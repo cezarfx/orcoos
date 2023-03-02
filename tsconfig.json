@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "paths": {
+      "orcoos" : ["./types/index.d.ts"]
+    }
+  }
+}
