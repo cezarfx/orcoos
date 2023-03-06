@@ -27,10 +27,12 @@ declare class NativeDate extends global.Date { }
 
 declare module 'orcoos' {
   import events = require('events');
-  import mongodb = require('mongodb');
-  import mongoose = require('orcoos');
+  //import mongodb = require('mongodb');
+  //import mongoose = require('mongoose');
+  import orcoos = require('orcoos');
 
-  export type Mongoose = typeof mongoose;
+  //export type Mongoose = typeof mongoose;
+  export type Mongoose = typeof orcoos;
 
   /**
    * Mongoose constructor. The exports object of the `mongoose` module is an instance of this
@@ -109,7 +111,7 @@ declare module 'orcoos' {
   export function setDriver(driver: any): Mongoose;
 
   /** The node-mongodb-native driver Mongoose uses. */
-  export { mongodb as mongo };
+  //export { mongodb as mongo };
 
   /** Declares a global plugin executed on all Schemas. */
   export function plugin(fn: (schema: Schema, opts?: any) => void, opts?: any): Mongoose;
@@ -570,5 +572,5 @@ declare module 'orcoos' {
   /* for ts-mongoose */
   export class mquery { }
 
-  export default mongoose;
+  export default orcoos;
 }

@@ -1,5 +1,5 @@
 declare module 'orcoos' {
-  import mongodb = require('mongodb');
+  //import mongodb = require('mongodb');
 
   /** A list of paths to skip. If set, Mongoose will validate every modified path that is not in this list. */
   type pathsToSkip = string[] | string;

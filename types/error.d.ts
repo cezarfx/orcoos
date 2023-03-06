@@ -1,7 +1,9 @@
 declare class NativeError extends global.Error { }
 
 declare module 'orcoos' {
-  import mongodb = require('mongodb');
+  //import mongodb = require('mongodb');
+  import nosqldb = require('oracle-nosqldb');
+
 
   type CastError = Error.CastError;
   type SyncIndexesError = Error.SyncIndexesError;
@@ -34,7 +36,7 @@ declare module 'orcoos' {
     }
     export class SyncIndexesError extends MongooseError {
       name: 'SyncIndexesError';
-      errors?: Record<string, mongodb.MongoServerError>;
+      errors?: Record<string, nosqldb.NoSQLError>;
 
       constructor(type: string, value: any, path: string, reason?: NativeError, schemaType?: SchemaType);
     }
