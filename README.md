@@ -296,26 +296,10 @@ and [acquit](https://github.com/vkarpov15/acquit).
 
 ## Related Projects
 
-#### MongoDB Runners
+#### Node SDK for Oracle NoSQL DB 
 
-- [run-rs](https://www.npmjs.com/package/run-rs)
-- [mongodb-memory-server](https://www.npmjs.com/package/mongodb-memory-server)
-- [mongodb-topology-manager](https://www.npmjs.com/package/mongodb-topology-manager)
+- [nosql-node-sdk](https://github.com/oracle/nosql-node-sdk/)
 
-#### Unofficial CLIs
-
-- [mongoosejs-cli](https://www.npmjs.com/package/mongoosejs-cli)
-
-#### Data Seeding
-
-- [dookie](https://www.npmjs.com/package/dookie)
-- [seedgoose](https://www.npmjs.com/package/seedgoose)
-- [mongoose-data-seed](https://www.npmjs.com/package/mongoose-data-seed)
-
-#### Express Session Stores
-
-- [connect-mongodb-session](https://www.npmjs.com/package/connect-mongodb-session)
-- [connect-mongo](https://www.npmjs.com/package/connect-mongo)
 
 ## License
 
