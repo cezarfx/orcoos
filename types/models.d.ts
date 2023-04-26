@@ -526,5 +526,9 @@ declare module 'orcoos' {
     TQueryHelpers,
     TRawDocType
     >;
+
+    nosqlQuery<ResultDoc = THydratedDocumentType>(statement: String
+      ): QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, TRawDocType>;
+  
   }
 }
