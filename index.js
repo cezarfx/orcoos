@@ -5,6 +5,53 @@
 
 'use strict';
 
+//import orcoos, { cast, STATES, setDriver, set, get, createConnection, connect, disconnect, startSession, pluralize, model, deleteModel, modelNames, plugin, connections, version, Orcoos, Schema, SchemaType, SchemaTypes, VirtualType, Types, Query, Model, Document, ObjectId, isValidObjectId, isObjectIdOrHexString, syncIndexes, Decimal128, Mixed, Date, Number, Error, now, CastError, SchemaTypeOptions, mongo, mquery, sanitizeFilter, trusted, skipMiddlewareFunction, overwriteMiddlewareResult } from './lib';
+//export default orcoos;
+// // Re-export for ESM support
+// export const cast = cast;
+// export const STATES = STATES;
+// export const setDriver = setDriver;
+// export const set = set;
+// export const get = get;
+// export const createConnection = createConnection;
+// export const connect = connect;
+// export const disconnect = disconnect;
+// export const startSession = startSession;
+// export const pluralize = pluralize;
+// export const model = model;
+// export const deleteModel = deleteModel;
+// export const modelNames = modelNames;
+// export const plugin = plugin;
+// export const connections = connections;
+// export const version = version;
+// export const Orcoos = Orcoos;
+// export const Schema = Schema;
+// export const SchemaType = SchemaType;
+// export const SchemaTypes = SchemaTypes;
+// export const VirtualType = VirtualType;
+// export const Types = Types;
+// export const Query = Query;
+// export const Model = Model;
+// export const Document = Document;
+// export const ObjectId = ObjectId;
+// export const isValidObjectId = isValidObjectId;
+// export const isObjectIdOrHexString = isObjectIdOrHexString;
+// export const syncIndexes = syncIndexes;
+// export const Decimal128 = Decimal128;
+// export const Mixed = Mixed;
+// export const Date = Date;
+// export const Number = Number;
+// export const Error = Error;
+// export const now = now;
+// export const CastError = CastError;
+// export const SchemaTypeOptions = SchemaTypeOptions;
+// export const mongo = mongo;
+// export const mquery = mquery;
+// export const sanitizeFilter = sanitizeFilter;
+// export const trusted = trusted;
+// export const skipMiddlewareFunction = skipMiddlewareFunction;
+// export const overwriteMiddlewareResult = overwriteMiddlewareResult;
+
 const orcoos = require('./lib/');
 
 module.exports = orcoos;
