@@ -1,0 +1,16 @@
+{
+    "name": "orcoos-js-examples",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Orcoos JavaScript Examples",
+    "dependencies": {
+        "orcoos": ">=0.0.1",
+        "package.json": "^2.0.1"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "author": "Cezar Andrei",
+    "license": "UPL-1.0",
+    "repository": {}
+}

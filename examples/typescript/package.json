@@ -1,0 +1,24 @@
+{
+    "name": "orcoos-ts-examples",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Orcoos TypeScript Examples",
+    "dependencies": {
+        "oracle-nosqldb": "latest",
+        "package.json": "^2.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^12.12.6",
+        "tsx": "^3.12.7",
+        "typescript": "^5.0.4"
+    },
+    "scripts": {
+        "build": "tsc"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "author": "Cezar An drei",
+    "license": "UPL-1.0",
+    "repository": {}
+}

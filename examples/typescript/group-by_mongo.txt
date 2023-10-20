@@ -1,0 +1,164 @@
+// delete all
+db.sales.deleteMany({});
+
+// show all
+db.sales.find();
+
+// insert docs
+db.sales.insertMany([
+    {
+        "saleDate" : "2023-09-14T19:08:17.098Z",
+        "items": [
+            { "name": "binder",
+                "price": 13.44,
+                "quantity": 8
+            },
+            { "name": "notebook",
+                "price": 1.44,
+                "quantity": 10
+            }
+        ],
+        "storeLocation": "London",
+        "customer": {
+            "gender": "M",
+            "age": 44,
+            "email": "em@ai.l",
+            "satisfaction": 2
+        },
+        "couponUsed" : false,
+        "purchaseMethod": "InStore"
+    }, 
+    {"saleDate" : "2023-09-16T19:08:17.098Z",
+        "items": [
+            { "name": "coffee",
+                "price": 6.44,
+                "quantity": 3
+            },
+            { "name": "notebook",
+                "price": 1.10,
+                "quantity": 5
+            }
+        ],
+        "storeLocation": "NY",
+        "customer": {
+            "gender": "F",
+            "age": 34,
+            "email": "em2@ai.l",
+            "satisfaction": 3
+        },
+        "couponUsed" : false,
+        "purchaseMethod": "InStore"
+    },
+    {
+        "saleDate" : "2023-09-14T09:18:17.098Z",
+        "items": [
+            { "name": "coffee",
+                "price": 3.44,
+                "quantity": 2
+            },
+            { "name": "milk",
+                "price": 3.10,
+                "quantity": 2
+            }
+        ],
+        "storeLocation": "NY",
+        "customer": {
+            "gender": "F",
+            "age": 30,
+            "email": "em3@ai.l",
+            "satisfaction": 2
+        },
+        "couponUsed" : false,
+        "purchaseMethod": "InStore"
+    },
+    {
+        "saleDate" : "2023-09-14T09:17:17.098Z",
+        "items": [
+            { "name": "eggs",
+                "price": 5.22,
+                "quantity": 1
+            },
+            { "name": "milk",
+                "price": 3.10,
+                "quantity": 2
+            }
+        ],
+        "storeLocation": "London",
+        "customer": {
+            "gender": "M",
+            "age": 47,
+            "email": "em4@ai.l",
+            "satisfaction": 4
+        },
+        "couponUsed" : false,
+        "purchaseMethod": "InStore"
+    },
+    {
+        "saleDate" : "2023-09-14T09:17:17.098Z",
+        "items": [
+            { "name": "eggs",
+                "price": 5.22,
+                "quantity": 1
+            },
+            { "name": "milk",
+                "price": 3.10,
+                "quantity": 2
+            },
+            { "name": "coffee",
+                "price": 2.10,
+                "quantity": 5
+            },
+            { "name": "bread",
+                "price": 4.10,
+                "quantity": 1
+            }
+        ],
+        "storeLocation": "Paris",
+        "customer": {
+            "gender": "M",
+            "age": 47,
+            "email": "em4@ai.l",
+            "satisfaction": 4
+        },
+        "couponUsed" : false,
+        "purchaseMethod": "InStore"
+    },
+    {   
+        "saleDate" : "2023-09-14T09:19:17.098Z",
+        "items": [
+            { "name": "milk",
+                "price": 3.10,
+                "quantity": 3
+            },
+            { "name": "coffee",
+                "price": 2.10,
+                "quantity": 5
+            },
+            { "name": "bread",
+                "price": 4.10,
+                "quantity": 2
+            }
+        ],
+        "storeLocation": "NY",
+        "customer": {
+            "gender": "M",
+            "age": 47,
+            "email": "em4@ai.l",
+            "satisfaction": 1
+        },
+        "couponUsed" : false,
+        "purchaseMethod": "Online"
+    }
+]);
+
+// select distinct locations
+db.sales.aggregate( [ { $group : { _id : "$storeLocation" } }] );
+
+// count docs in collection grouped by location
+db.sales.aggregate([{$group : {_id: "$storeLocation", count: {$count: {}}}}]);
+
+// by loction calculate total sales amount 
+db.sales.aggregate( [ { $group : { _id : "$storeLocation", totalSaleAmount: { $sum: { $multiply: [ "$items.price", "$items.quantity" ] } } } } ] );
+Error: MongoServerError: PlanExecutor error during aggregation :: caused by :: only numbers are allowed in an $multiply expression
+
+//
