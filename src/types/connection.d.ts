@@ -9,7 +9,8 @@ declare module 'orcoos' {
   const connections: Connection[];
 
   /** Opens Mongoose's default connection to MongoDB, see [connections docs](https://mongoosejs.com/docs/connections.html) */
-  function connect(uri: string, options?: ConnectOptions): Promise<Mongoose>;
+  // function connect(uri: string, options?: ConnectOptions): Promise<Mongoose>;
+  function connect(uri: string, options?: ConnectOptions): Promise<Orcoos>;
 
   /** Creates a Connection instance. */
   function createConnection(uri: string, options?: ConnectOptions): Connection;
