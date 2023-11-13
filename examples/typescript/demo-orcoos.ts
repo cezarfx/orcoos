@@ -271,7 +271,6 @@ async function run() {
 
 
     // console.log(`\n\nUser.finfOneAndDelete(...)`);
-    // //let rep = await savedUser.replaceOne({name: "Phil", age: 25});
     // let foad = await User.findOneAndDelete({_id: savedUser._id});
     // console.log(`   findOneAmdDelete user: ` + foad);
     // console.log(`   find again: ` + JSON.stringify(await User.findById(savedUser._id)));
