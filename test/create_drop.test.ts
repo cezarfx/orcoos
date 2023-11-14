@@ -96,6 +96,7 @@ describe("Create and Drop tables", () => {
         expect(dbSales).equal(0);
     }).timeout(30000);
     
+    // Test direct NoSQL node driver. 
     // it('direct nosql client', async () => {
     //     let client = new NoSQLClient({
     //         serviceType: ServiceType.KVSTORE,
@@ -148,60 +149,4 @@ describe("Create and Drop tables", () => {
     //     console.log('  Operation completed');
     //     console.log('  Table state is %s', res4.tableState);
     // });
-
-    // it('await test', async () => {
-    //     // let r1 = await f(1);
-    //     // let r2 = await f(2);
-    //     // let r3 = await f(3);
-
-    //     let r = await Promise.all([f(1), f(2), f(3)]);
-
-    //     console.log("await results: " + r[0] + " " + r[1] + " " + r[2]);
-    // }).timeout(4000);
-
-    // it('prom test ', async () => {
-    //     // let r1 = await f(1);
-    //     // let r2 = await f(2);
-    //     // let r3 = await f(3);
-
-    //     let r = await Promise.all([fp(1), fp(2), fp(3)]);
-
-    //     console.log("prom results: " + r[0] + " " + r[1] + " " + r[2]);
-    // }).timeout(8000);
 });
-
-// let i = 1;
-
-// async function f(param: number) {
-//     console.log("f(" + param + ") was called i: " + i);
-//     // return new Promise(res => {
-//     //     setTimeout( () => { 
-//     //         let ri = i++;
-//     //         console.log("f(" + param + ") runs now -> " + (ri));
-//     //         res(ri);
-//     //     }, 4000 - 1000 * param);
-//     // });
-//     let r1 = await slowf(param);
-//     let r2 = await slowf(param);
-//     let r3 = await slowf(param);
-//     return r1 + r2 + r3;
-// }
-
-// function fp(param: number) {
-//     console.log("fp(" + param + ") was called i: " + i);
-//     return new Promise((res, rej) => {
-//         setTimeout( () => { 
-//             let ri = i++;
-//             console.log("fp(" + param + ") runs now -> " + (ri));
-//             res(ri);
-//         }, 8000 - 1000 * param);
-//     });
-// }
-
-// async function slowf(param:number):Promise<number> {
-//     return new Promise(res => {
-//         setTimeout( () => { 
-//             res(param);
-//         }, 100);
-//     });
-// }
