@@ -22,11 +22,12 @@
   ],
   "scripts": {
     "start": "ts-node .",
-    "build": "vftsc",
+    "build": "tsc",
     "dev": "nodemon --watch src -e ts,js --exec ts-node .",
     "test": "mocha --require ts-node/register ./test/*.test.ts",
     "testw": "mocha --require ts-node/register ./test/*.test.ts --watch-files ./test/ -w",
-    "cov": "nyc --reporter=text ts-node ./node_modules/mocha/bin/mocha.js 'test/**/*.test.ts'"
+    "cov": "nyc --reporter=text ts-node ./node_modules/mocha/bin/mocha.js 'test/**/*.test.ts'",
+    "m": "npm run build && mocha dist/test/create_drop.test.js"
   },
   "dependencies": {
     "bson": "^6.1.0",

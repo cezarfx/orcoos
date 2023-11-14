@@ -3,82 +3,9 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-import { Schema, model, connect } from '../index';
+import { connect } from '../index';
 
-
-// 1. Create an interface representing a document in MongoDB.
-interface ISale {
-    //_id?: any;
-    saleDate: Date;
-    items?: [IItem];
-    storeLocation: string;
-    customer?: ICustomer;
-    couponUsed?: boolean;
-    purchaseMethod?: PurchaseMethod;
-};
-
-interface IItem {
-    name: string;
-    price: number;
-    quantity: number;
-};
-
-interface ICustomer {
-    gender?: Gender;
-    age?: number;
-    email?: string;
-    satisfaction?: number;
-};
-
-enum Gender {
-    M = 'M', 
-    F = 'F'
-};
-
-enum PurchaseMethod {
-    InStore = "InStore", 
-    Online = "Online"
-};
-
-
-const itemSchema = new Schema<IItem>({
-    name: String,
-    price: Number,
-    quantity: Number 
-});
-
-const customerSchema = new Schema<ICustomer>({
-    gender: { type: String, enum: Gender, optional: true },
-    age: { type: Number, optional: true },
-    email: { type: String, optional: true },
-    satisfaction: { type: Number, optional: true }
-});
-
-const saleSchema = new Schema<ISale>({
-    saleDate: { type: String, required: true },
-    items: [{
-        name: String,
-        price: Number,
-        quantity: Number
-    }],
-    storeLocation: { type: String, required: true },
-    customer: {
-        type: customerSchema,
-        optional: true
-    },
-    couponUsed: { type: Boolean, optional: true }, 
-    purchaseMethod: { 
-        type: String, 
-        enum: PurchaseMethod, 
-        default: PurchaseMethod.InStore, 
-        optional: true 
-    }
-});
-
-const Sale = model<ISale>('Sale', saleSchema);
-const Item = model<IItem>('Item', itemSchema);
-const Customer = model<ICustomer>('Customer', customerSchema);
-
+import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 
 describe("CRUD and query operations", () => {
     it('connect', async() => {
@@ -305,12 +232,12 @@ describe("CRUD and query operations", () => {
         expect(sale.storeLocation).equal('Miami');
         expect(sale.items[0].name).equal(updated.items[0].name);
     });
-     
+    
     //todo: add rest of operators: $currentDate, $min, $max, $inc, $mul, $rename
     
     // Nested set doesn't work!
     // it('findOneAndUpdate set nested', async () => {
-    //     // Q: UPDATE sales AS t  REMOVE t.kvjson."customer"[]."satisfaction"[] WHERE (t.kvid = "65525be2700feb6eab92af4b") RETURNING *
+    //     // Q: UPDATE sales AS t  REMOVE t.kvjson."customer"[]."satisfaction"[] WHERE (t.kvid = "655...") RETURNING *
     //     let updated = await Sale.findOneAndUpdate(sale._id, {$set: {"customer.satisfaction": 5}});
     //     expect(updated.storeLocation).equal(sale.storeLocation);
     //     expect(updated.items[0].name).equal(sale.items[0].name);
@@ -388,7 +315,7 @@ describe("CRUD and query operations", () => {
     it('deleteMany unfiltered all', async () => {
         // Q: DELETE FROM sales t
         let delM = await Sale.deleteMany();
-        console.log("       deletions: " + delM);
+        // console.log("       deletions: " + delM);
         expect(delM).lessThanOrEqual(allExpectedSales.length);
         expect(delM).greaterThanOrEqual(0);
 
