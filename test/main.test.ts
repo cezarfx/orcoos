@@ -9,7 +9,7 @@ import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 
 describe("CRUD and query operations", () => {
     it('connect', async() => {
-        expect(await connect('http://localhost:8080', {debug: 4}));
+        expect(await connect('http://localhost:8080', {debug: 1}));
     });
     
     it('delete all', async() => {
@@ -233,6 +233,35 @@ describe("CRUD and query operations", () => {
         expect(allSales.length).greaterThanOrEqual(1);
     });
 
+    it('query $regex', async () => {
+        // Q: SELECT * FROM sales t WHERE (( regex_like(t.kvjson."customer"."email", ".*@.*","") )) 
+        let allSales = await Sale.find(
+            {'customer.email': {$regex: '.*@.*'}});
+        expect(allSales).to.be.an('array');
+        
+        for (let sale of allSales) {
+            // console.log(JSON.stringify(sale));
+            expect(sale.customer.email).to.satisfy((e: String) => (e.includes('@')));
+        }
+        expect(allSales.length).greaterThanOrEqual(5);
+    });
+
+    it('query $regex case insensitive', async () => {
+        // Q: SELECT * FROM sales t WHERE (( regex_like(t.kvjson."customer"."email", "bo.*","is") ))
+        let allSales = await Sale.find(
+            {'customer.email': {$regex: 'bo.*', $options: 'is'}});
+        expect(allSales).to.be.an('array');
+        
+        for (let sale of allSales) {
+            // console.log(JSON.stringify(sale));
+            expect(sale.customer.email).to.satisfy((e: String) => (e.toLowerCase().includes('bo') && e.toLowerCase().startsWith("bo")));
+        }
+        expect(allSales.length).greaterThanOrEqual(1);
+    });
+
+    //todo filter by null values or missing fields, $exists, by type of value
+
+
     it('query filter by array size', async () => {
         // Q: SELECT * FROM sales t WHERE (( size([t.kvjson."items"[]]) = 1 ))
         let allSales = await Sale.find({'items': {$size: 1}});
@@ -252,6 +281,18 @@ describe("CRUD and query operations", () => {
             expect(sale.customer.gender).equal('F');
         }
     });
+
+    // Deep equal
+    // todo: this should work: {'customer': { gender: 'M', age: 47, email: 'em4@ai.l', satisfaction: 1 }
+    // it('query filter nested non array 2', async () => {
+    //     // Q: 
+    //     let allSales = await Sale.find({'customer': {'gender': 'F'}});
+    //     expect(allSales).to.be.an('array');
+        
+    //     for (let sale of allSales) {
+    //         expect(sale.customer.gender).equal('F');
+    //     }
+    // });
 
     it('updateOne $set', async () => {
         // Q: UPDATE sales AS t  SET t.kvjson."storeLocation"[] = "NY:NY" WHERE (t.kvid = "...")
@@ -463,32 +504,32 @@ describe("CRUD and query operations", () => {
     });
 
     it('deleteMany filter', async () => {
-        // Q: DELETE FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
-        let delM = await Sale.deleteMany({"items.price": {$gte: 60}});
-        // console.log("       deletions: " + delM);
-        expect(delM).lessThanOrEqual(allExpectedSales.length);
-        expect(delM).greaterThanOrEqual(0);
+    // Q: DELETE FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
+    let delM = await Sale.deleteMany({"items.price": {$gte: 60}});
+    // console.log("       deletions: " + delM);
+    expect(delM).lessThanOrEqual(allExpectedSales.length);
+    expect(delM).greaterThanOrEqual(0);
 
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
-        let dbSales = await Sale.find({'items.price': {$gte: 60}})
-        expect(dbSales).to.be.empty;
+    // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
+    let dbSales = await Sale.find({'items.price': {$gte: 60}})
+    expect(dbSales).to.be.empty;
 
-        allExpectedSales.splice(0, delM);
+    allExpectedSales.splice(0, delM);
     });
 
     it('deleteMany unfiltered all', async () => {
-        // Q: DELETE FROM sales t
-        let delM = await Sale.deleteMany();
-        // console.log("       deletions: " + delM);
-        expect(delM).lessThanOrEqual(allExpectedSales.length);
-        expect(delM).greaterThanOrEqual(0);
+    // Q: DELETE FROM sales t
+    let delM = await Sale.deleteMany();
+    // console.log("       deletions: " + delM);
+    expect(delM).lessThanOrEqual(allExpectedSales.length);
+    expect(delM).greaterThanOrEqual(0);
 
-        // Q: SELECT * FROM sales t
-        let dbSales = await Sale.find()
-        expect(dbSales).to.be.empty;
+    // Q: SELECT * FROM sales t
+    let dbSales = await Sale.find()
+    expect(dbSales).to.be.empty;
 
-        // Q: SELECT count(*) FROM sales t
-        let dbCount = await Sale.count();
-        expect(dbCount).equal(0);
+    // Q: SELECT count(*) FROM sales t
+    let dbCount = await Sale.count();
+    expect(dbCount).equal(0);
     });
 });

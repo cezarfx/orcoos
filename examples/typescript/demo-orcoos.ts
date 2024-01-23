@@ -1,5 +1,5 @@
 //const moogose = require('mongoose');
-//const orcoos = require('orcoos');
+// const orcoos = require('orcoos');
 import orcoos from 'orcoos';
 
 // mongoose.set('strictQuery', false);
@@ -7,6 +7,9 @@ orcoos.set('strictQuery', false);
 
 //import { Schema, model, connect } from 'mongoose';
 import { Schema, model, connect } from 'orcoos';
+// const Schema = orcoos.Schema;
+// const model = orcoos.model;
+// const connect = orcoos.connect;
 
 // 1. Create an interface representing a document in MongoDB.
 interface IUser {

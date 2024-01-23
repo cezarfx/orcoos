@@ -15,6 +15,9 @@ First install [Node.js](http://nodejs.org/) and [Oracle NoSQL DB](https://www.or
 $ npm install orcoos
 ```
 
+Note: For examples in the ./examples dir to work npm link must be used. See https://docs.npmjs.com/cli/v8/commands/npm-link .
+
+
 
 ## Importing
 
