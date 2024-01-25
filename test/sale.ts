@@ -35,20 +35,20 @@ export enum PurchaseMethod {
 };
 
 
-const itemSchema = new Schema<IItem>({
+export const itemSchema = new Schema<IItem>({
     name: String,
     price: Number,
     quantity: Number 
 });
 
-const customerSchema = new Schema<ICustomer>({
+export const customerSchema = new Schema<ICustomer>({
     gender: { type: String, enum: Gender, optional: true },
     age: { type: Number, optional: true },
     email: { type: String, optional: true },
     satisfaction: { type: Number, optional: true }
 });
 
-const saleSchema = new Schema<ISale>({
+export const saleSchema = new Schema<ISale>({
     saleDate: { type: String, required: true },
     items: [{
         name: String,

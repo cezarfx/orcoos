@@ -504,32 +504,32 @@ describe("CRUD and query operations", () => {
     });
 
     it('deleteMany filter', async () => {
-    // Q: DELETE FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
-    let delM = await Sale.deleteMany({"items.price": {$gte: 60}});
-    // console.log("       deletions: " + delM);
-    expect(delM).lessThanOrEqual(allExpectedSales.length);
-    expect(delM).greaterThanOrEqual(0);
+        // Q: DELETE FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
+        let delM = await Sale.deleteMany({"items.price": {$gte: 60}});
+        // console.log("       deletions: " + delM);
+        expect(delM).lessThanOrEqual(allExpectedSales.length);
+        expect(delM).greaterThanOrEqual(0);
 
-    // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
-    let dbSales = await Sale.find({'items.price': {$gte: 60}})
-    expect(dbSales).to.be.empty;
+        // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
+        let dbSales = await Sale.find({'items.price': {$gte: 60}})
+        expect(dbSales).to.be.empty;
 
-    allExpectedSales.splice(0, delM);
+        allExpectedSales.splice(0, delM);
     });
 
     it('deleteMany unfiltered all', async () => {
-    // Q: DELETE FROM sales t
-    let delM = await Sale.deleteMany();
-    // console.log("       deletions: " + delM);
-    expect(delM).lessThanOrEqual(allExpectedSales.length);
-    expect(delM).greaterThanOrEqual(0);
+        // Q: DELETE FROM sales t
+        let delM = await Sale.deleteMany();
+        // console.log("       deletions: " + delM);
+        expect(delM).lessThanOrEqual(allExpectedSales.length);
+        expect(delM).greaterThanOrEqual(0);
 
-    // Q: SELECT * FROM sales t
-    let dbSales = await Sale.find()
-    expect(dbSales).to.be.empty;
+        // Q: SELECT * FROM sales t
+        let dbSales = await Sale.find()
+        expect(dbSales).to.be.empty;
 
-    // Q: SELECT count(*) FROM sales t
-    let dbCount = await Sale.count();
-    expect(dbCount).equal(0);
+        // Q: SELECT count(*) FROM sales t
+        let dbCount = await Sale.count();
+        expect(dbCount).equal(0);
     });
 });
