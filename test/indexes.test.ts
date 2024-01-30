@@ -37,7 +37,7 @@ describe("Indexes", () => {
         expect(sale._id).exist;
         expect(sale._id).to.be.a('object');
         let dbSale = await Sale.findById(sale._id);
-        expect(dbSale.saleDate).equal(sale.saleDate);
+        expect(dbSale.saleDate.getTime()).equal(sale.saleDate.getTime());
         expect(dbSale.storeLocation).equal(sale.storeLocation);
         expect(dbSale.purchaseMethod).equal(PurchaseMethod.InStore);
         expect(dbSale.items.length).equal(sale.items.length);
@@ -52,6 +52,7 @@ describe("Indexes", () => {
     let names = ["Al", "Bo", "Yo", "Jo", "Ax"];
     let cities = ["LA", "NY", "SF", "London", "Paris"];
     let itemNames = ["wine", "milk", "beer", "soda", "tea"];
+    let tags = ["white", "green", "red"];
 
     it('insertMany', async () => {
         let saleCount = await Sale.count();
@@ -59,7 +60,7 @@ describe("Indexes", () => {
         
         let allSales: Array<ISale> = [];
 
-        for( let name of names) {
+        for( let [i, name] of names.entries()) {
             r = Math.round(1000 * Math.random());
   
             let city = cities[r % cities.length];
@@ -68,16 +69,18 @@ describe("Indexes", () => {
                 items: [new Item({
                     name: itemNames[r % itemNames.length],
                     price: r/10,
-                    quantity: r % 10 + (city.length > 2 ? 10 : 0)
+                    quantity: r % 10 + (city.length > 2 ? 10 : 0),
+                    tags: tags.slice(0, i % tags.length + 1)
                 })],
                 storeLocation: city,
                 customer: {
-                    gender: Object.values(Gender)[r % 2],
+                    gender: Object.values(Gender)[r % Object.values(Gender).length],
                     age: r % 100,
                     email: name + '@e.mail'
                 }
             });
             allSales.push(sale);
+            //console.log(" i: " + i + " s: " + JSON.stringify(sale.items));
         };
     
         let res = await Sale.insertMany(allSales, {rawResult: true});
@@ -155,12 +158,12 @@ describe("Indexes", () => {
     it('create and ensure', async () => {
         // console.log("= Sale.createIndexes() =")
         // Sends createIndex commands to DB for each index declared in the schema.
-        Sale.createIndexes();
+        await Sale.createIndexes();
 
        
         // console.log("= Sale.ensureIndexes() =")
         // Sends createIndex commands to DB for each index declared in the schema. 
-        Sale.ensureIndexes();
+        await Sale.ensureIndexes();
 
         let saleIndexes = saleSchema.indexes(); 
         expect(saleIndexes).has.lengthOf(2);
@@ -171,7 +174,7 @@ describe("Indexes", () => {
         expect(saleIndexes[0][0].purchaseMethod).equals(1);
         expect(saleIndexes[1][0]['customer.email']).equals(1);
         expect(saleIndexes[1][0]['customer.satisfaction']).equals(1);
-    });
+    }).timeout(10000);
 
     it('diff', async () => {
         // console.log("= Sale.diffIndexes() =")
@@ -230,7 +233,6 @@ describe("Indexes", () => {
     });
 
     it('sync2', async () => {
-        // console.log("= Sale.syncIndexes() =")
         // synchoronizes indexes, ie creates provisioned indexes, and loads from DB also drops the ones in DB but not in metadata
         await Sale.syncIndexes();
 
@@ -242,4 +244,35 @@ describe("Indexes", () => {
         // }
     });
 
+    it('index on [][]', async () => {
+        await saleSchema.index({"items.tags": 1});
+
+        await Sale.createIndexes();
+
+        console.log("= Sale.ensureIndexes() =")
+        // Sends createIndex commands to DB for each index declared in the schema. 
+        await Sale.ensureIndexes();
+
+        let saleIndexes = saleSchema.indexes(); 
+        expect(saleIndexes).has.lengthOf(1);
+        for (let i of saleIndexes) {
+            console.log("        - " + JSON.stringify(i));
+        }
+        expect(saleIndexes[0][0]["items.tags"]).equals(1);
+
+    });
+    
+    it('query using index on [][]', async () => {
+        // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"."tags"[] =any "red"))
+        let querySales = await Sale.find({'items.tags': "red"});
+        expect(querySales).to.be.an('array');
+        expect(querySales.length).equal(1);
+        for (let sale of querySales) {
+            expect(sale.items[0].name).to.be.oneOf(itemNames);
+            expect(sale.storeLocation).to.be.oneOf(cities);
+        }
+        expect(querySales[0].storeLocation).equal(allExpectedSales[2].storeLocation);
+        expect(querySales[0].items[0].tags[2]).equal(allExpectedSales[2].items[0].tags[2]);
+        expect(querySales[0].items[0].tags[2]).equal("red");
+    });
 });

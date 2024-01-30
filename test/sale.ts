@@ -15,6 +15,7 @@ interface IItem {
     name: string;
     price: number;
     quantity: number;
+    tags: string[];
 };
 
 interface ICustomer {
@@ -38,7 +39,8 @@ export enum PurchaseMethod {
 export const itemSchema = new Schema<IItem>({
     name: String,
     price: Number,
-    quantity: Number 
+    quantity: Number,
+    tags: [String]
 });
 
 export const customerSchema = new Schema<ICustomer>({
@@ -49,11 +51,12 @@ export const customerSchema = new Schema<ICustomer>({
 });
 
 export const saleSchema = new Schema<ISale>({
-    saleDate: { type: String, required: true },
+    saleDate: { type: Date, required: true },
     items: [{
         name: String,
         price: Number,
-        quantity: Number
+        quantity: Number,
+        tags: [String]
     }],
     storeLocation: { type: String, required: true },
     customer: {
@@ -72,3 +75,38 @@ export const saleSchema = new Schema<ISale>({
 export const Sale = model<ISale>('Sale', saleSchema);
 export const Item = model<IItem>('Item', itemSchema);
 export const Customer = model<ICustomer>('Customer', customerSchema);
+
+async function populateDatabase(): Promise<ISale[]> {
+    let names = ["Al", "Bo", "Yo", "Jo", "Ax"];
+    let cities = ["LA", "NY", "SF", "London", "Paris"];
+    let itemNames = ["wine", "milk", "beer", "soda", "tea"];
+    let tags = ["white", "green", "red"];
+
+    let r: number;   
+    let allSales: Array<ISale> = [];
+
+    for( let name of names) {
+        r = Math.round(1000 * Math.random());
+
+        let city = cities[r % cities.length];
+        const sale: ISale = new Sale<ISale>({
+            saleDate: new Date(),
+            items: [new Item({
+                name: itemNames[r % itemNames.length],
+                price: r/10,
+                quantity: r % 10 + (city.length > 2 ? 10 : 0),
+                tags: tags.slice(0, r % tags.length)
+            })],
+            storeLocation: city,
+            customer: {
+                gender: Object.values(Gender)[r % Object.keys(Gender).length],
+                age: r % 100,
+                email: name + '@e.mail'
+            }
+        });
+        allSales.push(sale);
+    };
+
+    await Sale.insertMany(allSales, {rawResult: true});
+    return allSales;
+}

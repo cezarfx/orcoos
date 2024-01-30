@@ -9,7 +9,7 @@ import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 
 describe("CRUD and query operations", () => {
     it('connect', async() => {
-        expect(await connect('http://localhost:8080', {debug: 1}));
+        expect(await connect('http://localhost:8080', {debug: 4}));
     });
     
     it('delete all', async() => {
@@ -37,7 +37,7 @@ describe("CRUD and query operations", () => {
         expect(sale._id).exist;
         expect(sale._id).to.be.a('object');
         let dbSale = await Sale.findById(sale._id);
-        expect(dbSale.saleDate).equal(sale.saleDate);
+        expect(dbSale.saleDate.getTime()).equal(sale.saleDate.getTime());
         expect(dbSale.storeLocation).equal(sale.storeLocation);
         expect(dbSale.purchaseMethod).equal(PurchaseMethod.InStore);
         expect(dbSale.items.length).equal(sale.items.length);
@@ -52,6 +52,7 @@ describe("CRUD and query operations", () => {
     let names = ["Al", "Bo", "Yo", "Jo", "Ax"];
     let cities = ["LA", "NY", "SF", "London", "Paris"];
     let itemNames = ["wine", "milk", "beer", "soda", "tea"];
+    let tags = ["white", "green", "red"];
 
     it('insertMany', async () => {
         let saleCount = await Sale.count();
@@ -59,7 +60,7 @@ describe("CRUD and query operations", () => {
         
         let allSales: Array<ISale> = [];
 
-        for( let name of names) {
+        for( let [i, name] of names.entries()) {
             r = Math.round(1000 * Math.random());
   
             let city = cities[r % cities.length];
@@ -68,7 +69,8 @@ describe("CRUD and query operations", () => {
                 items: [new Item({
                     name: itemNames[r % itemNames.length],
                     price: r/10,
-                    quantity: r % 10 + (city.length > 2 ? 10 : 0)
+                    quantity: r % 10 + (city.length > 2 ? 10 : 0),
+                    tags: tags.slice(0, i % tags.length + 1)
                 })],
                 storeLocation: city,
                 customer: {
@@ -498,6 +500,29 @@ describe("CRUD and query operations", () => {
         }
     });
 
+    // Not supported, matching inside a nested array on the same item: 
+    // Sale.find({items: {$elemMatch: {
+    //                      quantity: {$lt: 10},
+    //                      tags: {$in: ["red", "green"]}
+    //           }}});   
+    // Q: SELECT * FROM sales t 
+    //    WHERE (exists t.kvjson."items"[
+    //                      $element.quantity < 10 
+    //                  AND exists $element.tags[$element in ("red", "green")]]);        
+    it('Custom query nested arrays', async () => {
+        let q = 'SELECT * FROM sales t WHERE (' +
+            ' exists t.kvjson."items"[ $element.quantity < 20 AND ' + 
+            ' exists $element.tags[$element in ("red", "green")]])';
+        let sales = await Sale.nosqlQuery(q);
+        for(let i in sales) {
+            //console.log(" " + i + " " + JSON.stringify(sales[i]));
+            expect(sales[i].items[0].quantity).lessThan(20);
+            expect(sales[i].items[0].tags).contains("green");
+        }
+        expect(sales.length).equal(3);
+    });
+
+
     it('count',async () => {
         let c = await Sale.count();
         expect(c).equal(allExpectedSales.length);
@@ -532,4 +557,10 @@ describe("CRUD and query operations", () => {
         let dbCount = await Sale.count();
         expect(dbCount).equal(0);
     });
+
+    // SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price" > t.kvjson."items"[]."quamtity" + 60))
+    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" > t.kvjson."customer"."satisfaction" + 10))
+    
+    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" > 18 and t.kvjson."customer"."satisfaction" > 9))
+    // find( {$and: [{"customer.age}: {$gt: 18}}, {"customer.satisfaction": {$gt: 9}}]} )
 });

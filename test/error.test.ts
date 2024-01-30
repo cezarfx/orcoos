@@ -47,7 +47,7 @@ describe("Errors for weired queries", () => {
         expect(sale._id).exist;
         expect(sale._id).to.be.a('object');
         let dbSale = await Sale.findById(sale._id);
-        expect(dbSale.saleDate).equal(sale.saleDate);
+        expect(dbSale.saleDate.getTime()).equal(sale.saleDate.getTime());
         expect(dbSale.storeLocation).equal(sale.storeLocation);
         expect(dbSale.purchaseMethod).equal(PurchaseMethod.InStore);
         expect(dbSale.items.length).equal(sale.items.length);
