@@ -76,12 +76,12 @@ export const Sale = model<ISale>('Sale', saleSchema);
 export const Item = model<IItem>('Item', itemSchema);
 export const Customer = model<ICustomer>('Customer', customerSchema);
 
-async function populateDatabase(): Promise<ISale[]> {
-    let names = ["Al", "Bo", "Yo", "Jo", "Ax"];
-    let cities = ["LA", "NY", "SF", "London", "Paris"];
-    let itemNames = ["wine", "milk", "beer", "soda", "tea"];
-    let tags = ["white", "green", "red"];
+export let names = ["Al", "Bo", "Yo", "Jo", "Ax"];
+export let cities = ["LA", "NY", "SF", "London", "Paris"];
+export let itemNames = ["wine", "milk", "beer", "soda", "tea"];
+export let tags = ["white", "green", "red"];
 
+export async function populateDatabase(): Promise<ISale[]> {
     let r: number;   
     let allSales: Array<ISale> = [];
 
@@ -102,7 +102,9 @@ async function populateDatabase(): Promise<ISale[]> {
                 gender: Object.values(Gender)[r % Object.keys(Gender).length],
                 age: r % 100,
                 email: name + '@e.mail'
-            }
+            },
+            couponUsed: r % 2 == 0,
+            purchaseMethod: Object.values(PurchaseMethod)[r % Object.keys(PurchaseMethod).length]
         });
         allSales.push(sale);
     };

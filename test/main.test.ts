@@ -374,7 +374,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('updateMany fail', async () => {
-        expect(Sale.updateMany({$inc: {'customer.age': 1}}))
+        await expect(Sale.updateMany({$inc: {'customer.age': 1}}))
             .to.be.eventually.rejectedWith("updateMany() filter param doesn't contain _id field.");
     });
 
@@ -505,6 +505,12 @@ describe("CRUD and query operations", () => {
     //                      quantity: {$lt: 10},
     //                      tags: {$in: ["red", "green"]}
     //           }}});   
+    it('query with $elemMatch', async () => {
+        await expect(Sale.find({items: {$elemMatch: {quantity: {$lt: 20}, tags: {$in: ["red", "green"]}}}}))
+            .to.eventually.rejectedWith(Error, 'Unexpected property value for a comparison expression: {"$elemMatch":{"quantity":{"$lt":20},"tags":{"$in":["red","green"]}}}')
+    });
+
+    // Use nosqlQuery instead with this statement:
     // Q: SELECT * FROM sales t 
     //    WHERE (exists t.kvjson."items"[
     //                      $element.quantity < 10 
@@ -521,7 +527,6 @@ describe("CRUD and query operations", () => {
         }
         expect(sales.length).equal(3);
     });
-
 
     it('count',async () => {
         let c = await Sale.count();
@@ -557,10 +562,4 @@ describe("CRUD and query operations", () => {
         let dbCount = await Sale.count();
         expect(dbCount).equal(0);
     });
-
-    // SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price" > t.kvjson."items"[]."quamtity" + 60))
-    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" > t.kvjson."customer"."satisfaction" + 10))
-    
-    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" > 18 and t.kvjson."customer"."satisfaction" > 9))
-    // find( {$and: [{"customer.age}: {$gt: 18}}, {"customer.satisfaction": {$gt: 9}}]} )
 });
