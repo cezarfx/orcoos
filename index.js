@@ -103,6 +103,8 @@ module.exports.trusted = orcoos.trusted;
 module.exports.skipMiddlewareFunction = orcoos.skipMiddlewareFunction;
 module.exports.overwriteMiddlewareResult = orcoos.overwriteMiddlewareResult;
 
+module.exports.NoSQLConnectionString = orcoos.NoSQLConnectionString;
+
 // The following properties are not exported using ESM because `setDriver()` can mutate these
 // module.exports.connection = orcoos.connection;
 // module.exports.Collection = orcoos.Collection;

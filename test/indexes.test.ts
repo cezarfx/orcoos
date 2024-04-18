@@ -254,17 +254,16 @@ describe("Indexes", () => {
 
             await Sale.createIndexes();
 
-            console.log("= Sale.ensureIndexes() =")
+            //console.log("= Sale.ensureIndexes() =")
             // Sends createIndex commands to DB for each index declared in the schema. 
             await Sale.ensureIndexes();
 
             let saleIndexes = saleSchema.indexes(); 
             expect(saleIndexes).has.lengthOf(1);
-            for (let i of saleIndexes) {
-                console.log("        - " + JSON.stringify(i));
-            }
+            // for (let i of saleIndexes) {
+            //     console.log("        - " + JSON.stringify(i));
+            // }
             expect(saleIndexes[0][0]["items.tags"]).equals(1);
-
         });
         
         it('query using index on [][]', async () => {

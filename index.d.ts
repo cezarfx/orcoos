@@ -45,3 +45,5 @@ export const SchemaTypeOptions = orcoos.SchemaTypeOptions;
 // export const trusted = trusted;
 // export const skipMiddlewareFunction = skipMiddlewareFunction;
 // export const overwriteMiddlewareResult = overwriteMiddlewareResult;
+
+export const NoSQLConnectionString = orcoos.NoSQLConnectionString;
