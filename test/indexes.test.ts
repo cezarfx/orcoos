@@ -19,7 +19,7 @@ describe("Indexes", () => {
 
     describe('setup context', () => {
         it('connect', async() => {
-            expect(await connect('http://localhost:8080', {debug: 4}));
+            expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
         });
         
         it('delete all', async() => {

@@ -11,7 +11,7 @@ describe("Math operations", () => {
     let allSales: Array<ISale> = [];
 
     it('connect', async() => {
-        expect(await connect('http://localhost:8080', {debug: 1}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 1}));
     });
     
     it('delete all and populate sale', async() => {

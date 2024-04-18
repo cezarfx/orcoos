@@ -26,7 +26,7 @@ describe("Errors for weired queries", () => {
     let itemNames = ["wine", "milk", "beer", "soda", "tea"];
 
     it('setup', async() => {
-        expect(await connect('http://localhost:8080', {debug: 4}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
 
         expect(await Sale.deleteMany());
         expect(await Sale.count()).equal(0);

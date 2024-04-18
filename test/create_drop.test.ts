@@ -46,7 +46,7 @@ async function createSale() {
 
 describe("Create and Drop tables", () => {
     it('connect', async() => {
-        let r = await connect('http://localhost:8080');
+        let r = await connect('nosqldb+on_prem+http://localhost:8080');
         expect(r).not.empty;
         // get NoSQL DB driver clielt object
         client = r.connection.client.client;

@@ -14,7 +14,7 @@ import { AUTH_TYPE_CLOUDSIM, AUTH_TYPE_INSTANCE_PRINCIPAL, AUTH_TYPE_OKE_WORKLOA
 
 
 describe("NoSQLConnectionString tests", () => {
-    it('parse', () => {
+    it('parse first', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://user:password@host:123/my_namespace/reserved?o1=v1&o2=v2&o3=&o1=v3');
         expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
@@ -353,8 +353,8 @@ describe("NoSQLConnectionString tests", () => {
         }
     });
 
-    it('connect', async() => {
+    it('connect to nosqldb+on_prem+http://localhost:8080', async() => {
          let r = await connect('nosqldb+on_prem+http://localhost:8080');
          expect(r).not.empty;
-    }).timeout(30000);
+    }).timeout(3000);
 });
