@@ -5,7 +5,7 @@ chai.use(chaiAsPromised);
 
 
 import { Region } from 'oracle-nosqldb';
-import { connect } from '../index';
+import { connect, disconnect } from '../index';
 
 import { AUTH_TYPE_CLOUDSIM, AUTH_TYPE_INSTANCE_PRINCIPAL, AUTH_TYPE_OKE_WORKLOAD, 
     AUTH_TYPE_RESOURCE_PRINCIPAL, AUTH_TYPE_USER_PRINCIPAL, NoSQLConnectionString, 
@@ -356,5 +356,6 @@ describe("NoSQLConnectionString tests", () => {
     it('connect to nosqldb+on_prem+http://localhost:8080', async() => {
          let r = await connect('nosqldb+on_prem+http://localhost:8080');
          expect(r).not.empty;
+         await disconnect();
     }).timeout(3000);
 });

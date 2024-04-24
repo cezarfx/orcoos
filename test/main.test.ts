@@ -409,7 +409,7 @@ describe("CRUD and query operations", () => {
     
     it('findOneAndUpdate $unset nested', async () => {
         // Q: UPDATE sales AS t  REMOVE t.kvjson."customer"[]."satisfaction"[] WHERE (t.kvid = "655...") RETURNING *
-        let updated = await Sale.findOneAndUpdate(sale._id, {$unset: {"customer.satisfaction": ""}});
+        let updated = await Sale.findOneAndUpdate(sale._id, {$unset: {'customer.satisfaction': ''}});
         expect(updated.storeLocation).equal(sale.storeLocation);
         expect(updated.items[0].name).equal(sale.items[0].name);
         expect(updated.customer.satisfaction).to.be.undefined;
