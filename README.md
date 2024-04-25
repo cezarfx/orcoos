@@ -1,10 +1,10 @@
 # Orcoos
 
-Orcoos is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. Orcoos supports [Node.js](https://nodejs.org/en/).
+Orcoos is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. Orcoos supports [Node.js](https://nodejs.org/en/). Orcoos is modeled after [Mongoose](https://mongoosejs.com/).
 
 ## Documentation
 
-The official documentation website is [Orcoosjs.com](http://Orcoosjs.com/).
+The official documentation website is [TBD](http://github.com/).
 
 
 ## Installation
@@ -31,38 +31,28 @@ import orcoos from 'orcoos';
 
 ## Overview
 
-
-
-
-
-
-
-
-
-### TODO ###
-
 ### Connecting to Oracle NoSQL DB
 
-First, we need to define a connection. If your app uses only one database, you should use `mongoose.connect`. If you need to create additional connections, use `mongoose.createConnection`.
+First, we need to define a connection. If your app uses only one database, you should use `orcoos.connect`. If you need to create additional connections, use `orcoos.createConnection`.
 
-Both `connect` and `createConnection` take a `mongodb://` URI, or the parameters `host, database, port, options`.
+Both `connect` and `createConnection` take a connection string `nosqldb://` URI.
 
 ```js
-await mongoose.connect('mongodb://127.0.0.1/my_database');
+await orcoos.connect('nosqldb+on_prem_http://127.0.0.1:8080/');
 ```
 
-Once connected, the `open` event is fired on the `Connection` instance. If you're using `mongoose.connect`, the `Connection` is `mongoose.connection`. Otherwise, `mongoose.createConnection` return value is a `Connection`.
+Once connected, the `open` event is fired on the `Connection` instance. If you're using `orcoos.connect`, the `Connection` is `orcoos.connection`. Otherwise, `orcoos.createConnection` return value is a `Connection`.
 
 **Note:** _If the local connection fails then try using 127.0.0.1 instead of localhost. Sometimes issues may arise when the local hostname has been changed._
 
-**Important!** Mongoose buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to MongoDB in order to define models, run queries, etc.
+**Important!** Orcoos buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
 
 ### Defining a Model
 
 Models are defined through the `Schema` interface.
 
 ```js
-const Schema = mongoose.Schema;
+const Schema = orcoos.Schema;
 const ObjectId = Schema.ObjectId;
 
 const BlogPost = new Schema({
@@ -109,26 +99,26 @@ Comment.pre('save', function (next) {
 });
 ```
 
-Take a look at the example in [`examples/schema/schema.js`](https://github.com/Automattic/mongoose/blob/master/examples/schema/schema.js) for an end-to-end example of a typical setup.
+Take a look at the [`example`](./examples/typescript/demo-orcoos.ts) for an a detailed usage.
 
 ### Accessing a Model
 
-Once we define a model through `mongoose.model('ModelName', mySchema)`, we can access it through the same function
+Once we define a model through `orcoos.model('ModelName', mySchema)`, we can access it through the same function
 
 ```js
-const MyModel = mongoose.model('ModelName');
+const MyModel = orcoos.model('ModelName');
 ```
 
 Or just do it all at once
 
 ```js
-const MyModel = mongoose.model('ModelName', mySchema);
+const MyModel = orcoos.model('ModelName', mySchema);
 ```
 
-The first argument is the _singular_ name of the collection your model is for. **Mongoose automatically looks for the _plural_ version of your model name.** For example, if you use
+The first argument is the _singular_ name of the collection your model is for. **Orcoos automatically looks for the _plural_ version of your model name.** For example, if you use
 
 ```js
-const MyModel = mongoose.model('Ticket', mySchema);
+const MyModel = orcoos.model('Ticket', mySchema);
 ```
 
 Then `MyModel` will use the __tickets__ collection, not the __ticket__ collection. For more details read the [model docs](https://mongoosejs.com/docs/api/mongoose.html#mongoose_Mongoose-model).
@@ -160,10 +150,10 @@ console.log(instance.my.key);  // 'hello'
 
 For more details check out [the docs](http://mongoosejs.com/docs/queries.html).
 
-**Important!** If you opened a separate connection using `mongoose.createConnection()` but attempt to access the model through `mongoose.model('ModelName')` it will not work as expected since it is not hooked up to an active db connection. In this case access your model through the connection you created:
+**Important!** If you opened a separate connection using `orcoos.createConnection()` but attempt to access the model through `orcoos.model('ModelName')` it will not work as expected since it is not hooked up to an active db connection. In this case access your model through the connection you created:
 
 ```js
-const conn = mongoose.createConnection('your connection string');
+const conn = orcoos.createConnection('your connection string');
 const MyModel = conn.model('ModelName', schema);
 const m = new MyModel;
 m.save(); // works
@@ -172,8 +162,8 @@ m.save(); // works
 vs
 
 ```js
-const conn = mongoose.createConnection('your connection string');
-const MyModel = mongoose.model('ModelName', schema);
+const conn = orcoos.createConnection('your connection string');
+const MyModel = orcoos.model('ModelName', schema);
 const m = new MyModel;
 m.save(); // does not work b/c the default connection object was never connected
 ```
@@ -190,7 +180,7 @@ Where `Comment` is a `Schema` we created. This means that creating embedded docu
 
 ```js
 // retrieve my model
-const BlogPost = mongoose.model('BlogPost');
+const BlogPost = orcoos.model('BlogPost');
 
 // create a blog post
 const post = new BlogPost();
@@ -265,7 +255,7 @@ Moreover, you can mutate the incoming `method` arguments so that subsequent midd
 
 #### Schema gotcha
 
-`type`, when used in a schema has special meaning within Mongoose. If your schema requires using `type` as a nested property you must use object notation:
+`type`, when used in a schema has special meaning within Orcoos. If your schema requires using `type` as a nested property you must use object notation:
 
 ```js
 new Schema({
@@ -287,15 +277,14 @@ new Schema({
 
 ### Driver Access
 
-Mongoose is built on top of the [official MongoDB Node.js driver](https://github.com/mongodb/node-mongodb-native). Each mongoose model keeps a reference to a [native MongoDB driver collection](http://mongodb.github.io/node-mongodb-native/2.1/api/Collection.html). The collection object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all mongoose features, including hooks, validation, etc. The one
+Orcoos is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each mongoose model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all orcoos features, including hooks, validation, etc. The one
 notable exception that `YourModel.collection` still buffers
 commands. As such, `YourModel.collection.find()` will **not**
 return a cursor.
 
 ## API Docs
 
-Find the API docs [here](http://mongoosejs.com/docs/api/mongoose.html), generated using [dox](https://github.com/tj/dox)
-and [acquit](https://github.com/vkarpov15/acquit).
+Find the API docs [here](http://mongoosejs.com/docs/api/mongoose.html).
 
 ## Related Projects
 

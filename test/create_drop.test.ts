@@ -8,11 +8,6 @@ import { connect } from '../index';
 import { TableState } from 'oracle-nosqldb';
 
 let client;
-//  = new NoSQLClient({
-//     serviceType: ServiceType.KVSTORE,
-//     endpoint: "http://localhost:8080"
-// });
-
 import {Sale} from './sale';
 
 let tableName = 'sales';
@@ -23,10 +18,11 @@ async function dropSale() {
         let res = await client.tableDDL(ddl);
         // Wait for the operation completion
         await client.forCompletion(res);
-        console.log('  Table %s is dropped. State: %s', res.tableName, res.tableState);
+        //console.log('  Table %s is dropped. State: %s', res.tableName, res.tableState);
         expect(res.tableState).equal(TableState.DROPPED);
     } catch(err) {
         console.log('Error while dropping: ' + err);
+        expect(err).to.be.empty;
     }
 }
 
@@ -36,10 +32,11 @@ async function createSale() {
         let res = await client.tableDDL(ddl);
         // Wait for the operation completion
         await client.forCompletion(res);
-        console.log('  Table %s is dropped. State: %s', res.tableName, res.tableState);
+        // console.log('  Table %s is dropped. State: %s', res.tableName, res.tableState);
         expect(res.tableState).equal(TableState.ACTIVE);
     } catch(err) {
         console.log('Error while dropping: ' + err);
+        expect(err).to.be.empty;
     }
 }
 
