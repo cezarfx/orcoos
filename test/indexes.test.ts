@@ -108,7 +108,7 @@ describe("Indexes", () => {
         });
     });
 
-    describe('check indes API', () => {
+    describe('check indexes API', () => {
         it('no indexes', async () => {
             let saleIndexes = saleSchema.indexes();
             expect(saleIndexes).is.empty;
@@ -136,7 +136,7 @@ describe("Indexes", () => {
 
             let saleIndexes = saleSchema.indexes();
             expect(saleIndexes).has.lengthOf(1);
-            //console.log("si[0]: " + JSON.stringify(saleIndexes[0]))
+
             expect(saleIndexes[0][0].storeLocation).equals(1);
             expect(saleIndexes[0][0].purchaseMethod).equals(1);
             expect(saleIndexes[0][1].background).equals(true);
@@ -144,15 +144,17 @@ describe("Indexes", () => {
             //     console.log("        - " + JSON.stringify(i));
             // }
 
-            // console.log("= schema.index({'customer.email': 1, 'customer.satisfaction': 1}) =")
-            saleSchema.index({'customer.email': 1, 'customer.satisfaction': 1});
+            // User can provide the index name to be used in the DB
+            saleSchema.index({'customer.email': 1, 'customer.satisfaction': 1}, {name: 'my_ce_cs_idx'});
 
             saleIndexes = saleSchema.indexes();
             expect(saleIndexes).has.lengthOf(2);
-            //console.log("si[0]: " + JSON.stringify(saleIndexes[1]))
+
             expect(saleIndexes[1][0]['customer.email']).equals(1);
             expect(saleIndexes[1][0]['customer.satisfaction']).equals(1);
             expect(saleIndexes[1][1].background).equals(true);
+            // Check user provided index name
+            expect(saleIndexes[1][1].name).equals('my_ce_cs_idx');
             // for (let i of saleIndexes) {
             //     console.log("        - " + JSON.stringify(i));
             // }
@@ -177,6 +179,7 @@ describe("Indexes", () => {
             expect(saleIndexes[0][0].purchaseMethod).equals(1);
             expect(saleIndexes[1][0]['customer.email']).equals(1);
             expect(saleIndexes[1][0]['customer.satisfaction']).equals(1);
+            expect(saleIndexes[1][1].name).equals('my_ce_cs_idx');
         }).timeout(10000);
 
         it('diff', async () => {
