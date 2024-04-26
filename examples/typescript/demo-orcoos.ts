@@ -59,7 +59,7 @@ async function run() {
     // 4. Connect to NoSQL DB1
     console.log("Connecting to DB ...");
     //await connect('mongodb://localhost');
-    await connect('http://localhost:8080');
+    await connect('nosqldb+on_prem+http://localhost:8080');
     console.log("    ... done.");
 
 

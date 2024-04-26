@@ -7,6 +7,31 @@ Orcoos is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object mod
 The official documentation website is [TBD](http://github.com/).
 
 
+## Dev instalation
+
+Clone from GiyHub:
+$ git clone https://github.com/cezarfx/orcoos.git
+$ cd orcoos
+
+Run tests:
+$ npm test
+
+Run a single test:
+$ node ./node_modules/mocha/bin/mocha.js --require ts-node/register test/main.test.ts
+
+Localy link the Orcoos npm package:
+$ npm link
+
+Run examples:
+$ cd examples/typescript
+$ npm link orcoos
+$ npm start
+
+$ cd ../javascript
+$ npm link orcoos
+$ npm start
+
+
 ## Installation
 
 First install [Node.js](http://nodejs.org/) and [Oracle NoSQL DB](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html). Then:
@@ -16,7 +41,6 @@ $ npm install orcoos
 ```
 
 Note: For examples in the ./examples dir to work npm link must be used. See https://docs.npmjs.com/cli/v8/commands/npm-link .
-
 
 
 ## Importing
