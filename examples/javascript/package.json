@@ -1,6 +1,7 @@
 {
     "name": "orcoos-js-examples",
     "version": "0.0.1",
+    "type": "module",
     "private": true,
     "description": "Orcoos JavaScript Examples",
     "dependencies": {

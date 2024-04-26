@@ -1,15 +1,9 @@
 //const orcoos = require('mongoose');
-//const orcoos = require('orcoos');
-const orcoos = require('orcoos');
+//import { Schema, model, connect } from 'mongoose';
+import orcoos, { Schema, model, connect } from 'orcoos';
 
 // mongoose.set('strictQuery', false);
 orcoos.set('strictQuery', false);
-
-//import { Schema, model, connect } from 'mongoose';
-//import { Schema, model, connect } from 'orcoos';
-const Schema = orcoos.Schema;
-const model = orcoos.model;
-const connect = orcoos.connect;
 
  
 // 2. Create a Schema corresponding to the document interface.

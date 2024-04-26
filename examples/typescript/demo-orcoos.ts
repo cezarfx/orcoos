@@ -7,9 +7,6 @@ orcoos.set('strictQuery', false);
 
 //import { Schema, model, connect } from 'mongoose';
 import { Schema, model, connect } from 'orcoos';
-// const Schema = orcoos.Schema;
-// const model = orcoos.model;
-// const connect = orcoos.connect;
 
 // 1. Create an interface representing a document in MongoDB.
 interface IUser {
