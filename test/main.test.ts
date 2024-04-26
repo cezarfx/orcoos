@@ -6,6 +6,7 @@ chai.use(chaiAsPromised);
 import { connect } from '../index';
 
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
+import { sort } from '../lib/types/array/methods';
 
 describe("CRUD and query operations", () => {
     it('connect', async() => {
@@ -295,6 +296,36 @@ describe("CRUD and query operations", () => {
     //         expect(sale.customer.gender).equal('F');
     //     }
     // });
+
+    it('query sort', async () => {
+        // Q: SELECT * FROM sales t ORDER BY t.kvjson."customer"."gender"[] ASC, t.kvjson."storeLocation"[] DESC
+        let allSales = await Sale.find({}, {},{sort: {'customer.gender': 1, storeLocation: 'desc'}});
+        expect(allSales).to.be.an('array');
+        
+        let prevRow = undefined;
+        for (let sale of allSales) {
+            if (prevRow) {
+                expect(sale.customer.gender).greaterThanOrEqual(prevRow);
+            }
+        }
+    });
+
+    it('query limit', async () => {
+        // Q: SELECT * FROM sales t LIMIT 2
+        let allSales = await Sale.find({}, {}, {limit: 2});
+        expect(allSales).to.be.an('array');
+
+        expect(allSales.length).equal(2);
+    });
+
+    it('query skip', async () => {
+        let noOfSales = await Sale.count();
+        // Q: SELECT * FROM sales t OFFSET 2
+        let allSales = await Sale.find({}, {}, {skip: 2});
+        expect(allSales).to.be.an('array');
+
+        expect(allSales.length).equal(noOfSales - 2);
+    });
 
     it('updateOne $set', async () => {
         // Q: UPDATE sales AS t  SET t.kvjson."storeLocation"[] = "NY:NY" WHERE (t.kvid = "...")
