@@ -13,7 +13,7 @@ Clone from GiyHub:
 $ git clone https://github.com/cezarfx/orcoos.git
 $ cd orcoos
 
-Run tests:
+Run tests, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
 $ npm test
 
 Run a single test:
@@ -22,7 +22,7 @@ $ node ./node_modules/mocha/bin/mocha.js --require ts-node/register test/main.te
 Localy link the Orcoos npm package:
 $ npm link
 
-Run examples:
+Run examples, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
 $ cd examples/typescript
 $ npm link orcoos
 $ npm start
@@ -30,6 +30,10 @@ $ npm start
 $ cd ../javascript
 $ npm link orcoos
 $ npm start
+
+Or run them all, tests and examples:
+$ cd ../..
+$ npm run all
 
 
 ## Installation

@@ -27,7 +27,11 @@
     "test": "mocha --require ts-node/register ./test/*.test.ts",
     "testw": "mocha --require ts-node/register ./test/*.test.ts --watch-files ./test/ -w",
     "cov": "nyc --reporter=text ts-node ./node_modules/mocha/bin/mocha.js 'test/**/*.test.ts'",
-    "m": "npm run build && mocha dist/test/create_drop.test.js"
+    "m": "npm run build && mocha dist/test/create_drop.test.js",
+    "test-js": "cd examples/javascript && npm start",
+    "test-ts": "cd examples/typescript && npm start",
+    "test-ex": "npm run test-js && npm run test-ts",
+    "all": "npm run test && npm run test-ex"
   },
   "dependencies": {
     "bson": "^6.4.0",
