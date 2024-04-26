@@ -1,0 +1,216 @@
+Project Specific Array Elements in the Returned Array
+  - For fields that contain arrays, MongoDB provides the following projection operators for manipulating arrays: $elemMatch, $slice, and $.
+  - $elemMatch lets you return all documents that contain an array field with at least one element that matches a specified condition.
+    - db.sales.find({}, {items:{$elemMatch:{ price:{ $gt: 5}}}})
+    - select {'v': t.kvjson.items[$element.price > 5]} from sales t;
+    - verdict: can be translated
+
+  - $slice - The $slice projection operator specifies the number of elements in an array to return in the query result.
+    - db.sales.find({}, {_id:0, 'items.tags':{$slice:[1,1]}})   - This generates everything around, just limits the array.
+    - select {'v': t.kvjson.items.tags[0:1]} from sales t;  - This generates only the slice.
+    - This erros: db.sales.find({}, {_id:0, v: {'$items.tags': {$slice: [0,1]}}}) MongoServerError: Unknown expression $items.tags
+    - verdict: can be translated, but it's not easy
+
+  - $ - The positional $ operator limits the contents of an <array> to return the first element that matches the query condition on the array.
+        Works in tandem with the query condition on the same array.
+    - db.sales.find({'items.tags': 'red'}, {_idL:1, 'items.$': 1})
+        {
+            _id: ObjectId('65ef994bc650f994e3b58e3a'),
+            items: [ { name: 'tea', price: 38.4, quantity: 14, tags: [ 'red' ] } ]
+        }
+    - select {'items': t.kvjson.items[ 'red' in $element.tags[]]} from sales t where exists t.kvjson.items[ 'red' in $element.tags[]];
+    - verdict: not obvious on how to translate this
+
+
+In https://www.mongodb.com/docs/manual/tutorial/project-fields-from-query-results/ it says:
+  "You can specify aggregation expressions in a query projection. Aggregation expressions let you project new fields and modify the values of existing fields."
+
+These are all aggregation expressions: https://www.mongodb.com/docs/manual/reference/operator/aggregation/#std-label-aggregation-expressions
+  - Aarithmetic
+  - Bitwise
+  - Boolean
+  - Comparison
+  - Conditional
+  - Custom
+    - $accumulator
+    - $function
+  - Data size
+  - Date
+  - Litera
+  - Miscellaneous
+  - Object
+  - Set
+  - String
+  - Meta
+  - Timestamp
+  - Triginometry
+  - Type
+  - Accumulator
+  - Variable
+  - Window
+  - Array
+    - $arrayElemAt - Returns the element at the specified array index.
+      - db.sales.find({}, {v: {$arrayElemAt: ['$items', 0]}})
+      - select t.kvjson.items[0] from sales t;
+      - verdict: it can be translated
+
+    - $arrayToObject - Converts an array of key-value pairs into a single document.
+      - Ex 1: db.sales.find({}, {_id:0, v: {$arrayToObject: {$objectToArray: '$customer'}}})
+      - Ex 2: 
+         db.sales.find({}, {_id:0, v: {$objectToAtrray: {a: 1, b: 2}}})
+            { v: [ { k: 'a', v: 1 }, { k: 'b', v: 2 } ] }
+         db.sales.find({}, {_id:0, v: {$arrayToObject: [[ { k: 'a', v: 1 }, { k: 'b', v: 2 } ]]}})
+            { v: { a: 1, b: 2 } }
+      - select [ seq_transform({'a': 1, 'b': 2}.keys(), { "k" : $sq1, "v" : {'a': 1, 'b': 2}.$sq1}) ] from sales;
+            {
+                "Column_1" : [{
+                    "k" : "a",
+                    "v" : 1
+                }, {
+                    "k" : "b",
+                    "v" : 2
+                }]
+            }
+      - verdict: it cannot be translated
+    
+    - $concatArrays - Concatenates arrays to return the concatenated array.
+      - db.sales.find({}, {_id:0, v: {$concatArrays: [[ 'white', 'green' ], [ 'white', 'green' ]]}})
+            { v: [ 'white', 'green', 'white', 'green' ] }
+      - select {'v': [t.kvjson.items.tags[], t.kvjson.items.tags[]]} from sales t;
+            {
+              "Column_1" : {
+                "v" : ["white", "green", "white", "green"]
+              }
+            }
+      - verdict: it can be translated
+
+    - $filter - Filters an array of documents to return only those that match a specified condition.
+        - db.sales.find({}, {_id:0, v: {$filter: {input: '$items', as: 'i', cond: { $gt: ['$$i.price', 5]}}}})
+        - select {'v': t.kvjson.items[$element.price > 5]} from sales t;
+        - verdict: it can be translated only if not nested
+
+    - $firstN - Returns the first N elements of an array.
+      -  db.sales.find({}, {_idL:1, 'v': {$firstN: {n:2, input: '$items.tags'}}})
+      -  select {'v': t.kvjson.items.tags[][:2]} from sales t;
+
+    - $in - Returns a boolean indicating whether a specified value is in an array.
+      - db.sales.find({}, {_id:0, v: {$in: [['red'], '$items.tags']}})
+      - select {'v': ['red'] in t.kvjson.items.tags} from sales t;  
+        Error handling command select {'v': ['red'] in t.kvjson.items.tags} from sales t: Error: at (1, 39) Type mismatch in IN operator.
+            LHS type: ARRAY RHS type: ARRAY
+            LHS val = ["red"] RHS val = ["white"]
+      - select {'v': 'red' in t.kvjson.items.tags[]} from sales t; - works but different semantics
+      - verdict: it can't be translated because the semantics are different
+
+    - $indexOfArray - Returns the index of an array element that matches a specified value.
+      - db.sales.find({}, {_id:0, v: {$indexOfArray: ['$items.tags', ['red'], 0, 3]}})
+      - ??? 
+      - select {'v': t.kvjson.items.tags[$element = 'red' and $pos >= 0 and $pos <= 3]} from sales t;
+         This selects the item from array but bot its possition
+      - verdict: it can't be translated
+
+    - $isArray - Returns a boolean indicating whether the value is an array.
+      - db.sales.find({}, {_id:0, v: {$isArray: '$items.tags'}})
+      - select {v: t.kvjson.items.tags is of type (ARRAY)} from sales t;
+
+    - $lastN - Returns the last N elements of an array.
+      - db.sales.find({}, {_id:0, v: {$lastN: {n: 1, input:'$items.tags'}}})
+          ...{ v: [ [ 'red' ] ] }
+      - select {'v': t.kvjson.items.tags[][-1:]} from sales t;  
+         - doesn't work !!!
+      - verdict: it can't be translated
+
+    - $map - Applies an expression to each item in an array and returns an array with the applied results.
+      - db.sales.find({}, {_id:0, v: {$map: {as: 'arr', input:[1,2,3], in: {$add: ['$$arr', 4]}}}})
+          { v: [ 5, 6, 7 ] }
+      - select {'v': seq_transform([1,2,3][], $ + 4)} from sales t;
+      - verdict: it can be translated
+
+    - $maxN - Returns the n largest values in an array.
+      - db.sales.find({}, {_id:0, v: {$maxN: {input:[1,2,3], n: 2}}})
+          { v: [ 3, 2 ] }
+      - ???
+      - verdict: it can't be translated
+
+    - $minN - Returns the n smallest values in an array.
+      - verdict: it can't be translated
+
+    - $objectToArray - Converts a document to an array. The return array contains an element for each field/value pair in the original document. Each element in the return array is a document that contains two fields k and v.
+       - db.sales.find({}, {_id:0, v: {$objectToArray: {a: 1, b: 2}}})
+       - select [ seq_transform({'a': 1, 'b': 2}.keys(), { "k" : $sq1, "v" : {'a': 1, 'b': 2}.$sq1}) ] from sales;
+            {
+                "Column_1" : [{
+                    "k" : "a",
+                    "v" : 1
+                }, {
+                    "k" : "b",
+                    "v" : 2
+                }]
+            }
+        - verdict: it can be translated
+
+    - $range - Returns an array of numbers from a starting number to a stopping number.
+       - db.sales.find({}, {_id:0, v: {$range: [0,10, 2]}})
+            { v: [ 0, 2, 4, 6, 8 ] }
+       - ???
+       - verdict: it can't be translated
+    
+    - $reduce - Applies an expression to each element in an array and combines them into a single value.
+        - db.sales.find({}, {_id:0, v: {$reduce: {
+            input: [ 1, 2, 3, 4 ],
+            initialValue: { sum: 5, product: 2 },
+            in: {
+               sum: { $add : ["$$value.sum", "$$this"] },
+               product: { $multiply: [ "$$value.product", "$$this" ] }
+            }
+          }}})
+               { v: { sum: 15, product: 48 } }
+        - ???
+        - verdict: it can't be translated
+    
+    - $reverseArray - Returns an array with the elements in reverse order.
+        - db.sales.find({}, {_id:0, v: {$reverseArray: [[1,2,3]]}})
+            { v: [ 3, 2, 1 ] }
+        - ???
+        - verdict: it can't be translated
+
+    - $size - Returns the number of elements in an array.
+        - db.sales.find({}, {_id:0, v: {$size: [[1,2,3]]}})
+             { v: 3 }
+        - select {'v': size([1,2,3])} from sales t;
+        - verdict: it can be translated
+
+    - $slice - Returns a subset of an array.
+        - db.sales.find({}, {_id:0, v: {$slice: [[1,2,3], 1,1]}})
+              { v: [ 2 ] }
+        - db.sales.find({}, {_id:0, v: {$slice: [[1,2,3], -2]}})
+              { v: [ 2, 3 ] }
+        - select {'v': [1,2,3][1:1]} from sales t;
+             "Column_1" : {"v" : 2}
+        - select {'v': [1,2,3][:-2]} from sales t;
+              "Column_1" : {}
+        - verdict: Partial implementation posible, only for positive indexes
+
+    - $sortArray - Sorts an array based on its elements. The sort order is user specified.
+        - db.sales.find({}, {_id:0, v: {$sortArray: {input: [4,2,3], sortBy: 1}}})
+            { v: [ 2, 3, 4 ] }
+        - db.sales.find({}, {_id:0, v: {$sortArray: {input: '$items', sortBy: {price: -1, name: 1}}}})
+        - ???
+        - verdict: it can't be translated
+
+    - $zip - Transposes an array of input arrays
+        - db.sales.find({}, {_id:0, v: {$zip: {inputs: [[1,2,3], ['a','b','c']]}}})
+            { v: [ [ 1, 'a' ], [ 2, 'b' ], [ 3, 'c' ] ] }
+        - ???
+        - verdict: it can't be translated
+
+
+
+Works:
+ - $reduce: goes through all items in an array and concatenates them into a string
+    - db.sales.find({}, {_id:0, v: {$reduce: {input: '$items.name', initialValue: '', in: { $concat : ["$$value", "$$this"] }}}})
+
+ - $elemMatch: finds first item in an array that match a query
+    - db.sales.find({}, {_id:0, items: {$elemMatch: {price: {$gt: 8}}}})
+    - select {'v': 'red' in t.kvjson.items.tags[]} from sales t;
+    - 

@@ -1,0 +1,394 @@
+[
+//=====
+//JSON.stringify(schema.tree)
+{
+    "saleDate":{"required":true},
+    "items":[{"tags":[null]}],
+    "storeLocation":{"required":true},
+    "customer":{
+        "type":{
+            "obj":{
+                "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                "age":{"optional":true},
+                "email":{"optional":true},
+                "satisfaction":{"optional":true}
+            },
+            "paths":{
+                "gender":{"enumValues":["F","M"],"regExp":null,"path":"gender","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],"getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+                "age":{"path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+                "email":{"enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+                "satisfaction":{"path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},"_id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},
+                "__v":{"path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}
+            },
+            "aliases":{},"subpaths":{},
+            "virtuals":{"id":{"path":"id","getters":[null,null],"setters":[],"options":{}}},
+            "singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+            "tree":{
+                "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                "age":{"optional":true},
+                "email":{"optional":true},
+                "satisfaction":{"optional":true},
+                "_id":{"auto":true,"type":"ObjectId"},
+                "id":{"path":"id","getters":[null,null],"setters":[],"options":{}}
+            },
+            "query":{},"childSchemas":[],
+            "plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+            "$id":2,
+            "mapPaths":[], "s":{"hooks":{"_pres":{},"_posts":{}}}, "_userProvidedOptions":{},
+            "options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},
+            "$globalPluginsApplied":true,"_requiredpaths":[]
+        },
+        "optional":true
+    },
+    "couponUsed":{"optional":true},
+    "purchaseMethod":{"enum":{"InStore":"InStore","Online":"Online"},"default":"InStore","optional":true},
+    "_id":{"auto":true,"type":"ObjectId"},
+    "id":{"path":"id","getters":[null],"setters":[],"options":{}}
+},
+
+
+// =====
+// JSON.stringify(schema.obj)
+{
+    "saleDate": {"required":true},
+    "items": [{"tags":[null]}],
+    "storeLocation": {"required":true},
+    "customer": {
+        "type":{"obj":{
+            "gender": {"enum":{"M":"M","F":"F"},"optional":true},
+            "age": {"optional":true},
+            "email": {"optional":true},
+            "satisfaction": {"optional":true}
+        },
+        "paths":{"gender":{"enumValues":["F","M"],
+                    "regExp":null,
+                    "path":"gender",
+                    "instance":"String",
+                    "validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],
+                    "getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+                "age":{"path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+                "email":{"enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+                "satisfaction":{"path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},
+                "_id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},
+                "__v":{"path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}
+                },
+        "aliases":{}, 
+        "subpaths":{},
+        "virtuals":{"id":{"path":"id","getters":[null,null],"setters":[],"options":{}}},
+        "singleNestedPaths":{},
+        "nested":{},
+        "inherits":{},
+        "callQueue":[],
+        "_indexes":[],
+        "methods":{},
+        "methodOptions":{},
+        "statics":{},
+        "tree":{
+            "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+            "age":{"optional":true},
+            "email":{"optional":true},
+            "satisfaction":{"optional":true},
+            "_id":{"auto":true,"type":"ObjectId"},
+            "id":{"path":"id","getters":[null,null],"setters":[],"options":{}}
+        },
+        "query":{},
+        "childSchemas":[],
+        "plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+        "$id":2,
+        "mapPaths":[],
+        "s":{"hooks":{"_pres":{},"_posts":{}}},
+        "_userProvidedOptions":{},
+        "options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},
+        "$globalPluginsApplied":true,
+        "_requiredpaths":[]
+        },
+        "optional":true
+    },
+    "couponUsed":{"optional":true},
+    "purchaseMethod":{"enum":{"InStore":"InStore","Online":"Online"},"default":"InStore","optional":true}
+}
+
+
+,
+// ==============
+// JSON.stringify(schema)
+{
+    "obj": {
+        "saleDate": {"required":true},
+        "items":[{"tags":[null]}],
+        "storeLocation":{"required":true},
+        "customer":{
+            "type":{
+                "obj":{
+                    "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                    "age":{"optional":true},
+                    "email":{"optional":true},
+                    "satisfaction":{"optional":true}
+                },
+                "paths":{
+                    "gender":{
+                        "enumValues":["F","M"],"regExp":null,"path":"gender","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],"getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+                    "age":{
+                        "path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+                    "email":{
+                        "enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+                    "satisfaction":{
+                        "path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},
+                    "_id":{
+                        "path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},
+                    "__v":{
+                        "path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}
+                },
+                "aliases":{},"subpaths":{},
+                "virtuals":{"id":{"path":"id","getters":[null,null],"setters":[],"options":{}}},
+                "singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+                "tree":{
+                    "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                    "age":{"optional":true},"email":{"optional":true},
+                    "satisfaction":{"optional":true},"_id":{"auto":true,"type":"ObjectId"},
+                    "id":{"path":"id","getters":[null,null],"setters":[],"options":{}}
+                },
+                "query":{},"childSchemas":[],"plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                "$id":2,"mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},
+                "_userProvidedOptions":{},
+                "options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},
+                "$globalPluginsApplied":true,"_requiredpaths":[]
+            },
+            "optional":true
+        },
+        "couponUsed":{"optional":true},
+        "purchaseMethod":{"enum":{"InStore":"InStore","Online":"Online"},"default":"InStore","optional":true}
+    },
+    "paths":{
+        "saleDate":{"path":"saleDate","instance":"Date","validators":[{"message":"Path `{PATH}` is required.","type":"required"}],"getters":[],"setters":[],"_presplitPath":["saleDate"],"options":{"required":true},"_index":null,"isRequired":true,"originalRequiredValue":true},
+        "items":{
+            "schemaOptions":{},
+            "$embeddedSchemaType":{
+                "path":"items.$","validators":[],"getters":[],"setters":[],
+                "_presplitPath":["items","$"],"options":{"required":false},"_index":null,"isRequired":false,"$isMongooseDocumentArrayElement":true,
+                "schema":{
+                    "obj":{
+                        "tags":[null]
+                    },
+                    "paths":{
+                        "name":{
+                            "enumValues":[],"regExp":null,"path":"name","instance":"String","validators":[],"getters":[],"setters":[],          "_presplitPath":["name"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                        "price":{
+                            "path":"price","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["price"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                        "quantity":{
+                            "path":"quantity","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["quantity"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                        "tags":{
+                            "schemaOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},"caster":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},
+                            "$embeddedSchemaType":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},
+                            "$isMongooseArray":true,"path":"tags","instance":"Array","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{"type":[null]},"_index":null,"$isUnderneathDocArray":true},
+                        "_id":{
+                            "path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null,"$isUnderneathDocArray":true}
+                    },
+                    "aliases":{},"subpaths":{"tags.$":{"enumValues":[],"regExp":null,"path":"tags.$","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"$isUnderneathDocArray":true}},"virtuals":{"id":{"path":"id","getters":[null],"setters":[],"options":{}}},"singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+                    "tree":{
+                        "tags":[null],
+                        "_id":{"auto":true,"type":"ObjectId"},
+                        "id":{"path":"id","getters":[null],"setters":[],"options":{}}
+                    },
+                    "query":{},"childSchemas":[],"plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                    "$id":4,
+                    "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},"_userProvidedOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false},"options":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},"$implicitlyCreated":true,"$globalPluginsApplied":true,"_requiredpaths":[],"_indexedpaths":[]
+                }
+            },
+            "$isMongooseArray":true,"path":"items","instance":"Array","validators":[],"getters":[],"setters":[],"_presplitPath":["items"],"options":{"type":[{"tags":[null]}]},"_index":null,
+            "schema":{
+                "obj":{
+                    "tags":[null]
+                },
+                "paths":{
+                    "name":{
+                        "enumValues":[],"regExp":null,"path":"name","instance":"String","validators":[],"getters":[],"setters":[],  "_presplitPath":["name"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                    "price":{
+                        "path":"price","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["price"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                    "quantity":{
+                        "path":"quantity","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["quantity"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                    "tags":{
+                        "schemaOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},
+                        "caster":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},
+                        "$embeddedSchemaType":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},
+                        "$isMongooseArray":true,"path":"tags","instance":"Array","validators":[],"getters":[],"setters":[],
+                        "_presplitPath":["tags"],
+                        "options":{"type":[null]},"_index":null,"$isUnderneathDocArray":true},
+                    "_id":{
+                        "path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null,"$isUnderneathDocArray":true}
+                },
+                "aliases":{},"subpaths":{"tags.$":{"enumValues":[],"regExp":null,"path":"tags.$","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"$isUnderneathDocArray":true}},"virtuals":{"id":{"path":"id","getters":[null],"setters":[],"options":{}}},"singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},"tree":{"tags":[null],"_id":{"auto":true,"type":"ObjectId"},"id":{"path":"id","getters":[null],"setters":[],"options":{}}},"query":{},"childSchemas":[],"plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                "$id":4,
+                "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},"_userProvidedOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false},"options":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},"$implicitlyCreated":true,"$globalPluginsApplied":true,"_requiredpaths":[],"_indexedpaths":[]
+            },
+            "$isMongooseDocumentArray":true
+        },
+        "storeLocation":{
+            "enumValues":[],"regExp":null,"path":"storeLocation","instance":"String","validators":[{"message":"Path `{PATH}` is required.","type":"required"}],"getters":[],"setters":[],"_presplitPath":["storeLocation"],"options":{"required":true},"_index":null,"isRequired":true,"originalRequiredValue":true},
+        "customer":{
+            "path":"customer",
+            "options":{
+                "type":{
+                    "obj":{
+                        "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                        "age":{"optional":true},"email":{"optional":true},
+                        "satisfaction":{"optional":true}
+                    },
+                    "paths":{
+                        "gender":{"enumValues":["F","M"],"regExp":null,"path":"gender","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],"getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+                        "age":{"path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+                        "email":{"enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+                        "satisfaction":{"path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},
+                        "_id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},"__v":{"path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}
+                    },
+                    "aliases":{},"subpaths":{},"virtuals":{"id":{"path":"id","getters":[null,null],"setters":[],"options":{}}},
+                    "singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+                    "tree":{
+                        "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                        "age":{"optional":true},
+                        "email":{"optional":true},
+                        "satisfaction":{"optional":true},
+                        "_id":{"auto":true,"type":"ObjectId"},
+                        "id":{"path":"id","getters":[null,null],"setters":[],"options":{}}
+                    },
+                    "query":{},"childSchemas":[],"plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                    "$id":2,
+                    "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},"_userProvidedOptions":{},
+                    "options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},
+                    "$globalPluginsApplied":true,"_requiredpaths":[]
+                },
+                "optional":true
+            }
+        },
+        "couponUsed":{
+            "path":"couponUsed","instance":"Boolean","validators":[],"getters":[],"setters":[],"_presplitPath":["couponUsed"],"options":{"optional":true},"_index":null},
+        "purchaseMethod":{
+            "enumValues":["Online","InStore"],"regExp":null,"path":"purchaseMethod","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["Online","InStore"]}],"getters":[],"setters":[],"_presplitPath":["purchaseMethod"],"options":{"enum":{"InStore":"InStore","Online":"Online"},"default":"InStore","optional":true},"_index":null,"defaultValue":"InStore"},
+        "_id":{
+            "path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},
+        "__v":{
+            "path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}
+    },
+    "aliases":{},
+    "subpaths":{
+        "items.name":{"enumValues":[],"regExp":null,"path":"name","instance":"String","validators":[],"getters":[],"setters":[],            "_presplitPath":["name"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+        "items.price":{"path":"price","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["price"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+        "items.quantity":{"path":"quantity","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["quantity"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+        "items.tags":{"schemaOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},"caster":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},"$embeddedSchemaType":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},"$isMongooseArray":true,"path":"tags","instance":"Array","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{"type":[null]},"_index":null,"$isUnderneathDocArray":true},
+        "items._id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null,"$isUnderneathDocArray":true},
+        "items.tags.$":{"enumValues":[],"regExp":null,"path":"tags.$","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"$isUnderneathDocArray":true}},
+    "virtuals":{
+        "id":{"path":"id","getters":[null],"setters":[],"options":{}}},
+    "singleNestedPaths":{
+        "customer.gender":{"enumValues":["F","M"],"regExp":null,"path":"gender","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],"getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+        "customer.age":{"path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+        "customer.email":{"enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+        "customer.satisfaction":{"path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},
+        "customer._id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null}
+    },
+    "nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+    "tree":{
+        "saleDate":{"required":true},
+        "items":[{"tags":[null]}],
+        "storeLocation":{"required":true},
+        "customer":{
+            "type":{
+                "obj":{
+                    "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                    "age":{"optional":true},
+                    "email":{"optional":true},
+                    "satisfaction":{"optional":true}},
+                "paths":{
+                    "gender":{"enumValues":["F","M"],"regExp":null,"path":"gender","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],"getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+                    "age":{"path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+                    "email":{"enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+                    "satisfaction":{"path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},
+                    "_id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},
+                    "__v":{"path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}},
+                "aliases":{},"subpaths":{},
+                "virtuals":{"id":{"path":"id","getters":[null,null],"setters":[],"options":{}}},"singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+                "tree":{
+                    "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                    "age":{"optional":true},
+                    "email":{"optional":true},
+                    "satisfaction":{"optional":true},
+                    "_id":{"auto":true,"type":"ObjectId"},
+                    "id":{"path":"id","getters":[null,null],"setters":[],"options":{}}
+                },
+                "query":{},"childSchemas":[],"plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                "$id":2,
+                "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},"_userProvidedOptions":{},"options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},"$globalPluginsApplied":true,"_requiredpaths":[]
+            },
+            "optional":true
+        },
+        "couponUsed":{"optional":true},
+        "purchaseMethod":{"enum":{"InStore":"InStore","Online":"Online"},"default":"InStore","optional":true},
+        "_id":{"auto":true,"type":"ObjectId"},
+        "id":{"path":"id","getters":[null],"setters":[],"options":{}}
+    },
+    "query":{},
+    "childSchemas":[
+        {
+            "schema":{
+                "obj":{"tags":[null]},
+                "paths":{
+                    "name":{"enumValues":[],"regExp":null,"path":"name","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["name"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                    "price":{"path":"price","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["price"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                    "quantity":{"path":"quantity","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["quantity"],"options":{},"_index":null,"$isUnderneathDocArray":true},
+                    "tags":{"schemaOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},"caster":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},"$embeddedSchemaType":{"enumValues":[],"regExp":null,"path":"tags","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"_arrayPath":"tags.$","_arrayParentPath":"tags"},"$isMongooseArray":true,"path":"tags","instance":"Array","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{"type":[null]},"_index":null,"$isUnderneathDocArray":true},
+                    "_id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null,"$isUnderneathDocArray":true}
+                },
+                "aliases":{},
+                "subpaths":{"tags.$":{"enumValues":[],"regExp":null,"path":"tags.$","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["tags"],"options":{},"_index":null,"$isUnderneathDocArray":true}},
+                "virtuals":{"id":{"path":"id","getters":[null],"setters":[],"options":{}}},
+                "singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+                "tree":{"tags":[null],"_id":{"auto":true,"type":"ObjectId"},
+                    "id":{"path":"id","getters":[null],"setters":[],"options":{}}
+                },
+                "query":{},"childSchemas":[],
+                "plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                "$id":4,
+                "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},
+                "_userProvidedOptions":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false},
+                "options":{"minimize":true,"typeKey":"type","strict":true,"strictQuery":false,"id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true},
+                "$implicitlyCreated":true,"$globalPluginsApplied":true,"_requiredpaths":[],"_indexedpaths":[]
+            }
+        },
+        {
+            "schema":{
+                "obj":{
+                    "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                    "age":{"optional":true},"email":{"optional":true},
+                    "satisfaction":{"optional":true}
+                },
+                "paths":{
+                    "gender":{"enumValues":["F","M"],"regExp":null,"path":"gender","instance":"String","validators":[{"message":"`{VALUE}` is not a valid enum value for path `{PATH}`.","type":"enum","enumValues":["F","M"]}],"getters":[],"setters":[],"_presplitPath":["gender"],"options":{"enum":{"M":"M","F":"F"},"optional":true},"_index":null},
+                    "age":{"path":"age","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["age"],"options":{"optional":true},"_index":null},
+                    "email":{"enumValues":[],"regExp":null,"path":"email","instance":"String","validators":[],"getters":[],"setters":[],"_presplitPath":["email"],"options":{"optional":true},"_index":null},
+                    "satisfaction":{"path":"satisfaction","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["satisfaction"],"options":{"optional":true},"_index":null},
+                    "_id":{"path":"_id","instance":"ObjectId","validators":[],"getters":[],"setters":[null],"_presplitPath":["_id"],"options":{"auto":true,"type":"ObjectId"},"_index":null},
+                    "__v":{"path":"__v","instance":"Number","validators":[],"getters":[],"setters":[],"_presplitPath":["__v"],"options":{},"_index":null}
+                },
+                "aliases":{},"subpaths":{},"virtuals":{"id":{"path":"id","getters":[null,null],"setters":[],"options":{}}},
+                "singleNestedPaths":{},"nested":{},"inherits":{},"callQueue":[],"_indexes":[],"methods":{},"methodOptions":{},"statics":{},
+                "tree":{
+                    "gender":{"enum":{"M":"M","F":"F"},"optional":true},
+                    "age":{"optional":true},"email":{"optional":true},
+                    "satisfaction":{"optional":true},
+                    "_id":{"auto":true,"type":"ObjectId"},
+                    "id":{"path":"id","getters":[null,null],"setters":[],"options":{}}
+                },
+                "query":{},"childSchemas":[],"plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+                "$id":2,
+                "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},"_userProvidedOptions":{},
+                "options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},
+                "$globalPluginsApplied":true,"_requiredpaths":[]
+            }
+        }
+    ],
+    "plugins":[{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}},{"opts":{"deduplicate":true}}],
+    "$id":3,
+    "mapPaths":[],"s":{"hooks":{"_pres":{},"_posts":{}}},"_userProvidedOptions":{},"options":{"typeKey":"type","id":true,"_id":true,"validateBeforeSave":true,"read":null,"shardKey":null,"discriminatorKey":"__t","autoIndex":null,"minimize":true,"optimisticConcurrency":false,"versionKey":"__v","capped":false,"bufferCommands":true,"strictQuery":false,"strict":true,"pluralization":true},"$globalPluginsApplied":true,"_requiredpaths":["storeLocation","saleDate"]
+}
+
+]
