@@ -9,9 +9,12 @@ The official documentation website is [TBD](http://github.com/).
 
 ## Dev instalation
 
-Clone from GiyHub:
+Clone from GitHub (requires git):
 $ git clone https://github.com/cezarfx/orcoos.git
 $ cd orcoos
+
+Install dependencies (requires NodeJS > 18 and npm > 10.3):
+$ npm install
 
 Run tests, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
 $ npm test
