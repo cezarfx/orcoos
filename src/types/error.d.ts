@@ -8,10 +8,10 @@ declare module 'orcoos' {
   type CastError = Error.CastError;
   type SyncIndexesError = Error.SyncIndexesError;
 
-  class MongooseError extends global.Error {
+  class OrcoosError extends global.Error {
     constructor(msg: string);
 
-    /** The type of error. "MongooseError" for generic errors. */
+    /** The type of error. "OrcoosError" for generic errors. */
     name: string;
 
     static messages: any;
@@ -19,11 +19,11 @@ declare module 'orcoos' {
     static Messages: any;
   }
 
-  class Error extends MongooseError { }
+  class Error extends OrcoosError { }
 
   namespace Error {
 
-    export class CastError extends MongooseError {
+    export class CastError extends OrcoosError {
       name: 'CastError';
       stringValue: string;
       kind: string;
@@ -34,22 +34,22 @@ declare module 'orcoos' {
 
       constructor(type: string, value: any, path: string, reason?: NativeError, schemaType?: SchemaType);
     }
-    export class SyncIndexesError extends MongooseError {
+    export class SyncIndexesError extends OrcoosError {
       name: 'SyncIndexesError';
       errors?: Record<string, nosqldb.NoSQLError>;
 
       constructor(type: string, value: any, path: string, reason?: NativeError, schemaType?: SchemaType);
     }
 
-    export class DivergentArrayError extends MongooseError {
+    export class DivergentArrayError extends OrcoosError {
       name: 'DivergentArrayError';
     }
 
-    export class MissingSchemaError extends MongooseError {
+    export class MissingSchemaError extends OrcoosError {
       name: 'MissingSchemaError';
     }
 
-    export class DocumentNotFoundError extends MongooseError {
+    export class DocumentNotFoundError extends OrcoosError {
       name: 'DocumentNotFoundError';
       result: any;
       numAffected: number;
@@ -57,47 +57,47 @@ declare module 'orcoos' {
       query: any;
     }
 
-    export class ObjectExpectedError extends MongooseError {
+    export class ObjectExpectedError extends OrcoosError {
       name: 'ObjectExpectedError';
       path: string;
     }
 
-    export class ObjectParameterError extends MongooseError {
+    export class ObjectParameterError extends OrcoosError {
       name: 'ObjectParameterError';
     }
 
-    export class OverwriteModelError extends MongooseError {
+    export class OverwriteModelError extends OrcoosError {
       name: 'OverwriteModelError';
     }
 
-    export class ParallelSaveError extends MongooseError {
+    export class ParallelSaveError extends OrcoosError {
       name: 'ParallelSaveError';
     }
 
-    export class ParallelValidateError extends MongooseError {
+    export class ParallelValidateError extends OrcoosError {
       name: 'ParallelValidateError';
     }
 
-    export class MongooseServerSelectionError extends MongooseError {
+    export class MongooseServerSelectionError extends OrcoosError {
       name: 'MongooseServerSelectionError';
     }
 
-    export class StrictModeError extends MongooseError {
+    export class StrictModeError extends OrcoosError {
       name: 'StrictModeError';
       isImmutableError: boolean;
       path: string;
     }
 
-    export class ValidationError extends MongooseError {
+    export class ValidationError extends OrcoosError {
       name: 'ValidationError';
 
       errors: { [path: string]: ValidatorError | CastError };
       addError: (path: string, error: ValidatorError | CastError) => void;
 
-      constructor(instance?: MongooseError);
+      constructor(instance?: OrcoosError);
     }
 
-    export class ValidatorError extends MongooseError {
+    export class ValidatorError extends OrcoosError {
       name: 'ValidatorError';
       properties: {
         message: string,
@@ -109,7 +109,7 @@ declare module 'orcoos' {
       kind: string;
       path: string;
       value: any;
-      reason?: MongooseError | null;
+      reason?: OrcoosError | null;
 
       constructor(properties: {
         message?: string,
@@ -120,7 +120,7 @@ declare module 'orcoos' {
       });
     }
 
-    export class VersionError extends MongooseError {
+    export class VersionError extends OrcoosError {
       name: 'VersionError';
       version: number;
       modifiedPaths: Array<string>;
@@ -128,7 +128,7 @@ declare module 'orcoos' {
       constructor(doc: Document, currentVersion: number, modifiedPaths: Array<string>);
     }
 
-    export class StrictPopulateError extends MongooseError {
+    export class StrictPopulateError extends OrcoosError {
       name: 'StrictPopulateError';
       path: string;
     }
