@@ -6,7 +6,7 @@ chai.use(chaiAsPromised);
 import { connect } from '../index';
 
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
-import { sort } from '../lib/types/array/methods';
+
 
 describe("CRUD and query operations", () => {
     it('connect', async() => {

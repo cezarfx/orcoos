@@ -56,7 +56,7 @@ describe("Create and Drop tables", () => {
     }).timeout(30000);
 
     it('drop and get all', async() => {
-        await dropSale;
+        await dropSale();
         let q = 'select * from sales';
         let res = await Sale.nosqlQuery(q);
         //console.log(res);

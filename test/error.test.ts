@@ -5,25 +5,12 @@ chai.use(chaiAsPromised);
 
 import { connect } from '../index';
 
-import { TableState } from 'oracle-nosqldb';
-
-let client;
-//  = new NoSQLClient({
-//     serviceType: ServiceType.KVSTORE,
-//     endpoint: "http://localhost:8080"
-// });
-
 import {Sale, Item, PurchaseMethod, Gender, ISale} from './sale';
 import { CastError } from '../lib';
 
 describe("Errors for weired queries", () => {
     let sale: typeof Sale;
     let allExpectedSales:Array<typeof Sale> = [];
-
-    let noOfRows = 0;
-    let names = ["Al", "Bo", "Yo", "Jo", "Ax"];
-    let cities = ["LA", "NY", "SF", "London", "Paris"];
-    let itemNames = ["wine", "milk", "beer", "soda", "tea"];
 
     it('setup', async() => {
         expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
@@ -56,44 +43,6 @@ describe("Errors for weired queries", () => {
         expect(dbSale.items[0].quantity).equal(sale.items[0].quantity);
         expect(dbSale.customer).to.not.exist;
         allExpectedSales.push(sale);
-
-        // // Add more sales
-        // let saleCount = await Sale.count();
-        // let r: number;
-        
-        // let allSales: Array<ISale> = [];
-
-        // for( let name of names) {
-        //     r = Math.round(1000 * Math.random());
-  
-        //     let city = cities[r % cities.length];
-        //     const sale: ISale = new Sale<ISale>({
-        //         saleDate: new Date(),
-        //         items: [new Item({
-        //             name: itemNames[r % itemNames.length],
-        //             price: r/10,
-        //             quantity: r % 10 + (city.length > 2 ? 10 : 0)
-        //         })],
-        //         storeLocation: city,
-        //         customer: {
-        //             gender: Object.values(Gender)[r % 2],
-        //             age: r % 100,
-        //             email: name + '@e.mail'
-        //         }
-        //     });
-        //     allSales.push(sale);
-        // };
-    
-        // let res = await Sale.insertMany(allSales, {rawResult: true});
-        // expect(res).exist;
-        // expect(res.acknoledged).equal(true);
-        // expect(res.insertedIds).exist;
-        // expect(res.insertedIds).to.be.a('array');
-        // expect(res.insertedCount).equals(names.length);
-
-        // expect(await Sale.count()).equal(saleCount + names.length);
-        // noOfRows = saleCount + names.length;
-        // allExpectedSales = allSales;
     });
 
     it('.find(null) not resolved', async() => {
@@ -112,8 +61,6 @@ describe("Errors for weired queries", () => {
 
         await expect(Sale.find({'items.quantity': {$or: [ {$lt: 10}, {$gt: 10} ]}})).to.be.rejectedWith(CastError);
         await expect(Sale.find({'items.quantity': {$or: [ {$lt: 10}, {$gt: 10} ]}})).to.be.rejectedWith('Cast to number failed for value "[ { \'$lt\': 10 }, { \'$gt\': 10 } ]" (type Array) at path "quantity" for model "Sale"');
-
-        
     });
 
 });
