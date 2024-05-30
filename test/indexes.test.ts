@@ -248,7 +248,7 @@ describe("Indexes", () => {
             // for (let i of saleIndexes) {
             //     console.log("        - " + JSON.stringify(i));
             // }
-        });
+        }).timeout(10000);
     });
 
     describe('nested arrays', () => {

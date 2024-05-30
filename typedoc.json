@@ -1,0 +1,35 @@
+{
+    "name": "Oracle NoSQL Database Orcoos SDK",
+    "readme": "README.md",
+    "entryPoints": [ "./index.d.ts" ],
+    "out": "doc/site",
+    "includeVersion": true,
+    "disableSources": true,
+    "intentionallyNotExported": [ "Expand", "OpaqueTypeKey", "Tag",
+        "OpaqueType", "ExtractByType" ],
+    "validation": {
+        "notExported": false,
+        "invalidLink": true,
+        "notDocumented": false
+    },
+    "externalSymbolLinkMappings": {
+        "typescript": {
+            "Promise": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+            "Date": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date"
+        },
+        "global": {
+            "Buffer": "https://nodejs.org/api/buffer.html",
+            "Promise": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+            "Date": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+            "Date.parse": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse",
+            "Infinity": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+            "Number.MAX_SAFE_INTEGER": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER",
+            "Number.MIN_SAFE_INTEGER": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER",
+            "BigInt": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt",
+            "SyntaxError": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError"
+        },
+        "@types/node": {
+            "Buffer": "https://nodejs.org/api/buffer.html"
+        }
+    }
+}

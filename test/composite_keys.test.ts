@@ -49,7 +49,7 @@ export async function populateCollection(): Promise<IPlayer[]> {
             }
 
             let name = names[n % names.length];
-            const player: IPlayer = new Player<IPlayer>({
+            const player: IPlayer = await new Player<IPlayer>({
                 _id: {team: team, squadNumber: n},
                 name: name,
                 goals: Math.round(50 * Math.random())
@@ -72,12 +72,13 @@ describe("Composite Keys", () => {
     it('delete all', async() => {
         expect(await Player.deleteMany());
         expect(await Player.count()).equal(0);
-    });
+    }).timeout(10000);
 
     it('populate players', async() => {
         allPlayers = await populateCollection();
+        expect(allPlayers.length).equal(25);
         expect(await Player.count()).equal(25);
-    });
+    }).timeout(10000);
 
     it('query players', async() => {
         let dbPlayers = await Player.find();

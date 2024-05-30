@@ -31,7 +31,8 @@
     "test-js": "cd examples/javascript && npm start",
     "test-ts": "cd examples/typescript && npm start",
     "test-ex": "npm run test-js && npm run test-ts",
-    "all": "npm run test && npm run test-ex"
+    "all": "npm run test && npm run test-ex",
+    "docs": "typedoc"
   },
   "dependencies": {
     "bson": "^6.4.0",
@@ -41,7 +42,8 @@
     "mquery": "^5.0.0",
     "oracle-nosqldb": "^5.5.1",
     "package.json": "^0.0.0",
-    "sift": "^17.0.1"
+    "sift": "^17.0.1",
+    "typedoc": "^0.25.13"
   },
   "devDependencies": {
     "@types/chai": "^4.3.12",
@@ -73,6 +75,6 @@
     "orm",
     "db"
   ],
-  "author": "Cezar Andrei",
+  "author": "Oracle",
   "license": "MIT"
 }

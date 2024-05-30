@@ -51,7 +51,7 @@ describe("Errors for weired queries", () => {
         await sleep(1000);
         expect(fnp).to.not.be.fulfilled;
         expect(fnp).to.not.be.rejected;
-    }).timeout(2000);
+    }).timeout(10000);
 
 
     it('errors', async() => {

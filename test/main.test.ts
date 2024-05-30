@@ -10,7 +10,7 @@ import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 
 describe("CRUD and query operations", () => {
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 5}));
     });
     
     it('delete all', async() => {
