@@ -10,8 +10,8 @@ The official documentation website is [TBD](http://github.com/).
 ## Dev instalation
 
 Clone from GitHub (requires git):
-$ git clone https://github.com/cezarfx/orcoos.git
-$ cd orcoos
+$ git clone https://github.com/cezarfx/ondbmongoose.git
+$ cd ondbmongoose
 
 Install dependencies (requires NodeJS > 18 and npm > 10.3):
 $ npm install
@@ -27,11 +27,11 @@ $ npm link
 
 Run examples, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
 $ cd examples/typescript
-$ npm link orcoos
+$ npm link ondbmongoose
 $ npm start
 
 $ cd ../javascript
-$ npm link orcoos
+$ npm link ondbmongoose
 $ npm start
 
 Or run them all, tests and examples:
@@ -44,7 +44,7 @@ $ npm run all
 First install [Node.js](http://nodejs.org/) and [Oracle NoSQL DB](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html). Then:
 
 ```sh
-$ npm install orcoos
+$ npm install ondbmongoose
 ```
 
 Note: For examples in the ./examples dir to work npm link must be used. See https://docs.npmjs.com/cli/v8/commands/npm-link .
@@ -54,25 +54,25 @@ Note: For examples in the ./examples dir to work npm link must be used. See http
 
 ```javascript
 // Using Node.js `require()`
-const orcoose = require('orcoos');
+const orcoose = require('ondbmongoose');
 
 // Using ES6 imports
-import orcoos from 'orcoos';
+import ondbmongoose from 'ondbmongoose';
 ```
 
 ## Overview
 
 ### Connecting to Oracle NoSQL DB
 
-First, we need to define a connection. If your app uses only one database, you should use `orcoos.connect`. If you need to create additional connections, use `orcoos.createConnection`.
+First, we need to define a connection. If your app uses only one database, you should use `ondbmongoose.connect`. If you need to create additional connections, use `ondbmongoose.createConnection`.
 
 Both `connect` and `createConnection` take a connection string `nosqldb://` URI.
 
 ```js
-await orcoos.connect('nosqldb+on_prem_http://127.0.0.1:8080/');
+await ondbmongoose.connect('nosqldb+on_prem_http://127.0.0.1:8080/');
 ```
 
-Once connected, the `open` event is fired on the `Connection` instance. If you're using `orcoos.connect`, the `Connection` is `orcoos.connection`. Otherwise, `orcoos.createConnection` return value is a `Connection`.
+Once connected, the `open` event is fired on the `Connection` instance. If you're using `ondbmongoose.connect`, the `Connection` is `ondbmongoose.connection`. Otherwise, `ondbmongoose.createConnection` return value is a `Connection`.
 
 **Note:** _If the local connection fails then try using 127.0.0.1 instead of localhost. Sometimes issues may arise when the local hostname has been changed._
 
@@ -83,7 +83,7 @@ Once connected, the `open` event is fired on the `Connection` instance. If you'r
 Models are defined through the `Schema` interface.
 
 ```js
-const Schema = orcoos.Schema;
+const Schema = ondbmongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const BlogPost = new Schema({
@@ -130,26 +130,26 @@ Comment.pre('save', function (next) {
 });
 ```
 
-Take a look at the [`example`](./examples/typescript/demo-orcoos.ts) for an a detailed usage.
+Take a look at the [`example`](./examples/typescript/demo-ondbmongoose.ts) for an a detailed usage.
 
 ### Accessing a Model
 
-Once we define a model through `orcoos.model('ModelName', mySchema)`, we can access it through the same function
+Once we define a model through `ondbmongoose.model('ModelName', mySchema)`, we can access it through the same function
 
 ```js
-const MyModel = orcoos.model('ModelName');
+const MyModel = ondbmongoose.model('ModelName');
 ```
 
 Or just do it all at once
 
 ```js
-const MyModel = orcoos.model('ModelName', mySchema);
+const MyModel = ondbmongoose.model('ModelName', mySchema);
 ```
 
 The first argument is the _singular_ name of the collection your model is for. **Orcoos automatically looks for the _plural_ version of your model name.** For example, if you use
 
 ```js
-const MyModel = orcoos.model('Ticket', mySchema);
+const MyModel = ondbmongoose.model('Ticket', mySchema);
 ```
 
 Then `MyModel` will use the __tickets__ collection, not the __ticket__ collection. For more details read the [model docs](https://mongoosejs.com/docs/api/mongoose.html#mongoose_Mongoose-model).
@@ -181,10 +181,10 @@ console.log(instance.my.key);  // 'hello'
 
 For more details check out [the docs](http://mongoosejs.com/docs/queries.html).
 
-**Important!** If you opened a separate connection using `orcoos.createConnection()` but attempt to access the model through `orcoos.model('ModelName')` it will not work as expected since it is not hooked up to an active db connection. In this case access your model through the connection you created:
+**Important!** If you opened a separate connection using `ondbmongoose.createConnection()` but attempt to access the model through `ondbmongoose.model('ModelName')` it will not work as expected since it is not hooked up to an active db connection. In this case access your model through the connection you created:
 
 ```js
-const conn = orcoos.createConnection('your connection string');
+const conn = ondbmongoose.createConnection('your connection string');
 const MyModel = conn.model('ModelName', schema);
 const m = new MyModel;
 m.save(); // works
@@ -193,8 +193,8 @@ m.save(); // works
 vs
 
 ```js
-const conn = orcoos.createConnection('your connection string');
-const MyModel = orcoos.model('ModelName', schema);
+const conn = ondbmongoose.createConnection('your connection string');
+const MyModel = ondbmongoose.model('ModelName', schema);
 const m = new MyModel;
 m.save(); // does not work b/c the default connection object was never connected
 ```
@@ -211,7 +211,7 @@ Where `Comment` is a `Schema` we created. This means that creating embedded docu
 
 ```js
 // retrieve my model
-const BlogPost = orcoos.model('BlogPost');
+const BlogPost = ondbmongoose.model('BlogPost');
 
 // create a blog post
 const post = new BlogPost();
@@ -308,7 +308,7 @@ new Schema({
 
 ### Driver Access
 
-Orcoos is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each mongoose model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all orcoos features, including hooks, validation, etc. The one
+Orcoos is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each mongoose model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all ondbmongoose features, including hooks, validation, etc. The one
 notable exception that `YourModel.collection` still buffers
 commands. As such, `YourModel.collection.find()` will **not**
 return a cursor.

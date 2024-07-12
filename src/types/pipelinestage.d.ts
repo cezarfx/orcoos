@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   /**
      * [Stages reference](https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#aggregation-pipeline-stages)
      */

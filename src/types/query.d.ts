@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   import mongodb = require('mongodb');
 
   export type ApplyBasicQueryCasting<T> = T | T[] | (T extends (infer U)[] ? U : any) | any;

@@ -25,14 +25,14 @@
 
 declare class NativeDate extends global.Date { }
 
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   import events = require('events');
   //import mongodb = require('mongodb');
   //import mongoose = require('mongoose');
-  import orcoos = require('orcoos');
+  import ondbmongoose = require('ondbmongoose');
 
   //export type Mongoose = typeof mongoose;
-  export type Orcoos = typeof orcoos;
+  export type Orcoos = typeof ondbmongoose;
 
   /**
    * Orcoos constructor. The exports object of the `mongoose` module is an instance of this
@@ -572,5 +572,5 @@ declare module 'orcoos' {
   /* for ts-mongoose */
   export class mquery { }
 
-  export default orcoos;
+  export default ondbmongoose;
 }

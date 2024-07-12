@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   // import mongodb = require('mongodb');
 
   /** Extract generic type from Aggregate class */

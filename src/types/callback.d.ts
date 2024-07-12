@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   type CallbackError = NativeError | null;
 
   type Callback<T = any> = (error: CallbackError, result: T) => void;

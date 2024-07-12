@@ -14,9 +14,9 @@ import {
   ObjectIdSchemaDefinition,
   IfEquals,
   DefaultSchemaOptions
-} from 'orcoos';
+} from 'ondbmongoose';
 
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   /**
    * @summary Obtains document schema type.
    * @description Obtains document schema type from document Definition OR returns enforced schema type if it's provided.

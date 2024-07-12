@@ -1,5 +1,5 @@
 
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   import mongodb = require('mongodb');
 
   class NativeBuffer extends Buffer {}

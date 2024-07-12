@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
 
   import stream = require('stream');
 

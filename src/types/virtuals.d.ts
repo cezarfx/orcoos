@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
     type VirtualPathFunctions<DocType = {}, PathValueType = unknown, TInstanceMethods = {}> = {
       get?: TVirtualPathFN<DocType, PathValueType, TInstanceMethods, PathValueType>;
       set?: TVirtualPathFN<DocType, PathValueType, TInstanceMethods, void>;

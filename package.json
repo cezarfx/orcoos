@@ -1,5 +1,5 @@
 {
-  "name": "orcoos",
+  "name": "ondbmongoose",
   "version": "0.0.1",
   "description": "Oracle NoSQL DB object modeling for node.js",
   "main": "index.js",

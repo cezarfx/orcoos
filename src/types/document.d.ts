@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   //import mongodb = require('mongodb');
 
   /** A list of paths to skip. If set, Mongoose will validate every modified path that is not in this list. */

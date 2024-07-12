@@ -1,9 +1,9 @@
-//const orcoos = require('mongoose');
+//const ondbmongoose = require('mongoose');
 //import { Schema, model, connect } from 'mongoose';
-import orcoos, { Schema, model, connect } from 'orcoos';
+import ondbmongoose, { Schema, model, connect } from 'ondbmongoose';
 
 // mongoose.set('strictQuery', false);
-orcoos.set('strictQuery', false);
+ondbmongoose.set('strictQuery', false);
 
  
 // 2. Create a Schema corresponding to the document interface.

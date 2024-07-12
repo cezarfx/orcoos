@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//const orcoos = require('mongoose');
-//const orcoos = require('orcoos');
-const orcoos_1 = __importDefault(require("orcoos"));
+//const ondbmongoose = require('mongoose');
+//const ondbmongoose = require('ondbmongoose');
+const orcoos_1 = __importDefault(require("ondbmongoose"));
 // mongoose.set('strictQuery', false);
 orcoos_1.default.set('strictQuery', false);
 //import { Schema, model, connect } from 'mongoose';
-const orcoos_2 = require("orcoos");
+const orcoos_2 = require("ondbmongoose");
 // 2. Create a Schema corresponding to the document interface.
 const addressSchema = new orcoos_2.Schema({
     city: String,

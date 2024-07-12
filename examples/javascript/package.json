@@ -1,15 +1,15 @@
 {
-    "name": "orcoos-js-examples",
+    "name": "ondbmongoose-js-examples",
     "version": "0.0.1",
     "type": "module",
     "private": true,
     "description": "Orcoos JavaScript Examples",
     "dependencies": {
-        "orcoos": ">=0.0.1",
+        "ondbmongoose": ">=0.0.1",
         "package.json": "^2.0.1"
     },
     "scripts": {
-        "start": "node demo-orcoos-js.js"
+        "start": "node demo-ondbmongoose-js.js"
     },
     "engines": {
         "node": ">=18.0.0"

@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
 
   /**
    * [Expressions reference](https://www.mongodb.com/docs/manual/meta/aggregation-quick-reference/#expressions)

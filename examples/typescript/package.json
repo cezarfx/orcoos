@@ -1,5 +1,5 @@
 {
-    "name": "orcoos-ts-examples",
+    "name": "ondbmongoose-ts-examples",
     "version": "0.0.1",
     "private": true,
     "description": "Orcoos TypeScript Examples",
@@ -14,7 +14,7 @@
     },
     "scripts": {
         "build": "rm dist/* && tsc",
-        "start": "ts-node demo-orcoos.ts"
+        "start": "ts-node demo-ondbmongoose.ts"
     },
     "engines": {
         "node": ">=18.0.0"

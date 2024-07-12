@@ -1,4 +1,4 @@
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
 
   /** The Mongoose Date [SchemaType](/docs/schematypes.html). */
   type Date = Schema.Types.Date;

@@ -1,6 +1,6 @@
 declare class NativeError extends global.Error { }
 
-declare module 'orcoos' {
+declare module 'ondbmongoose' {
   //import mongodb = require('mongodb');
   import nosqldb = require('oracle-nosqldb');
 
