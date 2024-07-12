@@ -49,7 +49,7 @@ describe("Create and Drop tables", () => {
         client = r.connection.client.client;
     });
     
-    it('drop cr', async() => {
+    it('drop and create', async() => {
         await dropSale();
         await createSale();
         // await dropSale();
