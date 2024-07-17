@@ -10,7 +10,7 @@ import { NoSQLClient, TableState } from 'oracle-nosqldb';
 import {Sale} from './sale';
 
 let tableNames: Array<string> = [
-    'players', 'sales', 'items', 'customers'
+    'players', 'sales', 'items', 'customers', 'dateplayers'
 ];
 
 async function dropTable(client: NoSQLClient, tableName: string) {

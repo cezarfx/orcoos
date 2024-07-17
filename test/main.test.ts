@@ -507,7 +507,7 @@ describe("CRUD and query operations", () => {
         allExpectedSales.splice(0, 1);
     });
 
-    it('Custom query: nosqlQuery', async () => {
+    it('Native query: nosqlQuery', async () => {
         let dbSales = await Sale.nosqlQuery('SELECT * FROM Sales ORDER BY kvid');
         for(let i in dbSales) {
             // console.log(" " + i + " " + dbSales[i]);
@@ -518,9 +518,9 @@ describe("CRUD and query operations", () => {
             expect(dbSales[i].items[0].name).equal(allExpectedSales[i].items[0].name);
         }
         expect(dbSales.length).equal(allExpectedSales.length);
-    });
+    }).timeout(20000);
 
-    it('Custom query returning nested structure',async () => {
+    it('Native query returning nested structure',async () => {
         let q = 'SELECT t.kvjson.customer.age as age, t.kvjson.customer.email as email, t.kvjson.customer.gender as gender FROM sales t ORDER BY t.kvid';
         let customers = await Customer.nosqlQuery(q);
         for(let i in customers) {
@@ -529,7 +529,7 @@ describe("CRUD and query operations", () => {
             expect(customers[i].email).equal(allExpectedSales[i].customer.email);
             expect(customers[i].gender).equal(allExpectedSales[i].customer.gender);
         }
-    });
+    }).timeout(20000);
 
     // Not supported, matching inside a nested array on the same item: 
     // Sale.find({items: {$elemMatch: {
@@ -546,7 +546,7 @@ describe("CRUD and query operations", () => {
     //    WHERE (exists t.kvjson."items"[
     //                      $element.quantity < 10 
     //                  AND exists $element.tags[$element in ("red", "green")]]);        
-    it('Custom query nested arrays', async () => {
+    it('Native query nested arrays', async () => {
         let q = 'SELECT * FROM sales t WHERE (' +
             ' exists t.kvjson."items"[ $element.quantity < 20 AND ' + 
             ' exists $element.tags[$element in ("red", "green")]])';

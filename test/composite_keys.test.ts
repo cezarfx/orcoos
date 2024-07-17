@@ -116,4 +116,63 @@ describe("Composite Keys", () => {
         allPlayers.splice(0, 4);
         expect(await Player.count()).equal(allPlayers.length);
     });
+
+    it('key non-key field name colision', async() => {
+        interface ICollisionPlayer {
+            _id: ICollisionPlayerKey;
+            name: String;
+            goals: number;
+            team: String;
+        };
+        
+        interface ICollisionPlayerKey {
+            team: string;
+            squadNumber: number;
+        };
+        
+        const cPlayerSchema = new Schema<ICollisionPlayer>({
+            _id: {
+                team: String, 
+                squadNumber: Number
+            },
+            name: String,
+            goals: Number,
+            team: String,
+        });
+        
+        try {
+            const CPlayer = model<ICollisionPlayer>('CollisionPlayer', cPlayerSchema);
+
+            await CPlayer.deleteMany();
+        } catch (e: any) {
+            expect(e.message).contains('Composite key and non-key field names collision: "team"');
+        }
+    });
+
+    it('key field of type Date', async() => {
+        interface IDatePlayer {
+            _id: IDatePlayerKey;
+            name: String;
+            goals: number;
+        };
+        
+        interface IDatePlayerKey {
+            team: string;
+            joinDate: Date;
+        };
+        
+        const dPlayerSchema = new Schema<IDatePlayer>({
+            _id: {
+                team: String, 
+                joinDate: Date
+            },
+            name: String,
+            goals: Number
+        });
+        
+        const DPlayer = model<IDatePlayer>('DatePlayer', dPlayerSchema);
+
+        expect(await DPlayer.deleteMany());
+        expect(await DPlayer.count()).equal(0);
+    });
 });
