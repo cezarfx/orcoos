@@ -8,7 +8,7 @@ import { connect } from '../index';
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 
 
-describe("CRUD and query operations", () => {
+describe("main CRUD and query operations", () => {
     it('connect', async() => {
         expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 5}));
     });
@@ -118,7 +118,7 @@ describe("CRUD and query operations", () => {
     });
     
     it('query filter prop = value', async () => {
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."storeLocation"[] =any "NY"))
+        // Q: DECLARE $storeLocation STRING; SELECT * FROM o_sales t WHERE ((t."storeLocation"[] =any $storeLocation))
         let allSales = await Sale.find({'storeLocation': 'NY'});
 
         expect(allSales).to.be.an('array');
@@ -131,7 +131,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter nested', async () => {
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"[]."quantity"[] >= 10));
+        // Q: DECLARE $items_quantity NUMBER; SELECT * FROM o_sales t WHERE ((t."items"."quantity"[] >= $items_quantity))
         let allSales = await Sale.find({'items.quantity': {$gte: 10}});
         expect(allSales).to.be.an('array');
         
@@ -144,7 +144,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter and .where', async () => {
-        // todo Q: SELECT * FROM sales t WHERE ((t.kvjson."items.quantity" <= 10) AND (t.kvjson."storeLocation"[] =any "NY"))
+        // Q: DECLARE $items_quantity NUMBER;$storeLocation STRING; SELECT * FROM o_sales t WHERE ((t."items"."quantity"[] <= $items_quantity) AND (t."storeLocation"[] =any $storeLocation))
         let allSales = await Sale.find({'items.quantity': {$lte: 10}}).where({storeLocation: 'NY'});
         expect(allSales).to.be.an('array');
         
@@ -157,7 +157,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter $or', async () => {
-        // Q: SELECT * FROM sales t WHERE ((((t.kvjson."items.quantity" < 10)) OR ((t.kvjson."items.quantity" > 10))))
+        // Q: DECLARE $items_quantity NUMBER;$items_quantity2 NUMBER; SELECT * FROM o_sales t WHERE ((((t."items"."quantity"[] < $items_quantity)) OR ((t."items"."quantity"[] > $items_quantity2))))
         let allSales = await Sale.find({$or: [{'items.quantity': {$lt: 10}}, {'items.quantity': {$gt: 10}}]});
         expect(allSales).to.be.an('array');
         
@@ -169,7 +169,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter $not', async () => {
-        // Q: SELECT * FROM sales t WHERE ((((t.kvjson."items.quantity" < 10)) OR ((t.kvjson."items.quantity" > 10))))
+        // Q: DECLARE $items_quantity NUMBER; SELECT * FROM o_sales t WHERE (NOT(((t."items"."quantity"[] < $items_quantity))))
         let allSales = await Sale.find({$not: {'items.quantity': {$lt: 10}}});
         expect(allSales).to.be.an('array');
         
@@ -182,7 +182,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter $nor', async () => {
-        // Q: SELECT * FROM sales t WHERE (NOT(((t.kvjson."items"."quantity" < 10)) OR ((t.kvjson."items"."quantity" > 10))))
+        // Q: DECLARE $items_quantity NUMBER; SELECT * FROM o_sales t WHERE (NOT(((t."items"."quantity"[] < $items_quantity))))
         let allSales = await Sale.find({$nor: [{'items.quantity': {$lt: 10}}, {'items.quantity': {$gt: 10}}]});
         expect(allSales).to.be.an('array');
         
@@ -194,7 +194,10 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter $or and $and', async () => {
-        // Q: SELECT * FROM sales t WHERE ((((t.kvjson."items"."quantity" < 10)) OR ((t.kvjson."items"."quantity" > 10)) OR ((((t.kvjson."items"."quantity" > 10))))))
+        // Q: DECLARE $items_quantity NUMBER;$items_quantity2 NUMBER;$items_quantity3 NUMBER; 
+        //    SELECT * FROM o_sales t WHERE ((((t."items"."quantity"[] < $items_quantity)) OR 
+        //      ((t."items"."quantity"[] > $items_quantity2)) OR 
+        //      ((((t."items"."quantity"[] > $items_quantity3))))))
         let allSales = await Sale.find(
                 {$or: [ {'items.quantity': {$lt: 10}}, 
                         {'items.quantity': {$gt: 10}},
@@ -210,7 +213,10 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter $in', async () => {
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"."name" IN ("wine","milk","beer","soda","tea") OR EXISTS (t.kvjson."items"."name"[$element IN ("wine","milk","beer","soda","tea")])))
+        // Q: DECLARE $items_name STRING;$items_name2 STRING;$items_name3 STRING;$items_name4 STRING;$items_name5 STRING; 
+        //    SELECT * FROM o_sales t WHERE ((t."items"."name"[] IN 
+        //      ($items_name,$items_name2,$items_name3,$items_name4,$items_name5) OR 
+        //      EXISTS (t."items"."name"[][$element IN ($items_name,$items_name2,$items_name3,$items_name4,$items_name5)])))
         let allSales = await Sale.find(
                 {'items.name': {$in: itemNames}});
         expect(allSales).to.be.an('array');
@@ -223,7 +229,8 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter 1 field 2 conditions', async () => {
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."storeLocation" = "NY") AND (t.kvjson."storeLocation" >= "NY"))
+        // Q: DECLARE $storeLocation STRING;$storeLocation2 STRING; SELECT * FROM o_sales t 
+        //    WHERE ((t."storeLocation"[] = $storeLocation) AND (t."storeLocation"[] >= $storeLocation2))
         let allSales = await Sale.find(
             {storeLocation: {$eq: "NY", $gte: "NY"}});
         expect(allSales).to.be.an('array');
@@ -237,7 +244,8 @@ describe("CRUD and query operations", () => {
     });
 
     it('query $regex', async () => {
-        // Q: SELECT * FROM sales t WHERE (( regex_like(t.kvjson."customer"."email", ".*@.*","") )) 
+        // Q: DECLARE $customer_email STRING; SELECT * FROM o_sales t 
+        //    WHERE (( regex_like(t."customer"."email"[], $customer_email,"") ))
         let allSales = await Sale.find(
             {'customer.email': {$regex: '.*@.*'}});
         expect(allSales).to.be.an('array');
@@ -250,7 +258,8 @@ describe("CRUD and query operations", () => {
     });
 
     it('query $regex case insensitive', async () => {
-        // Q: SELECT * FROM sales t WHERE (( regex_like(t.kvjson."customer"."email", "bo.*","is") ))
+        // Q: DECLARE $customer_email STRING; SELECT * FROM o_sales t 
+        //    WHERE (( regex_like(t."customer"."email"[], $customer_email,"is") ))
         let allSales = await Sale.find(
             {'customer.email': {$regex: 'bo.*', $options: 'is'}});
         expect(allSales).to.be.an('array');
@@ -266,7 +275,7 @@ describe("CRUD and query operations", () => {
 
 
     it('query filter by array size', async () => {
-        // Q: SELECT * FROM sales t WHERE (( size([t.kvjson."items"[]]) = 1 ))
+        // Q: SELECT * FROM o_sales t WHERE (( size([t."items"[]]) = 1 ))
         let allSales = await Sale.find({'items': {$size: 1}});
         expect(allSales).to.be.an('array');
         
@@ -276,7 +285,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query filter nested non array', async () => {
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."customer"[]."gender"[] =any "F"))
+        // Q: DECLARE $customer_gender STRING; SELECT * FROM o_sales t WHERE ((t."customer"."gender"[] =any $customer_gender))
         let allSales = await Sale.find({'customer.gender': 'F'});
         expect(allSales).to.be.an('array');
         
@@ -298,7 +307,7 @@ describe("CRUD and query operations", () => {
     // });
 
     it('query sort', async () => {
-        // Q: SELECT * FROM sales t ORDER BY t.kvjson."customer"."gender"[] ASC, t.kvjson."storeLocation"[] DESC
+        // Q: SELECT * FROM o_sales t ORDER BY t."customer"."gender"[] ASC, t."storeLocation"[] DESC
         let allSales = await Sale.find({}, {},{sort: {'customer.gender': 1, storeLocation: 'desc'}});
         expect(allSales).to.be.an('array');
         
@@ -311,7 +320,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('query limit', async () => {
-        // Q: SELECT * FROM sales t LIMIT 2
+        // Q: SELECT * FROM o_sales t LIMIT 2
         let allSales = await Sale.find({}, {}, {limit: 2});
         expect(allSales).to.be.an('array');
 
@@ -320,7 +329,7 @@ describe("CRUD and query operations", () => {
 
     it('query skip', async () => {
         let noOfSales = await Sale.count();
-        // Q: SELECT * FROM sales t OFFSET 2
+        // Q: SELECT * FROM o_sales t OFFSET 2
         let allSales = await Sale.find({}, {}, {skip: 2});
         expect(allSales).to.be.an('array');
 
@@ -328,7 +337,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('updateOne $set', async () => {
-        // Q: UPDATE sales AS t  SET t.kvjson."storeLocation"[] = "NY:NY" WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS $t PUT $t {"storeLocation": "NY:NY"} WHERE ($t.kvid = "...")
         await sale.updateOne({$set: {storeLocation: 'NY:NY'}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.storeLocation).equal('NY:NY');
@@ -336,7 +345,7 @@ describe("CRUD and query operations", () => {
 
     it('updateOne $set nested', async () => {
         expect(sale.customer).to.not.exist;
-        // Q: UPDATE sales AS t  PUT t.kvid {"customer": {"age": 23}} WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS $t PUT $t {"customer": {"age": 23}} WHERE ($t.kvid = "...")
         await sale.updateOne({$set: {'customer.age': 23}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.customer).to.be.not.empty;
@@ -344,7 +353,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('updateOne $unset', async () => {
-        // Q: UPDATE sales AS t  REMOVE t.kvjson."customer" WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS $t REMOVE $t."customer"[] WHERE ($t.kvid = "...")
         await sale.updateOne({$unset: {customer: ''}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.customer).to.not.exist;
@@ -353,7 +362,7 @@ describe("CRUD and query operations", () => {
     it('updateOne $min', async () => {
         let dbSale = await Sale.findById(sale._id);
         expect(dbSale.items[0].price).equal(8.22);
-        // Q: UPDATE sales AS t  SET t.kvjson."items"[0]."price" = CASE WHEN 5 < t.kvjson."items"[0]."price" THEN 5 ELSE t.kvjson."items"[0]."price" END WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS t  SET t."items"[0]."price"[] = CASE WHEN 5 < t."items"[0]."price"[] THEN 5 ELSE t."items"[0]."price"[] END WHERE (t.kvid = "...")
         await sale.updateOne({$min: {'items.0.price': 5}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.items[0].price).equal(5);
@@ -362,7 +371,7 @@ describe("CRUD and query operations", () => {
     it('updateOne $max', async () => {
         let dbSale = await Sale.findById(sale._id);
         expect(dbSale.items[0].price).equal(5);
-        // Q: UPDATE sales AS t  SET t.kvjson."items"[0]."price" = CASE WHEN 8.22 > t.kvjson."items"[0]."price" THEN 8.22 ELSE t.kvjson."items"[0]."price" END WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS t  SET t."items"[0]."price"[] = CASE WHEN 8.22 > t."items"[0]."price"[] THEN 8.22 ELSE t."items"[0]."price"[] END WHERE (t.kvid = "...")
         await sale.updateOne({$max: {'items.0.price': 8.22}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.items[0].price).equal(8.22);
@@ -371,7 +380,7 @@ describe("CRUD and query operations", () => {
     it('updateOne $inc', async () => {
         let dbSale = await Sale.findById(sale._id);
         expect(dbSale.items[0].quantity).equal(4);
-        // Q: UPDATE sales AS t  SET t.kvjson."items"[0]."quantity" = t.kvjson."items"[0]."quantity" + 4 WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS t  SET t."items"[0]."quantity"[] = t."items"[0]."quantity"[] + 4 WHERE (t.kvid = "...")
         await sale.updateOne({$inc: {'items.0.quantity': 4}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.items[0].quantity).equal(8);
@@ -380,14 +389,14 @@ describe("CRUD and query operations", () => {
     it('updateOne $mul', async () => {
         let dbSale = await Sale.findById(sale._id);
         expect(dbSale.items[0].quantity).equal(8);
-        // Q: UPDATE sales AS t  SET t.kvjson."items"[0]."quantity" = t.kvjson."items"[0]."quantity" * 0.5 WHERE (t.kvid = "...")
+        // Q: UPDATE sales AS t  SET t."items"[0]."quantity"[] = t."items"[0]."quantity"[] * 0.5 WHERE (t.kvid = "...")
         await sale.updateOne({$mul: {'items.0.quantity': 0.5}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.items[0].quantity).equal(4);
     });
     
-    it('updateOne', async () => {
-        // Q: UPDATE sales AS t  SET t.kvjson."saleDate" = CAST (current_time() AS String) WHERE (t.kvid = "...")
+    it('updateOne $currentDate', async () => {
+        // Q: UPDATE sales AS $t SET $t."saleDate"[] = CAST (current_time() AS String) WHERE ($t.kvid = "...")
         await sale.updateOne({$currentDate: {saleDate: true}});
         let updSale = await Sale.findById(sale._id);
         expect(Date.now() - new Date(updSale.saleDate).getTime()).lessThanOrEqual(2000);
@@ -439,7 +448,7 @@ describe("CRUD and query operations", () => {
     });
     
     it('findOneAndUpdate $unset nested', async () => {
-        // Q: UPDATE sales AS t  REMOVE t.kvjson."customer"[]."satisfaction"[] WHERE (t.kvid = "655...") RETURNING *
+        // Q: UPDATE sales AS $t REMOVE $t."customer"."satisfaction"[] WHERE ($t.kvid = "...") RETURNING *
         let updated = await Sale.findOneAndUpdate(sale._id, {$unset: {'customer.satisfaction': ''}});
         expect(updated.storeLocation).equal(sale.storeLocation);
         expect(updated.items[0].name).equal(sale.items[0].name);
@@ -447,7 +456,7 @@ describe("CRUD and query operations", () => {
     });
     
     it('findOneAndUpdate $set unnested', async () => {
-        // Q: UPDATE sales AS t  PUT t.kvjson {"storeLocation": "Miami"} WHERE (t.kvid = "656e07b43e61f21fbf3c516a") RETURNING *
+        // Q: UPDATE sales AS $t PUT $t {"storeLocation": "Miami"} WHERE ($t.kvid = "...") RETURNING *
         let updated = await Sale.findOneAndUpdate(sale._id, {$set: {storeLocation: 'Miami'}});
         expect(updated.storeLocation).equal('Miami');
         expect(updated.items[0].name).equal(sale.items[0].name);
@@ -459,7 +468,7 @@ describe("CRUD and query operations", () => {
     });
     
     it('findOneAndUpdate $set nested', async () => {
-        // Q: UPDATE sales AS t  REMOVE t.kvjson."customer"[]."satisfaction"[] WHERE (t.kvid = "655...") RETURNING *
+        // Q: UPDATE sales AS $t PUT $t {"customer": {"satisfaction": 5}} WHERE ($t.kvid = "...") RETURNING *
         let updated = await Sale.findOneAndUpdate(sale._id, {$set: {"customer.satisfaction": 5}});
         expect(updated.storeLocation).equal(sale.storeLocation);
         expect(updated.items[0].name).equal(sale.items[0].name);
@@ -475,7 +484,7 @@ describe("CRUD and query operations", () => {
         expect(dbSale.customer.satisfaction).to.exist;
         expect(dbSale.customer.satisfaction).equal(5);
         expect(dbSale.customer.age).to.not.exist;
-        // Q: UPDATE sales AS t  PUT t.kvjson."customer" {"age": t.kvjson."customer"."satisfaction"}, REMOVE t.kvjson."customer"."satisfaction" WHERE (t.kvid = "6578a3197cbd60ec0c147508") RETURNING *
+        // Q: UPDATE sales AS $t PUT $t."customer"[] {"age": $t."customer"."satisfaction"[]}, REMOVE $t."customer"."satisfaction"[] WHERE ($t.kvid = "...") RETURNING *
         let updated = await Sale.findOneAndUpdate(sale._id, {$rename: {"customer.satisfaction": 'age'}});
         expect(updated.customer.satisfaction).to.not.exist;
         expect(updated.customer.age).to.exist;
@@ -483,7 +492,7 @@ describe("CRUD and query operations", () => {
     });
     
     it('findOneAndDelete', async () => {
-        // Q: DELETE FROM sales t WHERE (t.kvid = "6552684c63f61bfd2f25a638") RETURNING *
+        // Q: DELETE FROM o_sales t WHERE (t.kvid = "...") RETURNING *
         let res = await Sale.findOneAndDelete(sale._id);
         expect('' + res._id).equal('' + sale._id);
 
@@ -492,7 +501,6 @@ describe("CRUD and query operations", () => {
     });
 
     it('deleteOne', async () => {
-        // .delete(table, kdid)
         // delete an already deleted row
         let res = await Sale.deleteOne({_id: sale._id});
         expect(res).to.be.false;
@@ -508,7 +516,7 @@ describe("CRUD and query operations", () => {
     });
 
     it('Native query: nosqlQuery', async () => {
-        let dbSales = await Sale.nosqlQuery('SELECT * FROM Sales ORDER BY kvid');
+        let dbSales = await Sale.nosqlQuery('SELECT * FROM o_Sales ORDER BY kvid');
         for(let i in dbSales) {
             // console.log(" " + i + " " + dbSales[i]);
             expect('' + dbSales[i]._id).equal('' + allExpectedSales[i]._id);
@@ -521,7 +529,7 @@ describe("CRUD and query operations", () => {
     }).timeout(20000);
 
     it('Native query returning nested structure',async () => {
-        let q = 'SELECT t.kvjson.customer.age as age, t.kvjson.customer.email as email, t.kvjson.customer.gender as gender FROM sales t ORDER BY t.kvid';
+        let q = 'SELECT t.customer.age as age, t.customer.email as email, t.customer.gender as gender FROM o_sales t ORDER BY t.kvid';
         let customers = await Customer.nosqlQuery(q);
         for(let i in customers) {
             // console.log(" " + i + " " + customers[i]);
@@ -542,13 +550,10 @@ describe("CRUD and query operations", () => {
     });
 
     // Use nosqlQuery instead with this statement:
-    // Q: SELECT * FROM sales t 
-    //    WHERE (exists t.kvjson."items"[
-    //                      $element.quantity < 10 
-    //                  AND exists $element.tags[$element in ("red", "green")]]);        
+    // Q: q - exactly the same query      
     it('Native query nested arrays', async () => {
-        let q = 'SELECT * FROM sales t WHERE (' +
-            ' exists t.kvjson."items"[ $element.quantity < 20 AND ' + 
+        let q = 'SELECT * FROM o_sales t WHERE (' +
+            ' exists t."items"[ $element.quantity < 20 AND ' + 
             ' exists $element.tags[$element in ("red", "green")]])';
         let sales = await Sale.nosqlQuery(q);
         for(let i in sales) {
@@ -565,13 +570,13 @@ describe("CRUD and query operations", () => {
     });
 
     it('deleteMany filter', async () => {
-        // Q: DELETE FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
+        // Q: DELETE FROM o_sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
         let delM = await Sale.deleteMany({"items.price": {$gte: 60}});
         // console.log("       deletions: " + delM);
         expect(delM).lessThanOrEqual(allExpectedSales.length);
         expect(delM).greaterThanOrEqual(0);
 
-        // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
+        // Q: SELECT * FROM o_sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
         let dbSales = await Sale.find({'items.price': {$gte: 60}})
         expect(dbSales).to.be.empty;
 
@@ -579,17 +584,17 @@ describe("CRUD and query operations", () => {
     });
 
     it('deleteMany unfiltered all', async () => {
-        // Q: DELETE FROM sales t
+        // Q: DELETE FROM o_sales t
         let delM = await Sale.deleteMany();
         // console.log("       deletions: " + delM);
         expect(delM).lessThanOrEqual(allExpectedSales.length);
         expect(delM).greaterThanOrEqual(0);
 
-        // Q: SELECT * FROM sales t
+        // Q: SELECT * FROM o_sales t
         let dbSales = await Sale.find()
         expect(dbSales).to.be.empty;
 
-        // Q: SELECT count(*) FROM sales t
+        // Q: SELECT count(*) FROM o_sales t
         let dbCount = await Sale.count();
         expect(dbCount).equal(0);
     });

@@ -41,18 +41,30 @@ export const itemSchema = new Schema<IItem>({
     price: Number,
     quantity: Number,
     tags: [String]
-});
+}, 
+    // schema options
+    { 
+        _id: false,             // do not generate _id in the item objects
+        autoCreate: false,      // do not create a table for items
+        collection: 'o_items'   // when creating a table, name it o_items
+    });
 
 export const customerSchema = new Schema<ICustomer>({
     gender: { type: String, enum: Gender, optional: true },
     age: { type: Number, optional: true },
     email: { type: String, optional: true },
     satisfaction: { type: Number, optional: true }
-});
+}, 
+    {
+        _id: false,
+        autoCreate: false, 
+        collection: 'o_cust'
+    });
 
 export const saleSchema = new Schema<ISale>({
     saleDate: { type: Date, required: true },
     items: [{
+        _id: false,
         name: String,
         price: Number,
         quantity: Number,
@@ -69,8 +81,11 @@ export const saleSchema = new Schema<ISale>({
         enum: PurchaseMethod, 
         default: PurchaseMethod.InStore, 
         optional: true 
-    }
-});
+    },
+}, 
+    {
+        collection: 'o_sales'   // use the table with this name
+    });
 
 export const Sale = model<ISale>('Sale', saleSchema);
 export const Item = model<IItem>('Item', itemSchema);

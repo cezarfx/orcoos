@@ -1,6 +1,6 @@
-# Orcoos
+# OndbMongoose
 
-Orcoos is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. Orcoos supports [Node.js](https://nodejs.org/en/). Orcoos is modeled after [Mongoose](https://mongoosejs.com/).
+OndbMongoose is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. OndbMongoose supports [Node.js](https://nodejs.org/en/) 18+. OndbMongoose is modeled after [Mongoose](https://mongoosejs.com/).
 
 ## Documentation
 
@@ -10,7 +10,7 @@ The official documentation website is [TBD](http://github.com/).
 ## Dev instalation
 
 Clone from GitHub (requires git):
-$ git clone https://github.com/cezarfx/ondbmongoose.git
+$ git clone https://github.com/cezarfx/orcoos.git ondbmongoose
 $ cd ondbmongoose
 
 Install dependencies (requires NodeJS > 18 and npm > 10.3):
@@ -22,7 +22,7 @@ $ npm test
 Run a single test:
 $ node ./node_modules/mocha/bin/mocha.js --require ts-node/register test/main.test.ts
 
-Localy link the Orcoos npm package:
+Localy link the ondbmongoose npm package:
 $ npm link
 
 Run examples, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
@@ -54,7 +54,7 @@ Note: For examples in the ./examples dir to work npm link must be used. See http
 
 ```javascript
 // Using Node.js `require()`
-const orcoose = require('ondbmongoose');
+const ondbmongoose = require('ondbmongoose');
 
 // Using ES6 imports
 import ondbmongoose from 'ondbmongoose';
@@ -76,7 +76,7 @@ Once connected, the `open` event is fired on the `Connection` instance. If you'r
 
 **Note:** _If the local connection fails then try using 127.0.0.1 instead of localhost. Sometimes issues may arise when the local hostname has been changed._
 
-**Important!** Orcoos buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
+**Important!** OndbMongoose buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
 
 ### Defining a Model
 
@@ -146,7 +146,7 @@ Or just do it all at once
 const MyModel = ondbmongoose.model('ModelName', mySchema);
 ```
 
-The first argument is the _singular_ name of the collection your model is for. **Orcoos automatically looks for the _plural_ version of your model name.** For example, if you use
+The first argument is the _singular_ name of the collection your model is for. **OndbMongoose automatically looks for the _plural_ version of your model name.** For example, if you use
 
 ```js
 const MyModel = ondbmongoose.model('Ticket', mySchema);
@@ -286,7 +286,7 @@ Moreover, you can mutate the incoming `method` arguments so that subsequent midd
 
 #### Schema gotcha
 
-`type`, when used in a schema has special meaning within Orcoos. If your schema requires using `type` as a nested property you must use object notation:
+`type`, when used in a schema has special meaning within OndbMongoose. If your schema requires using `type` as a nested property you must use object notation:
 
 ```js
 new Schema({
@@ -308,7 +308,7 @@ new Schema({
 
 ### Driver Access
 
-Orcoos is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each mongoose model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all ondbmongoose features, including hooks, validation, etc. The one
+OndbMongoose is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each mongoose model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all ondbmongoose features, including hooks, validation, etc. The one
 notable exception that `YourModel.collection` still buffers
 commands. As such, `YourModel.collection.find()` will **not**
 return a cursor.

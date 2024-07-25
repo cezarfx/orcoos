@@ -20,12 +20,36 @@ interface IPlayerKey {
 };
 
 export const playerSchema = new Schema<IPlayer>({
-    _id: {
+    _id: {                                  // composite key with 2 components, of which one is a shard key (see below under collectionOptions/shardKey)
         team: String, 
         squadNumber: Number
     },
     name: String,
     goals: Number,
+}, 
+{
+    collection: 'o_players',                // Name of the table used for collection
+    collectionOptions: {
+        shardKey: ["team"],                 // shard key component
+        compartment: 'ondbMongooseSDK',     // cloud only, compartment id or name to use if table is created
+        definedTags: {                      // Defined tags represent metadata managed by an administrator. 
+            customTag: 'ondb', 
+            'sdk': 'ondbMongooseSDK'
+        },
+        freeFormTags: {                     // Free-form tags represent an unmanaged metadata created and applied by the user. 
+            "Department": "Finance"
+        },  
+        namespace: 'ondbMongooseSDK',       // on-premises only, namespace used if table is created 
+        tableLimits: {
+            //mode: "ON_DEMAND",              // Capacity mode of the table, "ON_DEMAND" or "PROVISIONED"
+            readUnits: 5,                   // desired throughput of read operations in terms of read units, if table is created
+            writeUnits: 5,                  // desired throughput of write operations in terms of write units, if table is created
+            storageGB: 5                    // The maximum storage to be consumed by the table, in gigabytes, if table is created
+        },
+        timeout: 20000,                      // Timeout for the create table operation in milliseconds. 
+        durability: undefined,              // the desired durability for master/replica sync/acks
+        //consistency: "EVENTUAL",            // onsistency guarantees for read operations, EVENTUAL or ABSOLUTE
+    }
 });
 
 export const Player = model<IPlayer>('Player', playerSchema);
@@ -92,6 +116,9 @@ describe("Composite Keys", () => {
 
     it('updateOne with pk', async() => {
         let firstPlayer = await Player.findById(allPlayers[0]._id);
+        expect(firstPlayer._id.team = allPlayers[0]._id.team);
+        expect(firstPlayer._id.squadNumber = allPlayers[0]._id.squadNumber);
+        
         expect(await firstPlayer.updateOne({$set: {name: "Messi"}}));
         let messi = await Player.findById(allPlayers[0]._id);
         expect(messi.name).equal("Messi");
@@ -138,14 +165,14 @@ describe("Composite Keys", () => {
             name: String,
             goals: Number,
             team: String,
-        });
+        }, {collection: 'o_collPlayers'});
         
         try {
             const CPlayer = model<ICollisionPlayer>('CollisionPlayer', cPlayerSchema);
 
             await CPlayer.deleteMany();
         } catch (e: any) {
-            expect(e.message).contains('Composite key and non-key field names collision: "team"');
+            expect(e.message).contains('Composite key and non-key field name collision: "team"');
         }
     });
 
@@ -168,7 +195,7 @@ describe("Composite Keys", () => {
             },
             name: String,
             goals: Number
-        });
+        }, {collection: 'o_datePlayers'});
         
         const DPlayer = model<IDatePlayer>('DatePlayer', dPlayerSchema);
 

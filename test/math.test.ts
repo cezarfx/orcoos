@@ -29,13 +29,13 @@ describe("Math operations", () => {
     });
 
     
-    // SELECT * FROM sales t WHERE ((t.kvjson."items"[]."price" > t.kvjson."items"[]."quamtity" + 60))
-    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" > t.kvjson."customer"."satisfaction" + 10))
+    // SELECT * FROM o_sales t WHERE ((t.kvjson."items"[]."price" > t.kvjson."items"[]."quamtity" + 60))
+    // SELECT * FROM o_sales t WHERE ((t.kvjson."customer"."age" > t.kvjson."customer"."satisfaction" + 10))
     
-    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" > 18 and t.kvjson."customer"."satisfaction" > 9))
+    // SELECT * FROM o_sales t WHERE ((t.kvjson."customer"."age" > 18 and t.kvjson."customer"."satisfaction" > 9))
     // find( {$and: [{"customer.age}: {$gt: 18}}, {"customer.satisfaction": {$gt: 9}}]} )
 
-    // SELECT * FROM sales t WHERE ((t.kvjson."customer"."age" * t.kvjson."customer"."satisfaction" > 100))
+    // SELECT * FROM o_sales t WHERE ((t.kvjson."customer"."age" * t.kvjson."customer"."satisfaction" > 100))
     // db.sales.find({$expr: {$gt: [{$multiply: ['$customer.age', '$customer.satisfaction']}, 100]}})
 
     it('multiply 2 db props', async() => {

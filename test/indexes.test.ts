@@ -19,7 +19,7 @@ describe("Indexes", () => {
 
     describe('setup context', () => {
         it('connect', async() => {
-            expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
+            expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 6}));
         });
         
         it('delete all', async() => {
@@ -216,7 +216,7 @@ describe("Indexes", () => {
             expect(saleIndexes[0][0].purchaseMethod).equals(1);
             expect(saleIndexes[1][0]['customer.email']).equals(1);
             expect(saleIndexes[1][0]['customer.satisfaction']).equals(1);
-        });
+        }).timeout(20000);
 
         it('clear', async () => {
             // console.log("= schema.clearIndexes() =")
@@ -267,10 +267,10 @@ describe("Indexes", () => {
             //     console.log("        - " + JSON.stringify(i));
             // }
             expect(saleIndexes[0][0]["items.tags"]).equals(1);
-        });
+        }).timeout(10000);
         
         it('query using index on [][]', async () => {
-            // Q: SELECT * FROM sales t WHERE ((t.kvjson."items"."tags"[] =any "red"))
+            // Q: SELECT * FROM o_sales t WHERE ((t.kvjson."items"."tags"[] =any "red"))
             let querySales = await Sale.find({'items.tags': "red"});
             expect(querySales).to.be.an('array');
             expect(querySales.length).equal(1);

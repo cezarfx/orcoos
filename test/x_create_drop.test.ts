@@ -10,7 +10,7 @@ import { TableState } from 'oracle-nosqldb';
 let client;
 import {Sale} from './sale';
 
-let tableName = 'sales';
+let tableName = 'o_sales';
 
 async function dropSale() {
     try {
@@ -18,7 +18,7 @@ async function dropSale() {
         let res = await client.tableDDL(ddl);
         // Wait for the operation completion
         await client.forCompletion(res);
-        //console.log('  Table %s is dropped. State: %s', res.tableName, res.tableState);
+        
         expect(res.tableState).equal(TableState.DROPPED);
     } catch(err) {
         console.log('Error while dropping: ' + err);
@@ -28,7 +28,7 @@ async function dropSale() {
 
 async function createSale() {
     try {
-        let ddl = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(kvid STRING, kvjson JSON, PRIMARY KEY(kvid))';
+        let ddl = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(kvid STRING, PRIMARY KEY(kvid)) AS JSON COLLECTION';
         let res = await client.tableDDL(ddl);
         // Wait for the operation completion
         await client.forCompletion(res);
@@ -52,14 +52,12 @@ describe("Create and Drop tables", () => {
     it('drop and create', async() => {
         await dropSale();
         await createSale();
-        // await dropSale();
     }).timeout(30000);
 
     it('drop and get all', async() => {
         await dropSale();
-        let q = 'select * from sales';
+        let q = 'select * from ' + tableName;
         let res = await Sale.nosqlQuery(q);
-        //console.log(res);
         expect(res).to.be.empty;
     }).timeout(30000);
 

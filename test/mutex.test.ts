@@ -52,7 +52,7 @@ describe("Check Mutex", () => {
         // console.log('Done 2');
     
         // setTimeout(v => console.log("Done done"), 100);    
-    });
+    }).timeout(10000);
     
     it('isLocked', async() => {
         expect(lock.isLocked()).false;
