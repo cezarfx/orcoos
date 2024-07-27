@@ -1,6 +1,6 @@
 # OndbMongoose
 
-OndbMongoose is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. OndbMongoose supports [Node.js](https://nodejs.org/en/) 18+. OndbMongoose is modeled after [Mongoose](https://mongoosejs.com/).
+OndbMongoose is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. OndbMongoose supports [Node.js](https://nodejs.org/en/) 22+. OndbMongoose is modeled after [Mongoose](https://mongoosejs.com/).
 
 ## Documentation
 
@@ -13,7 +13,7 @@ Clone from GitHub (requires git):
 $ git clone https://github.com/cezarfx/orcoos.git ondbmongoose
 $ cd ondbmongoose
 
-Install dependencies (requires NodeJS > 18 and npm > 10.3):
+Install dependencies (requires NodeJS >= 22 and npm >= 10.8):
 $ npm install
 
 Run tests, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
