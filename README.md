@@ -13,7 +13,7 @@ Clone from GitHub (requires git):
 $ git clone https://github.com/cezarfx/orcoos.git ondbmongoose
 $ cd ondbmongoose
 
-Install dependencies (requires NodeJS >= 22 and npm >= 10.8):
+Install dependencies (requires NodeJS >= 22 and npm >= 10.8, if behind proxy use additional npm arg: --proxy=http://www-proxy.us.oracle.com:80):
 $ npm install
 
 Run tests, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
