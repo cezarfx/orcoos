@@ -10,34 +10,47 @@ The official documentation website is [TBD](http://github.com/).
 ## Dev instalation
 
 Clone from GitHub (requires git):
-$ git clone https://github.com/cezarfx/orcoos.git ondbmongoose
-$ cd ondbmongoose
+```sh
+  $ git clone ssh://git@bitbucket.oci.oraclecorp.com:7999/nosql/nosql-mongoose-sdk.git ondbmongoose
+  $ cd ondbmongoose
+```
 
 Install dependencies (requires NodeJS >= 22 and npm >= 10.8, if behind proxy use additional npm arg: --proxy=http://www-proxy.us.oracle.com:80):
-$ npm install
+```sh
+  $ npm install
+```
 
 Run tests, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
-$ npm test
+```sh
+  $ npm test
+```
 
 Run a single test:
-$ node ./node_modules/mocha/bin/mocha.js --require ts-node/register test/main.test.ts
+```sh
+  $ node ./node_modules/mocha/bin/mocha.js --require ts-node/register test/main.test.ts
+```
 
 Localy link the ondbmongoose npm package:
-$ npm link
+```sh
+  $ npm link
+```
 
 Run examples, must have a Oracle NoSQL DB instance (kvlite and proxy) running on http://localhost:8080:
-$ cd examples/typescript
-$ npm link ondbmongoose
-$ npm start
-
-$ cd ../javascript
-$ npm link ondbmongoose
-$ npm start
+```sh
+  $ cd examples/typescript
+  $ npm link ondbmongoose
+  $ npm start
+  
+  $ cd ../javascript
+  $ npm link ondbmongoose
+  $ npm start
+```
 
 Or run them all, tests and examples:
-$ cd ../..
-$ npm run all
-
+```sh
+  $ cd ../..
+  $ npm run all
+```
 
 ## Installation
 
