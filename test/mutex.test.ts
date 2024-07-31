@@ -3,7 +3,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-import { OrcoosMutex } from "../lib/nosqldb-adapter/utils";
+import { OrcoosMutex } from "../lib/nosqldb-adapter/adapterUtils";
 
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

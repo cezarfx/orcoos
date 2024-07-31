@@ -2,7 +2,7 @@
     "name": "ondbmongoose-ts-examples",
     "version": "0.0.1",
     "private": true,
-    "description": "Orcoos TypeScript Examples",
+    "description": "OndbMongoose SDK TypeScript Examples",
     "dependencies": {
         "oracle-nosqldb": "latest",
         "package.json": "^2.0.1"

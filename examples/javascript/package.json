@@ -3,13 +3,13 @@
     "version": "0.0.1",
     "type": "module",
     "private": true,
-    "description": "Orcoos JavaScript Examples",
+    "description": "OndbMongoose SDK JavaScript Examples",
     "dependencies": {
         "ondbmongoose": ">=0.0.1",
         "package.json": "^2.0.1"
     },
     "scripts": {
-        "start": "node demo-ondbmongoose-js.js"
+        "start": "node demo-ondbmongoose.js"
     },
     "engines": {
         "node": ">=18.0.0"
