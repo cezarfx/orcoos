@@ -1,13 +1,20 @@
-# OndbMongoose
+# OndbMongoose SDK
 
-OndbMongoose is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. OndbMongoose supports [Node.js](https://nodejs.org/en/) 22+. OndbMongoose is modeled after [Mongoose](https://mongoosejs.com/).
+OndbMongoose SDK is a [Oracle NoSQL DB](https://www.oracle.com/database/nosql/) object modeling tool designed to work in an asynchronous environment. OndbMongoose works with [Node.js](https://nodejs.org/en/) 22+. OndbMongoose is modeled after [Mongoose](https://mongoosejs.com/), using the same API and adds functionality to allow executing native Oracle NoSQL DB queries.
 
-## Documentation
+## Installation
 
-The official documentation website is [TBD](http://github.com/).
+First install [Node.js](http://nodejs.org/) and [Oracle NoSQL DB](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html), then:
 
+```sh
+$ npm install ondbmongoose
+```
 
-## Dev instalation
+Note: For examples in the ./examples dir to work npm link must be used. See https://docs.npmjs.com/cli/v8/commands/npm-link or below under Dev Instalation.
+
+### Dev instalation
+
+When developing the OndbMongoose SDK use the following installation steps:
 
 Clone from GitHub (requires git):
 ```sh
@@ -15,7 +22,7 @@ Clone from GitHub (requires git):
   $ cd ondbmongoose
 ```
 
-Install dependencies (requires NodeJS >= 22 and npm >= 10.8, if behind proxy use additional npm arg: --proxy=http://www-proxy.us.oracle.com:80):
+Install dependencies (requires NodeJS >= 22 and npm >= 10.8, if behind proxy use additional npm arg: --proxy=http://www-proxy:80):
 ```sh
   $ npm install
 ```
@@ -52,18 +59,13 @@ Or run them all, tests and examples:
   $ npm run all
 ```
 
-## Installation
+## Documentation
 
-First install [Node.js](http://nodejs.org/) and [Oracle NoSQL DB](https://www.oracle.com/database/technologies/nosql-database-server-downloads.html). Then:
+The official documentation website is [TBD](http://github.com/).
 
-```sh
-$ npm install ondbmongoose
-```
+## Examples
 
-Note: For examples in the ./examples dir to work npm link must be used. See https://docs.npmjs.com/cli/v8/commands/npm-link .
-
-
-## Importing
+### Importing
 
 ```javascript
 // Using Node.js `require()`
@@ -73,9 +75,9 @@ const ondbmongoose = require('ondbmongoose');
 import ondbmongoose from 'ondbmongoose';
 ```
 
-## Overview
+### Overview
 
-### Connecting to Oracle NoSQL DB
+#### Connecting to Oracle NoSQL DB
 
 First, we need to define a connection. If your app uses only one database, you should use `ondbmongoose.connect`. If you need to create additional connections, use `ondbmongoose.createConnection`.
 
@@ -91,7 +93,7 @@ Once connected, the `open` event is fired on the `Connection` instance. If you'r
 
 **Important!** OndbMongoose buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
 
-### Defining a Model
+#### Defining a Model
 
 Models are defined through the `Schema` interface.
 
@@ -145,7 +147,7 @@ Comment.pre('save', function (next) {
 
 Take a look at the [`example`](./examples/typescript/demo-ondbmongoose.ts) for an a detailed usage.
 
-### Accessing a Model
+#### Accessing a Model
 
 Once we define a model through `ondbmongoose.model('ModelName', mySchema)`, we can access it through the same function
 
@@ -212,7 +214,7 @@ const m = new MyModel;
 m.save(); // does not work b/c the default connection object was never connected
 ```
 
-### Embedded Documents
+#### Embedded Documents
 
 In the first example snippet, we defined a key in the Schema that looks like:
 
@@ -253,11 +255,11 @@ BlogPost.findById(myId, function (err, post) {
 Embedded documents enjoy all the same features as your models. Defaults, validators, middleware. Whenever an error occurs, it's bubbled to the `save()` error callback, so error handling is a snap!
 
 
-### Middleware
+#### Middleware
 
 See the [docs](http://mongoosejs.com/docs/middleware.html) page.
 
-#### Intercepting and mutating method arguments
+##### Intercepting and mutating method arguments
 
 You can intercept method arguments via middleware.
 
@@ -297,7 +299,7 @@ Moreover, you can mutate the incoming `method` arguments so that subsequent midd
 });
 ```
 
-#### Schema gotcha
+##### Schema gotcha
 
 `type`, when used in a schema has special meaning within OndbMongoose. If your schema requires using `type` as a nested property you must use object notation:
 
@@ -321,41 +323,45 @@ new Schema({
 
 ### Driver Access
 
-OndbMongoose is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each mongoose model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all ondbmongoose features, including hooks, validation, etc. The one
+OndbMongoose is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all ondbmongoose features, including hooks, validation, etc. The one
 notable exception that `YourModel.collection` still buffers
 commands. As such, `YourModel.collection.find()` will **not**
 return a cursor.
 
-## API Docs
+### API Docs
 
 Find the API docs [here](http://mongoosejs.com/docs/api/mongoose.html).
 
-## Related Projects
+### Related Projects
 
 #### Node SDK for Oracle NoSQL DB 
 
 - [nosql-node-sdk](https://github.com/oracle/nosql-node-sdk/)
 
 
+## Help
+
+* Open an issue in the [Issues](https://github.com/oracle/TBD/issues) page
+* Post your question on the [Oracle NoSQL Database Community](https://forums.oracle.com/ords/apexds/domain/dev-community/category/nosql_database).
+* [Email to nosql\_sdk\_help\_grp@oracle.com](mailto:nosql_sdk_help_grp@oracle.com)
+
+When requesting help please be sure to include as much detail as possible,
+including version of the SDK and **simple**, standalone example code as needed.
+
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
 ## License
 
-Copyright (c) 2010 LearnBoost &lt;dev@learnboost.com&gt;
+Copyright (c) 2024 Oracle and/or its affiliates.
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+Released under the Universal Permissive License v1.0 as shown at
+<https://oss.oracle.com/licenses/upl/>.
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The [THIRD\_PARTY\_LICENSES](THIRD_PARTY_LICENSES.txt) file contains third
+party notices and licenses.

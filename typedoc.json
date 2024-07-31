@@ -1,5 +1,5 @@
 {
-    "name": "Oracle NoSQL Database Orcoos SDK",
+    "name": "OndbMongoose SDK",
     "readme": "README.md",
     "entryPoints": [ "./index.d.ts" ],
     "out": "doc/site",
