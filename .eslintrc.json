@@ -8,7 +8,9 @@
     "dist",
     "website.js",
     "test/files/*",
-    "benchmarks"
+    "benchmarks",
+    ".vscode",
+    ".nyc_output"
   ],
   "overrides": [
     {

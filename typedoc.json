@@ -2,7 +2,7 @@
     "name": "OndbMongoose SDK",
     "readme": "README.md",
     "entryPoints": [ "./index.d.ts" ],
-    "out": "doc/site",
+    "out": "docs/site",
     "includeVersion": true,
     "disableSources": true,
     "intentionallyNotExported": [ "Expand", "OpaqueTypeKey", "Tag",

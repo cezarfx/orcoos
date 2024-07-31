@@ -1,6 +1,6 @@
 **/node_modules/**
 .vscode/**
 dist/**
-package-lock.json
+**/package-lock.json/**
 .nyc_output/**
-
+docs/**
