@@ -41,14 +41,14 @@ export const playerSchema = new Schema<IPlayer>({
         },  
         namespace: 'ondbMongooseSDK',       // on-premises only, namespace used if table is created 
         tableLimits: {
-            //mode: "ON_DEMAND",              // Capacity mode of the table, "ON_DEMAND" or "PROVISIONED"
+            mode: "PROVISIONED",            // Capacity mode of the table, "ON_DEMAND" or "PROVISIONED"
             readUnits: 5,                   // desired throughput of read operations in terms of read units, if table is created
             writeUnits: 5,                  // desired throughput of write operations in terms of write units, if table is created
             storageGB: 5                    // The maximum storage to be consumed by the table, in gigabytes, if table is created
         },
-        timeout: 20000,                      // Timeout for the create table operation in milliseconds. 
-        durability: undefined,              // the desired durability for master/replica sync/acks
-        //consistency: "EVENTUAL",            // onsistency guarantees for read operations, EVENTUAL or ABSOLUTE
+        timeout: 20000,                     // Timeout for the table operations in milliseconds.
+        durability: undefined,              // Durability for master/replica sync/acks write operations
+        consistency: undefined,             // Consistency guarantees for read operations, EVENTUAL or ABSOLUTE
     }
 });
 

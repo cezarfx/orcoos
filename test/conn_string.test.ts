@@ -9,14 +9,14 @@ import { connect, disconnect } from '../index';
 
 import { AUTH_TYPE_CLOUDSIM, AUTH_TYPE_INSTANCE_PRINCIPAL, AUTH_TYPE_OKE_WORKLOAD, 
     AUTH_TYPE_RESOURCE_PRINCIPAL, AUTH_TYPE_USER_PRINCIPAL, NoSQLConnectionString, 
-    PROTOCOL_HTTPS, PROTOCOL_HTTP, SERVICE_CLOUD, SERVICE_ON_PREM 
+    PROTOCOL_HTTPS, PROTOCOL_HTTP, CONNECTION_CLOUD, CONNECTION_ON_PREM 
 } from '../lib/nosqldb-adapter/connectionString';
 
 
 describe("NoSQLConnectionString tests", () => {
     it('parse first', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://user:password@host:123/my_namespace/reserved?o1=v1&o2=v2&o3=&o1=v3');
-        expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('host:123');
@@ -48,7 +48,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud region', () => {
         let cs = new NoSQLConnectionString('nosqldb://us-ashburn-1');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('us-ashburn-1');
@@ -68,7 +68,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud inst_prn endpoint', () => {
         let cs = new NoSQLConnectionString('nosqldb://+instance_principal@endpoint');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_INSTANCE_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('endpoint');
@@ -82,7 +82,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud inst_prn local region', () => {
         let cs = new NoSQLConnectionString('nosqldb://+instance_principal@');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_INSTANCE_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('');
@@ -96,7 +96,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud res_prn region', () => {
         let cs = new NoSQLConnectionString('nosqldb+cloud://+resource_principal@us-ashburn-1');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_RESOURCE_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('us-ashburn-1');
@@ -110,7 +110,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud res_prn local region with compartment_id', () => {
         let cs = new NoSQLConnectionString('nosqldb+cloud://+resource_principal@/my_compartment_id');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_RESOURCE_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('');
@@ -124,7 +124,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud oke_wrk endpoint', () => {
         let cs = new NoSQLConnectionString('nosqldb://+OKE_workload@nosql.us-newreg-1.oci.oraclecloud.com');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_OKE_WORKLOAD);
         expect(cs.getHosts()[0]).equal('nosql.us-newreg-1.oci.oraclecloud.com');
@@ -138,7 +138,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloud oke_wrk endpoint no host', () => {
         let cs = new NoSQLConnectionString('nosqldb://+OKE_workload@/');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_OKE_WORKLOAD);
         expect(cs.getHosts()[0]).equal('');
@@ -152,7 +152,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloudsim1', () => {
         let cs = new NoSQLConnectionString('nosqldb://+cloudsim@localhost');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_CLOUDSIM);
         expect(cs.getHosts()[0]).equal('localhost');
@@ -166,7 +166,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse cloudsim2', () => {
         let cs = new NoSQLConnectionString('nosqldb+cloud://+cloudsim@localhost');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_CLOUDSIM);
         expect(cs.getHosts()[0]).equal('localhost');
@@ -181,7 +181,7 @@ describe("NoSQLConnectionString tests", () => {
     // todo: don't allow on_prem with cloudsim
     it('parse cloudsim3', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://+cloudsim@localhost');
-        expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('localhost');
@@ -195,7 +195,7 @@ describe("NoSQLConnectionString tests", () => {
     
     it('parse on_prem', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://host');
-        expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('host');
@@ -210,7 +210,7 @@ describe("NoSQLConnectionString tests", () => {
     // todo: test if user can start with + using the hex enc
     it('parse on_prem with + username', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://%43cloudsim@host:8080');
-        expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts()[0]).equal('host:8080');
@@ -224,7 +224,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse on_prem multiple hosts', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://host1,host2:8000,host3:8080');
-        expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts().length).equal(3);
@@ -241,7 +241,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse on_prem http namespace', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem+http://host:8080/ns1');
-        expect(cs.getServiceType()).equal(SERVICE_ON_PREM);
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTP);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts().length).equal(1);
@@ -257,7 +257,7 @@ describe("NoSQLConnectionString tests", () => {
 
     it('parse options', () => {
         let cs = new NoSQLConnectionString('nosqldb://host/ns1?op1=v1&op2=v2&op3=v3');
-        expect(cs.getServiceType()).equal(SERVICE_CLOUD);
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
         expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
         expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
         expect(cs.getHosts().length).equal(1);
@@ -308,7 +308,7 @@ describe("NoSQLConnectionString tests", () => {
         
         for (let connStr of connStrs) {
             let cs = new NoSQLConnectionString(connStr);
-            expect(cs.getServiceType()).oneOf([SERVICE_CLOUD, SERVICE_ON_PREM]);
+            expect(cs.getConnectionType()).oneOf([CONNECTION_CLOUD, CONNECTION_ON_PREM]);
             expect(cs.getProtocol()).oneOf([PROTOCOL_HTTPS, PROTOCOL_HTTP, 'ftp', 'smtp', 'sftp', 'webdav']);
             expect(cs.getAuthType()).oneOf([AUTH_TYPE_USER_PRINCIPAL, AUTH_TYPE_INSTANCE_PRINCIPAL, 
                 AUTH_TYPE_RESOURCE_PRINCIPAL, AUTH_TYPE_OKE_WORKLOAD, AUTH_TYPE_CLOUDSIM]);

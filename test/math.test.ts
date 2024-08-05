@@ -38,10 +38,14 @@ describe("Math operations", () => {
     // SELECT * FROM o_sales t WHERE ((t.kvjson."customer"."age" * t.kvjson."customer"."satisfaction" > 100))
     // db.sales.find({$expr: {$gt: [{$multiply: ['$customer.age', '$customer.satisfaction']}, 100]}})
 
+    
     it('multiply 2 db props', async() => {
         expect(Sale.find({$expr: { $gt: [{$multiply: ['$customer.age', '$customer.satisfaction']}, 100] }}))
             .to.be.rejectedWith(Error, 'Unknown top level operator: $expr');
+        // write a test for Sale model
+
     });
 
+    
 
 });
