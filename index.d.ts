@@ -1,5 +1,9 @@
 // import ondbmongoose, { cast, STATES, setDriver, set, get, createConnection, connect, disconnect, startSession, pluralize, model, deleteModel, modelNames, plugin, connections, version, Orcoos, Schema, SchemaType, SchemaTypes, VirtualType, Types, Query, Model, Document, ObjectId, isValidObjectId, isObjectIdOrHexString, syncIndexes, Decimal128, Mixed, Date, Number, Error, now, CastError, SchemaTypeOptions, mongo, mquery, sanitizeFilter, trusted, skipMiddlewareFunction, overwriteMiddlewareResult } from './src/types/index';
 import ondbmongoose from './src/types/index';
+
+/**
+ * The default export for OndbMongoose.
+ */
 export default ondbmongoose;
 // // Re-export for ESM support
 // export const cast = cast;
@@ -8,6 +12,9 @@ export default ondbmongoose;
 // export const set = set;
 // export const get = get;
 export const createConnection = ondbmongoose.createConnection;
+/**
+ * Connects to an Oracle NoSQL Database using a connection string.
+ */
 export const connect = ondbmongoose.connect;
 export const disconnect = ondbmongoose.disconnect;
 // export const startSession = startSession;

@@ -35,7 +35,7 @@ declare module 'ondbmongoose' {
   export type Orcoos = typeof ondbmongoose;
 
   /**
-   * Orcoos constructor. The exports object of the `mongoose` module is an instance of this
+   * Mongoose constructor. The exports object of the `ondbmongoose` module is an instance of this
    * class. Most apps will only use this one instance.
    */
   export const Orcoos: new (options?: MongooseOptions | null) => Orcoos;
@@ -49,7 +49,7 @@ declare module 'ondbmongoose' {
     [modelName: string]: Model<any>
   }
 
-  /** An array containing all models associated with this Orcoos instance. */
+  /** An array containing all models associated with this Mongoose instance. */
   export const models: Models;
 
   /**
