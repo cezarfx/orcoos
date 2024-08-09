@@ -546,6 +546,15 @@ describe("main CRUD and query operations", () => {
         }
     }).timeout(20000);
 
+    it('Native query with bind var',async () => {
+        let q = 'DECLARE $id STRING; SELECT t.customer.age as age, t.customer.email as email, t.customer.gender as gender FROM o_sales t WHERE t.kvid = $id';
+        let customers = await Customer.nosqlQuery(q, {bindings: {'$id': '' + allExpectedSales[0]._id}});
+        expect(customers.length).equal(1);
+        expect(customers[0].age).equal(allExpectedSales[0].customer.age);
+        expect(customers[0].email).equal(allExpectedSales[0].customer.email);
+        expect(customers[0].gender).equal(allExpectedSales[0].customer.gender);
+    }).timeout(20000);
+
     // Not supported, matching inside a nested array on the same item: 
     // Sale.find({items: {$elemMatch: {
     //                      quantity: {$lt: 10},
