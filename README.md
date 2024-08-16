@@ -12,7 +12,7 @@ $ npm install ondbmongoose
 
 Note: For examples in the ./examples dir to work npm link must be used. See https://docs.npmjs.com/cli/v8/commands/npm-link or below under Dev Instalation.
 
-### Dev instalation
+### Development installation
 
 When developing the OndbMongoose SDK use the following installation steps:
 
@@ -47,7 +47,7 @@ Run examples, must have a Oracle NoSQL DB instance (kvlite and proxy) running on
   $ cd examples/typescript
   $ npm link ondbmongoose
   $ npm start
-  
+
   $ cd ../javascript
   $ npm link ondbmongoose
   $ npm start
@@ -340,7 +340,7 @@ Find the API docs [here](http://mongoosejs.com/docs/api/mongoose.html).
 
 ### Related Projects
 
-#### Node SDK for Oracle NoSQL DB 
+#### Node SDK for Oracle NoSQL DB
 
 - [nosql-node-sdk](https://github.com/oracle/nosql-node-sdk/)
 
