@@ -26,7 +26,7 @@ describe("Indexes", () => {
 
     describe('setup context', () => {
         it('connect', async() => {
-            expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 6}));
+            expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
         });
         
         it('delete all', async() => {
@@ -47,7 +47,6 @@ describe("Indexes", () => {
             expect(await sale.save());
             expect(await Sale.count()).equal(1);
 
-            // console.log("_id: " + sale._id + " t: " + typeof sale._id);
             expect(sale._id).exist;
             expect(sale._id).to.be.a('object');
             let dbSale = await Sale.findById(sale._id);
@@ -88,7 +87,6 @@ describe("Indexes", () => {
                     }
                 });
                 allSales.push(sale);
-                //console.log(" i: " + i + " s: " + JSON.stringify(sale.items));
             };
         
             let res = await Sale.insertMany(allSales, {rawResult: true});
@@ -128,17 +126,12 @@ describe("Indexes", () => {
         });
 
         it('check no indexes', async () => {
-            // console.log("=== Indexes case ===")
             // stage indexes in schema
             let saleIndexes = saleSchema.indexes();
             expect(saleIndexes).is.empty;
-            // for (let i in saleIndexes) {
-            //     console.log("        - " + i);
-            // }
         });
         
         it('provision indexes', async () => {
-            // console.log("= schema.index({storeLocation: 1, purchaseMethod: 1}) =")
             saleSchema.index({storeLocation: 1, purchaseMethod: 1});
 
             let saleIndexes = saleSchema.indexes();
@@ -147,9 +140,7 @@ describe("Indexes", () => {
             expect(saleIndexes[0][0].storeLocation).equals(1);
             expect(saleIndexes[0][0].purchaseMethod).equals(1);
             expect(saleIndexes[0][1].background).equals(true);
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
+
 
             // User can provide the index name to be used in the DB
             saleSchema.index({'customer.email': 1, 'customer.satisfaction': 1}, {name: 'my_ce_cs_idx'});
@@ -162,26 +153,19 @@ describe("Indexes", () => {
             expect(saleIndexes[1][1].background).equals(true);
             // Check user provided index name
             expect(saleIndexes[1][1].name).equals('my_ce_cs_idx');
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
         });
 
         it('create and ensure', async () => {
-            // console.log("= Sale.createIndexes() =")
             // Sends createIndex commands to DB for each index declared in the schema.
             await Sale.createIndexes();
 
         
-            // console.log("= Sale.ensureIndexes() =")
             // Sends createIndex commands to DB for each index declared in the schema. 
             await Sale.ensureIndexes();
 
             let saleIndexes = saleSchema.indexes(); 
             expect(saleIndexes).has.lengthOf(2);
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
+
             expect(saleIndexes[0][0].storeLocation).equals(1);
             expect(saleIndexes[0][0].purchaseMethod).equals(1);
             expect(saleIndexes[1][0]['customer.email']).equals(1);
@@ -190,7 +174,6 @@ describe("Indexes", () => {
         }).timeout(10000);
 
         it('diff', async () => {
-            // console.log("= Sale.diffIndexes() =")
             // Does a dry-run of Model.syncIndexes(), returning the indexes that syncIndexes() would drop and create if you were to run syncIndexes().
             const {toDrop, toCreate} = Sale.diffIndexes();
             toDrop?.forEach((i: Object) => console.log("        - toDrop " + JSON.stringify(i)));
@@ -209,16 +192,13 @@ describe("Indexes", () => {
         });
 
         it('sync', async () => {
-            // console.log("= Sale.syncIndexes() =")
             // synchoronizes indexes, ie creates provisioned indexes, and loads from DB
             await Sale.syncIndexes();
             // this does a listIndexes and then createIndex for each that is not in the DB
 
             let saleIndexes = saleSchema.indexes();
             expect(saleIndexes).has.lengthOf(2);
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
+
             expect(saleIndexes[0][0].storeLocation).equals(1);
             expect(saleIndexes[0][0].purchaseMethod).equals(1);
             expect(saleIndexes[1][0]['customer.email']).equals(1);
@@ -226,19 +206,14 @@ describe("Indexes", () => {
         }).timeout(20000);
 
         it('clear', async () => {
-            // console.log("= schema.clearIndexes() =")
             // Deletes all indexes that aren't defined in this model's schema.
             saleSchema.clearIndexes();
 
             let saleIndexes = saleSchema.indexes();
             expect(saleIndexes).is.empty;
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
         });
 
         it('diff2', async () => {
-            // console.log("= Sale.diffIndexes() =")
             // Does a dry-run of Model.syncIndexes(), returning the indexes that syncIndexes() would drop and create if you were to run syncIndexes().
             const {toDrop2, toCreate2} = Sale.diffIndexes();
             toDrop2?.forEach((i: Object) => console.log("        - toDrop2 " + JSON.stringify(i)));
@@ -249,12 +224,8 @@ describe("Indexes", () => {
             // synchoronizes indexes, ie creates provisioned indexes, and loads from DB also drops the ones in DB but not in metadata
             await Sale.syncIndexes();
 
-            // console.log("= schema.indexes() =")
             let saleIndexes = saleSchema.indexes();
             expect(saleIndexes).is.empty;
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
         }).timeout(10000);
     });
 
@@ -264,15 +235,11 @@ describe("Indexes", () => {
 
             await Sale.createIndexes();
 
-            //console.log("= Sale.ensureIndexes() =")
             // Sends createIndex commands to DB for each index declared in the schema. 
             await Sale.ensureIndexes();
 
             let saleIndexes = saleSchema.indexes(); 
             expect(saleIndexes).has.lengthOf(1);
-            // for (let i of saleIndexes) {
-            //     console.log("        - " + JSON.stringify(i));
-            // }
             expect(saleIndexes[0][0]["items.tags"]).equals(1);
         }).timeout(10000);
         
@@ -295,21 +262,21 @@ describe("Indexes", () => {
         it('index with *',async () => {
             await saleSchema.clearIndexes();
             await saleSchema.index({"items.*": 1});
-            //await Sale.createIndexes();
+
             await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "Orcoos does not support wildcard indexes, received: items.*");
         });
 
         it('index with $',async () => {
             await saleSchema.clearIndexes();
             await saleSchema.index({"$": 1});
-            //await Sale.createIndexes();
+
             await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "Orcoos does not support wildcard indexes, received: $");
         });
 
         it('index with 0',async () => {
             await saleSchema.clearIndexes();
             await saleSchema.index({"customer": 0});
-            //await Sale.createIndexes();
+
             await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "Orcoos supports indexes only on path values equal to 1, received: 0");
         });
     });

@@ -18,7 +18,7 @@ describe("Math operations", () => {
     let allSales: Array<ISale> = [];
 
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 1}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
     });
     
     it('delete all and populate sale', async() => {
@@ -49,10 +49,5 @@ describe("Math operations", () => {
     it('multiply 2 db props', async() => {
         expect(Sale.find({$expr: { $gt: [{$multiply: ['$customer.age', '$customer.satisfaction']}, 100] }}))
             .to.be.rejectedWith(Error, 'Unknown top level operator: $expr');
-        // write a test for Sale model
-
     });
-
-    
-
 });

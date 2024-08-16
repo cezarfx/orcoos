@@ -17,7 +17,7 @@ import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 
 describe("main CRUD and query operations", () => {
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 5}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
     });
     
     it('delete all', async() => {
@@ -41,7 +41,6 @@ describe("main CRUD and query operations", () => {
         expect(await sale.save());
         expect(await Sale.count()).equal(1);
 
-        // console.log("_id: " + sale._id + " t: " + typeof sale._id);
         expect(sale._id).exist;
         expect(sale._id).to.be.a('object');
         let dbSale = await Sale.findById(sale._id);
@@ -131,7 +130,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         expect(allSales.length).to.be.greaterThan(0);
         for (let sale of allSales) {
-            // console.log(sale);
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.equal('NY');
         }
@@ -143,7 +141,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.oneOf(cities.filter(v => v.length > 2));
             expect(sale.items[0].quantity).greaterThanOrEqual(10);
@@ -156,7 +153,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.equal('NY');
             expect(sale.items[0].quantity).lessThanOrEqual(10);
@@ -169,7 +165,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).to.satisfy((q: number) => q < 10 || q > 10);
         }
@@ -181,7 +176,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).not.lessThan(10);
             expect(sale.items[0].quantity).greaterThanOrEqual(10);
@@ -194,7 +188,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).to.satisfy((q: number) => !(q < 10) && !(q > 10));
         }
@@ -213,7 +206,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).to.satisfy((q: number) => (q < 10 || q > 10 || q > 10));
         }
@@ -229,7 +221,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
         }
         expect(allSales.length).equal(allExpectedSales.length + 1);
@@ -243,7 +234,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.satisfy((sl: String) => (sl == "NY" && sl >= "NY"));
         }
@@ -258,7 +248,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.customer.email).to.satisfy((e: String) => (e.includes('@')));
         }
         expect(allSales.length).greaterThanOrEqual(5);
@@ -272,7 +261,6 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         for (let sale of allSales) {
-            // console.log(JSON.stringify(sale));
             expect(sale.customer.email).to.satisfy((e: String) => (e.toLowerCase().includes('bo') && e.toLowerCase().startsWith("bo")));
         }
         expect(allSales.length).greaterThanOrEqual(1);
@@ -445,8 +433,7 @@ describe("main CRUD and query operations", () => {
         expect(replaced.modifiedCount).equal(1);
         expect(replaced.acknoledged).equal(true);
         expect("" + replaced.upsertedId).equal("" + sale._id);
-        // expect(replaced.upsertedCount).equal(1);
-
+        
         sale = await Sale.findById(dbSale._id);
         expect(sale.storeLocation).equal('Bloom');
         expect(sale.items[0].name).equal('beads');
@@ -525,7 +512,6 @@ describe("main CRUD and query operations", () => {
     it('Native query: nosqlQuery', async () => {
         let dbSales = await Sale.nosqlQuery('SELECT * FROM o_Sales ORDER BY kvid');
         for(let i in dbSales) {
-            // console.log(" " + i + " " + dbSales[i]);
             expect('' + dbSales[i]._id).equal('' + allExpectedSales[i]._id);
             expect(dbSales[i].storeLocation).equal(allExpectedSales[i].storeLocation);
             expect(dbSales[i].customer.email).equal(allExpectedSales[i].customer.email);
@@ -539,7 +525,6 @@ describe("main CRUD and query operations", () => {
         let q = 'SELECT t.customer.age as age, t.customer.email as email, t.customer.gender as gender FROM o_sales t ORDER BY t.kvid';
         let customers = await Customer.nosqlQuery(q);
         for(let i in customers) {
-            // console.log(" " + i + " " + customers[i]);
             expect(customers[i].age).equal(allExpectedSales[i].customer.age);
             expect(customers[i].email).equal(allExpectedSales[i].customer.email);
             expect(customers[i].gender).equal(allExpectedSales[i].customer.gender);
@@ -573,7 +558,6 @@ describe("main CRUD and query operations", () => {
             ' exists $element.tags[$element in ("red", "green")]])';
         let sales = await Sale.nosqlQuery(q);
         for(let i in sales) {
-            //console.log(" " + i + " " + JSON.stringify(sales[i]));
             expect(sales[i].items[0].quantity).lessThan(20);
             expect(sales[i].items[0].tags).contains("green");
         }
@@ -588,7 +572,7 @@ describe("main CRUD and query operations", () => {
     it('deleteMany filter', async () => {
         // Q: DELETE FROM o_sales t WHERE ((t.kvjson."items"[]."price"[] >= 60))
         let delM = await Sale.deleteMany({"items.price": {$gte: 60}});
-        // console.log("       deletions: " + delM);
+        
         expect(delM).lessThanOrEqual(allExpectedSales.length);
         expect(delM).greaterThanOrEqual(0);
 
@@ -602,7 +586,7 @@ describe("main CRUD and query operations", () => {
     it('deleteMany unfiltered all', async () => {
         // Q: DELETE FROM o_sales t
         let delM = await Sale.deleteMany();
-        // console.log("       deletions: " + delM);
+        
         expect(delM).lessThanOrEqual(allExpectedSales.length);
         expect(delM).greaterThanOrEqual(0);
 

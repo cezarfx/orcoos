@@ -5,15 +5,20 @@
  * https://oss.oracle.com/licenses/upl/
  */
 
-//const ondbmongoose = require('mongoose');
-//import { Schema, model, connect } from 'mongoose';
-import ondbmongoose, { Schema, model, connect } from 'ondbmongoose';
+/**
+ *  Example shows how the Ondb Mongoose SDK is used instead of Mongoose.
+ * 
+ *  The following two lines should be updated and the rest of the code is unchenged. 
+ */
 
+// import mongoose, { Schema, model, connect } from 'mongoose';
 // mongoose.set('strictQuery', false);
+
+import ondbmongoose, { Schema, model, connect } from 'ondbmongoose';
 ondbmongoose.set('strictQuery', false);
 
  
-// 2. Create a Schema corresponding to the document interface.
+// Create a Schema corresponding to the document interface.
 const addressSchema = new Schema({
     city: String,
     street: String,
@@ -31,7 +36,7 @@ const userSchema = new Schema({
     offices: [addressSchema],
 });
 
-// 3. Create a Model.
+// Create a Model.
 const User = model('User', userSchema);
 const Address = model('Address', addressSchema);
 
@@ -39,10 +44,10 @@ const Address = model('Address', addressSchema);
 run().catch(err => console.log(err));
 
 async function run() {
-    // 4. Connect to NoSQL DB1
+    // Connect to NoSQL DB
     console.log("Connecting to DB ...");
-    //await connect('mongodb://localhost');
-    await connect('nosqldb+on_prem+http://localhost:8080');
+    
+    await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 3});
     console.log("    ... done.");
 
     let now = Date.now();
@@ -65,17 +70,20 @@ async function run() {
       ]
     });
     console.log("user.save()");
+    // Save user
     let savedUser = await user.save();
 
     console.log("  savedUser._id: " + savedUser._id);
 
 
     console.log("\n\nUser.findById()");
+    // Find user by id
     let bill = await User.findById(savedUser._id);
     console.log("  Bill: " + bill);
 
 
     console.log("\n\nUser.find()");
+    // Find all users
     let users = await User.find();
     users.forEach( function (u) { 
         console.log("  user: " + u.name + "  " + u.age + "   " + u.dept + " " + JSON.stringify(u.dateAdded)); 

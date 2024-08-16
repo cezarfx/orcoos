@@ -63,6 +63,10 @@ declare module 'ondbmongoose' {
     autoIndex?: boolean;
     /** Set to `true` to make Mongoose automatically call `createCollection()` on every model created on this connection. */
     autoCreate?: boolean;
+    /** Set the console logging level: number 0 to 6 
+     * (NONE: 0, SEVERE: 1, WARNING: 2, INFO: 3, CONFIG: 4, FINE: 5, FINNER: 6) 
+     */
+    logLevel?: number;
   }
 
   class Connection extends events.EventEmitter implements SessionStarter {

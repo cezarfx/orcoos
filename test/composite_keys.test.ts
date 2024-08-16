@@ -98,7 +98,7 @@ describe("Composite Keys", () => {
     let allPlayers: Array<IPlayer> = [];
 
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 5}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 3}));
     });
     
     it('delete all', async() => {

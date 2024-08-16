@@ -66,3 +66,4 @@ export const SchemaTypeOptions = ondbmongoose.SchemaTypeOptions;
 // export const overwriteMiddlewareResult = overwriteMiddlewareResult;
 
 export const NoSQLConnectionString = ondbmongoose.NoSQLConnectionString;
+export const LOG_LEVEL = ondbmongoose.LOG_LEVEL;

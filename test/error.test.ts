@@ -20,7 +20,7 @@ describe("Errors for weired queries", () => {
     let allExpectedSales:Array<typeof Sale> = [];
 
     it('setup', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
 
         expect(await Sale.deleteMany());
         expect(await Sale.count()).equal(0);
@@ -53,7 +53,6 @@ describe("Errors for weired queries", () => {
     });
 
     it('.find(null) not resolved', async() => {
-        // await Sale.find(null);          // Error timeout
         let fnp = Sale.find(null);
         await sleep(1000);
         expect(fnp).to.not.be.fulfilled;

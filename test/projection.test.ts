@@ -20,7 +20,7 @@ let allSales: Array<ISale> = [];
 describe("Projection", () => {
 
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {debug: 4}));
+        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
     });
     
     it('delete all and populate sale', async() => {
@@ -71,7 +71,7 @@ describe("Projection", () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined; // <<--
+            expect(sale._id).to.be.undefined; 
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.an('array');
             expect(sale.storeLocation).to.be.a('string');
@@ -119,7 +119,7 @@ describe("Projection", () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined; 
+            expect(sale._id).to.be.undefined; 
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
@@ -135,7 +135,7 @@ describe("Projection", () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.an('array');
             expect(sale.items[0].name).to.be.an('string');
@@ -177,7 +177,7 @@ describe("Projection", () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.an('array');
             expect(sale.storeLocation).to.be.a('string');
@@ -193,7 +193,7 @@ describe("Projection", () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.a('date');
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.a('string');
@@ -224,7 +224,7 @@ describe("Projection", () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.an('array');
             expect(sale.items[0].price).to.be.undefined;
@@ -248,7 +248,7 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
@@ -266,7 +266,7 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
@@ -297,7 +297,7 @@ describe('Projection with extra fields', () => {
         let res = await Sale.find({}, {_id:0, customer: 1, couponUsed: 1,
             mult: {$multiply: ['$customer.age', 2]},
             div: {$divide: ['$customer.age', 2]},
-            //mod: {$mod: ['$customer.age', 2]},
+            mod: {$mod: ['$customer.age', 2]},
             add: {$add: ['$customer.age', 2]},
             sub: {$subtract: ['$customer.age', 2]},
 
@@ -317,7 +317,7 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
@@ -331,8 +331,8 @@ describe('Projection with extra fields', () => {
             expect(sale._doc.mult).to.be.equal(sale.customer.age * 2);
             expect(sale._doc.div).to.be.a('number');
             expect(sale._doc.div).to.be.equal(sale.customer.age / 2);
-            // expect(sale._doc.mod).to.be.a('number');
-            // expect(sale._doc.mod).to.be.equal(sale.customer.age % 2);
+            expect(sale._doc.mod).to.be.a('number');
+            expect(sale._doc.mod).to.be.equal(sale.customer.age % 2);
             expect(sale._doc.add).to.be.a('number');
             expect(sale._doc.add).to.be.equal(sale.customer.age + 2);
             expect(sale._doc.sub).to.be.a('number');
@@ -379,7 +379,7 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
@@ -427,18 +427,14 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
-            //expect(sale.saleDate).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
-            //expect(sale.items).to.lengthOf(0);
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
             expect(sale.customer).to.be.undefined;
             expect(sale.couponUsed).to.be.undefined;
-            //expect(sale.purchaseMethod).to.be.equal(PurchaseMethod.InStore);
             expect(sale.purchaseMethod).to.be.undefined
-            // console.log('DBG:', sale.saleDate, sale.items, sale.purchaseMethod);
-
+            
             expect(sale._doc.abs).to.be.a('number');
             expect(sale._doc.abs).to.be.equal(Math.abs(-123));
             expect(sale._doc.ceil).to.be.a('number');
@@ -494,7 +490,7 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
@@ -557,18 +553,14 @@ describe('Projection with extra fields', () => {
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
         for (let sale of res) {
-            //expect(sale._id).to.be.undefined;
-            //expect(sale.saleDate).to.be.undefined;
+            expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
-            //expect(sale.items).to.lengthOf(0);
             expect(sale.items).to.be.undefined;
             expect(sale.storeLocation).to.be.undefined;
             expect(sale.customer).to.be.undefined;
             expect(sale.couponUsed).to.be.undefined;
-            //expect(sale.purchaseMethod).to.be.equal(PurchaseMethod.InStore);
             expect(sale.purchaseMethod).to.be.undefined
-            // console.log('DBG:', sale.saleDate, sale.items, sale.purchaseMethod);
-
+            
             expect(sale._doc.conc).to.be.a('string');
             expect(sale._doc.conc).to.be.equal('abc');
             expect(sale._doc.substr).to.be.a('string');

@@ -9,7 +9,7 @@ import { Schema, model } from '../index';
 
 // 1. Create an interface representing a DB entity.
 export interface ISale {
-    //_id?: any;
+    //_id?: any;     // automaticaly handled
     saleDate: Date;
     items?: [IItem];
     storeLocation: string;

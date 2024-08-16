@@ -89,6 +89,12 @@ await ondbmongoose.connect('nosqldb+on_prem_http://127.0.0.1:8080/');
 
 Once connected, the `open` event is fired on the `Connection` instance. If you're using `ondbmongoose.connect`, the `Connection` is `ondbmongoose.connection`. Otherwise, `ondbmongoose.createConnection` return value is a `Connection`.
 
+To enable logging to get insight into what query OndbMongoose SDK generates use the option logLevel, with one of values: NONE 0, SEVERE: 1, WARNING: 2, INFO: 3, CONFIG: 4, FINE: 5, FINNER: 6.
+
+```js
+await ondbmongoose.connect('nosqldb+on_prem_http://127.0.0.1:8080/', {logLevel: 3});
+```
+
 **Note:** _If the local connection fails then try using 127.0.0.1 instead of localhost. Sometimes issues may arise when the local hostname has been changed._
 
 **Important!** OndbMongoose buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
