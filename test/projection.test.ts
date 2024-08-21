@@ -13,6 +13,7 @@ chai.use(chaiAsPromised);
 import { connect } from '../index';
 
 import {ISale, PurchaseMethod, Sale, populateDatabase} from './sale';
+import { ONDB_URL } from './test-utils';
 
 
 let allSales: Array<ISale> = [];
@@ -20,7 +21,7 @@ let allSales: Array<ISale> = [];
 describe("Projection", () => {
 
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
+        expect(await connect(ONDB_URL, {logLevel: 2}));
     });
     
     it('delete all and populate sale', async() => {

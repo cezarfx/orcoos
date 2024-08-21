@@ -13,6 +13,7 @@ chai.use(chaiAsPromised);
 import { connect } from '../index';
 
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender, saleSchema, customerSchema, itemSchema} from './sale';
+import { ONDB_URL } from './test-utils';
 
 describe("Indexes", () => {
     let sale: typeof Sale;
@@ -26,7 +27,7 @@ describe("Indexes", () => {
 
     describe('setup context', () => {
         it('connect', async() => {
-            expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
+            expect(await connect(ONDB_URL, {logLevel: 2}));
         });
         
         it('delete all', async() => {

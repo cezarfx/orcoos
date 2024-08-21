@@ -13,17 +13,18 @@ chai.use(chaiAsPromised);
 import { connect } from '../index';
 
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
-
+import {ONDB_URL} from './test-utils';
 
 describe("main CRUD and query operations", () => {
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
+        expect(await connect(ONDB_URL, { logLevel: 2 }));
+        expect(await Sale.createCollection()).to.not.throw;
     });
     
     it('delete all', async() => {
         expect(await Sale.deleteMany());
         expect(await Sale.count()).equal(0);
-    }).timeout(3000);
+    }).timeout(4000);
     
     let sale: typeof Sale;
     let allExpectedSales:Array<typeof Sale> = [];
@@ -329,7 +330,7 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
 
         expect(allSales.length).equal(noOfSales - 2);
-    });
+    }).timeout(4000);
 
     it('updateOne $set', async () => {
         // Q: UPDATE sales AS $t PUT $t {"storeLocation": "NY:NY"} WHERE ($t.kvid = "...")
@@ -352,7 +353,7 @@ describe("main CRUD and query operations", () => {
         await sale.updateOne({$unset: {customer: ''}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.customer).to.not.exist;
-    });
+    }).timeout(4000);
 
     it('updateOne $min', async () => {
         let dbSale = await Sale.findById(sale._id);
@@ -370,7 +371,7 @@ describe("main CRUD and query operations", () => {
         await sale.updateOne({$max: {'items.0.price': 8.22}});
         let updSale = await Sale.findById(sale._id);
         expect(updSale.items[0].price).equal(8.22);
-    });
+    }).timeout(4000);
 
     it('updateOne $inc', async () => {
         let dbSale = await Sale.findById(sale._id);
@@ -581,7 +582,7 @@ describe("main CRUD and query operations", () => {
         expect(dbSales).to.be.empty;
 
         allExpectedSales.splice(0, delM);
-    });
+    }).timeout(4000);
 
     it('deleteMany unfiltered all', async () => {
         // Q: DELETE FROM o_sales t
@@ -597,5 +598,5 @@ describe("main CRUD and query operations", () => {
         // Q: SELECT count(*) FROM o_sales t
         let dbCount = await Sale.count();
         expect(dbCount).equal(0);
-    });
+    }).timeout(4000);
 });

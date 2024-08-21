@@ -14,7 +14,7 @@ import { connect } from '../index';
 
 import { NoSQLClient, TableState } from 'oracle-nosqldb';
 
-import {Sale} from './sale';
+import { ONDB_URL } from './test-utils';
 
 let tableNames: Array<string> = [
     'ondbMongooseSDK:o_players', 'o_sales', 'o_cust', 'o_dateplayers'
@@ -38,7 +38,7 @@ async function dropTable(client: NoSQLClient, tableName: string) {
 describe("Connect and Drop all known test tables", () => {
     let client: NoSQLClient;
     it('connect', async() => {
-        let r = await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2});
+        let r = await connect(ONDB_URL, { logLevel: 2 });
         expect(r).not.empty;
         // get NoSQL DB driver client object
         client = r.connection.client.client;

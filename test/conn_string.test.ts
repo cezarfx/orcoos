@@ -18,6 +18,7 @@ import { AUTH_TYPE_CLOUDSIM, AUTH_TYPE_INSTANCE_PRINCIPAL, AUTH_TYPE_OKE_WORKLOA
     AUTH_TYPE_RESOURCE_PRINCIPAL, AUTH_TYPE_USER_PRINCIPAL, NoSQLConnectionString, 
     PROTOCOL_HTTPS, PROTOCOL_HTTP, CONNECTION_CLOUD, CONNECTION_ON_PREM 
 } from '../lib/nosqldb-adapter/connectionString';
+import { ONDB_URL } from './test-utils';
 
 
 describe("NoSQLConnectionString tests", () => {
@@ -184,22 +185,21 @@ describe("NoSQLConnectionString tests", () => {
         expect(cs.getPath()).equals('');
         expect(cs.getOptions().size).equals(0);
     });
-
-    // todo: don't allow on_prem with cloudsim
+    
     it('parse cloudsim3', () => {
-        let cs = new NoSQLConnectionString('nosqldb+on_prem://+cloudsim@localhost');
-        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
-        expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
-        expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
-        expect(cs.getHosts()[0]).equal('localhost');
+        let cs = new NoSQLConnectionString('nosqldb+cloud+http://+cloudsim@127.0.0.1:8081/orcoos');
+        expect(cs.getConnectionType()).equal(CONNECTION_CLOUD);
+        expect(cs.getProtocol()).equal(PROTOCOL_HTTP);
+        expect(cs.getAuthType()).equal(AUTH_TYPE_CLOUDSIM);
+        expect(cs.getHosts()[0]).equal('127.0.0.1:8081');
         expect(cs.getRegion()).equal(undefined);
-        expect(cs.getUserName()).equal('+cloudsim');
-        expect(cs.getPassword()).equal('');
-        expect(cs.getCompartment()).equals('');
-        expect(cs.getPath()).equals('');
+        expect(cs.getUserName()).equal(undefined);
+        expect(cs.getPassword()).equal(undefined);
+        expect(cs.getCompartment()).equals('orcoos');
+        expect(cs.getPath()).equals('/orcoos');
         expect(cs.getOptions().size).equals(0);
     });
-    
+
     it('parse on_prem', () => {
         let cs = new NoSQLConnectionString('nosqldb+on_prem://host');
         expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
@@ -261,6 +261,19 @@ describe("NoSQLConnectionString tests", () => {
         expect(cs.getOptions().size).equals(0);
     });
 
+    it('parse on prem with username: +cloudsim', () => {
+        let cs = new NoSQLConnectionString('nosqldb+on_prem://+cloudsim@localhost');
+        expect(cs.getConnectionType()).equal(CONNECTION_ON_PREM);
+        expect(cs.getProtocol()).equal(PROTOCOL_HTTPS);
+        expect(cs.getAuthType()).equal(AUTH_TYPE_USER_PRINCIPAL);
+        expect(cs.getHosts()[0]).equal('localhost');
+        expect(cs.getRegion()).equal(undefined);
+        expect(cs.getUserName()).equal('+cloudsim');
+        expect(cs.getPassword()).equal('');
+        expect(cs.getCompartment()).equals('');
+        expect(cs.getPath()).equals('');
+        expect(cs.getOptions().size).equals(0);
+    });
 
     it('parse options', () => {
         let cs = new NoSQLConnectionString('nosqldb://host/ns1?op1=v1&op2=v2&op3=v3');
@@ -360,8 +373,8 @@ describe("NoSQLConnectionString tests", () => {
         }
     });
 
-    it('connect to nosqldb+on_prem+http://localhost:8080', async() => {
-         let r = await connect('nosqldb+on_prem+http://localhost:8080');
+    it('connect to ONDB_URL', async() => {
+         let r = await connect(ONDB_URL);
          expect(r).not.empty;
          await disconnect();
     }).timeout(3000);

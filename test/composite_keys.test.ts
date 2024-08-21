@@ -13,6 +13,8 @@ chai.use(chaiAsPromised);
 import { connect } from '../index';
 
 import { Schema, model } from '../index';
+import { ONDB_URL, TEST_TABLE_OPTIONS } from './test-utils';
+import { CapacityMode } from 'oracle-nosqldb';
 
 // 1. Create an interface representing a DB entity.
 interface IPlayer {
@@ -38,7 +40,7 @@ export const playerSchema = new Schema<IPlayer>({
     collection: 'o_players',                // Name of the table used for collection
     collectionOptions: {
         shardKey: ["team"],                 // Shard key component
-        compartment: 'ondbMongooseSDK',     // Cloud only, compartment id or name to use if table is created
+        //  compartment: 'ondbMongooseSDK',     // Cloud only, compartment id or name to use if table is created
         definedTags: {                      // Defined tags represent metadata managed by an administrator. 
             customTag: 'ondb', 
             'sdk': 'ondbMongooseSDK'
@@ -46,13 +48,13 @@ export const playerSchema = new Schema<IPlayer>({
         freeFormTags: {                     // Free-form tags represent an unmanaged metadata created and applied by the user. 
             "Department": "Finance"
         },  
-        namespace: 'ondbMongooseSDK',       // On-premises only, namespace used if table is created 
-        // tableLimits: {                      // Cloud only, table limits.
-        //     mode: "PROVISIONED",            // Capacity mode of the table, "ON_DEMAND" or "PROVISIONED"
-        //     readUnits: 5,                   // desired throughput of read operations in terms of read units, if table is created
-        //     writeUnits: 5,                  // desired throughput of write operations in terms of write units, if table is created
-        //     storageGB: 5                    // The maximum storage to be consumed by the table, in gigabytes, if table is created
-        // },
+        // namespace: 'ondbMongooseSDK',       // On-premises only, namespace used if table is created 
+        tableLimits: {                      // Cloud only, table limits.
+            mode: CapacityMode.PROVISIONED, // Capacity mode of the table, "ON_DEMAND" or "PROVISIONED"
+            readUnits: 50,                  // desired throughput of read operations in terms of read units, if table is created
+            writeUnits: 50,                 // desired throughput of write operations in terms of write units, if table is created
+            storageGB: 1                    // The maximum storage to be consumed by the table, in gigabytes, if table is created
+        },
         timeout: 5000,                      // Timeout for the row operations in milliseconds.
         ddlTimeout: 20000,                  // Timeout for the table operations in milliseconds.
         durability: undefined,              // Durability for master/replica sync/acks write operations
@@ -98,7 +100,7 @@ describe("Composite Keys", () => {
     let allPlayers: Array<IPlayer> = [];
 
     it('connect', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 3}));
+        expect(await connect(ONDB_URL, { logLevel: 2 }));
     });
     
     it('delete all', async() => {
@@ -203,7 +205,11 @@ describe("Composite Keys", () => {
             },
             name: String,
             goals: Number
-        }, {collection: 'o_datePlayers'});
+        }, 
+        {
+            collection: 'o_datePlayers',
+            ...TEST_TABLE_OPTIONS,
+        });
         
         const DPlayer = model<IDatePlayer>('DatePlayer', dPlayerSchema);
 

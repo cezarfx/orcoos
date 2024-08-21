@@ -14,13 +14,14 @@ import { connect } from '../index';
 
 import {Sale, Item, PurchaseMethod, Gender, ISale} from './sale';
 import { CastError } from '../lib';
+import { ONDB_URL } from './test-utils';
 
 describe("Errors for weired queries", () => {
     let sale: typeof Sale;
     let allExpectedSales:Array<typeof Sale> = [];
 
     it('setup', async() => {
-        expect(await connect('nosqldb+on_prem+http://localhost:8080', {logLevel: 2}));
+        expect(await connect(ONDB_URL, {logLevel: 2}));
 
         expect(await Sale.deleteMany());
         expect(await Sale.count()).equal(0);

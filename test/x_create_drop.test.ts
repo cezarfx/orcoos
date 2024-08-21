@@ -16,6 +16,7 @@ import { TableState } from 'oracle-nosqldb';
 
 let client;
 import {Sale} from './sale';
+import { ONDB_URL, TEST_TABLE_OPTIONS } from './test-utils';
 
 let tableName = 'o_sales';
 
@@ -36,7 +37,7 @@ async function dropSale() {
 async function createSale() {
     try {
         let ddl = 'CREATE TABLE IF NOT EXISTS ' + tableName + '(kvid STRING, PRIMARY KEY(kvid)) AS JSON COLLECTION';
-        let res = await client.tableDDL(ddl);
+        let res = await client.tableDDL(ddl, {...TEST_TABLE_OPTIONS.collectionOptions});
         // Wait for the operation completion
         await client.forCompletion(res);
         
@@ -50,7 +51,7 @@ async function createSale() {
 
 describe("Create and Drop tables", () => {
     it('connect', async() => {
-        let r = await connect('nosqldb+on_prem+http://localhost:8080');
+        let r = await connect(ONDB_URL);
         expect(r).not.empty;
         // get NoSQL DB driver clielt object
         client = r.connection.client.client;

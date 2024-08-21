@@ -5,6 +5,7 @@
  * https://oss.oracle.com/licenses/upl/
  */
 
+import { CapacityMode } from 'oracle-nosqldb';
 import { Schema, model } from '../index';
 
 // 1. Create an interface representing a DB entity.
@@ -91,7 +92,15 @@ export const saleSchema = new Schema<ISale>({
     },
 }, 
     {
-        collection: 'o_sales'   // use the table with this name
+        collection: 'o_sales',   // use the table with this name
+        collectionOptions: {
+            tableLimits: {
+                mode: CapacityMode.PROVISIONED, 
+                readUnits: 50,
+                writeUnits: 50,
+                storageGB: 1
+            } 
+        }
     });
 
 export const Sale = model<ISale>('Sale', saleSchema);
