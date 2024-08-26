@@ -14,6 +14,7 @@ import { connect } from '../index';
 
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 import {ONDB_URL} from './test-utils';
+import { CapacityMode } from 'oracle-nosqldb';
 
 describe("main CRUD and query operations", () => {
     it('connect', async() => {
@@ -106,7 +107,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find();
         expect(allSales).to.be.an('array');
         expect(allSales.length).equal(noOfRows);
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.oneOf(cities);
         }
@@ -117,7 +118,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({});
         expect(allSales).to.be.an('array');
         expect(allSales.length).equal(noOfRows);
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.oneOf(cities);
         }
@@ -130,7 +131,7 @@ describe("main CRUD and query operations", () => {
 
         expect(allSales).to.be.an('array');
         expect(allSales.length).to.be.greaterThan(0);
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.equal('NY');
         }
@@ -141,7 +142,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({'items.quantity': {$gte: 10}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.oneOf(cities.filter(v => v.length > 2));
             expect(sale.items[0].quantity).greaterThanOrEqual(10);
@@ -153,7 +154,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({'items.quantity': {$lte: 10}}).where({storeLocation: 'NY'});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.be.equal('NY');
             expect(sale.items[0].quantity).lessThanOrEqual(10);
@@ -165,7 +166,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({$or: [{'items.quantity': {$lt: 10}}, {'items.quantity': {$gt: 10}}]});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).to.satisfy((q: number) => q < 10 || q > 10);
         }
@@ -176,7 +177,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({$not: {'items.quantity': {$lt: 10}}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).not.lessThan(10);
             expect(sale.items[0].quantity).greaterThanOrEqual(10);
@@ -188,7 +189,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({$nor: [{'items.quantity': {$lt: 10}}, {'items.quantity': {$gt: 10}}]});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).to.satisfy((q: number) => !(q < 10) && !(q > 10));
         }
@@ -206,7 +207,7 @@ describe("main CRUD and query operations", () => {
                       ] });
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.items[0].quantity).to.satisfy((q: number) => (q < 10 || q > 10 || q > 10));
         }
@@ -221,7 +222,7 @@ describe("main CRUD and query operations", () => {
                 {'items.name': {$in: itemNames}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
         }
         expect(allSales.length).equal(allExpectedSales.length + 1);
@@ -234,7 +235,7 @@ describe("main CRUD and query operations", () => {
             {storeLocation: {$eq: "NY", $gte: "NY"}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items[0].name).to.be.oneOf(itemNames);
             expect(sale.storeLocation).to.satisfy((sl: String) => (sl == "NY" && sl >= "NY"));
         }
@@ -248,7 +249,7 @@ describe("main CRUD and query operations", () => {
             {'customer.email': {$regex: '.*@.*'}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.customer.email).to.satisfy((e: String) => (e.includes('@')));
         }
         expect(allSales.length).greaterThanOrEqual(5);
@@ -261,7 +262,7 @@ describe("main CRUD and query operations", () => {
             {'customer.email': {$regex: 'bo.*', $options: 'is'}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.customer.email).to.satisfy((e: String) => (e.toLowerCase().includes('bo') && e.toLowerCase().startsWith("bo")));
         }
         expect(allSales.length).greaterThanOrEqual(1);
@@ -275,7 +276,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({'items': {$size: 1}});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.items.length).equal(1);
         }
     });
@@ -285,7 +286,7 @@ describe("main CRUD and query operations", () => {
         let allSales = await Sale.find({'customer.gender': 'F'});
         expect(allSales).to.be.an('array');
         
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             expect(sale.customer.gender).equal('F');
         }
     });
@@ -308,7 +309,7 @@ describe("main CRUD and query operations", () => {
         expect(allSales).to.be.an('array');
         
         let prevRow = undefined;
-        for (let sale of allSales) {
+        for await (let sale of allSales) {
             if (prevRow) {
                 expect(sale.customer.gender).greaterThanOrEqual(prevRow);
             }
@@ -511,13 +512,15 @@ describe("main CRUD and query operations", () => {
     });
 
     it('Native query: nosqlQuery', async () => {
-        let dbSales = await Sale.nosqlQuery('SELECT * FROM o_Sales ORDER BY kvid');
-        for(let i in dbSales) {
-            expect('' + dbSales[i]._id).equal('' + allExpectedSales[i]._id);
-            expect(dbSales[i].storeLocation).equal(allExpectedSales[i].storeLocation);
-            expect(dbSales[i].customer.email).equal(allExpectedSales[i].customer.email);
-            expect(dbSales[i].customer.age).equal(allExpectedSales[i].customer.age);
-            expect(dbSales[i].items[0].name).equal(allExpectedSales[i].items[0].name);
+        let dbSales: Array<any> = await Sale.nosqlQuery('SELECT * FROM o_Sales ORDER BY kvid');
+        let i = 0;
+        for await (let dbSale of dbSales) {
+            expect('' + dbSale._id).equal('' + allExpectedSales[i]._id);
+            expect(dbSale.storeLocation).equal(allExpectedSales[i].storeLocation);
+            expect(dbSale.customer.email).equal(allExpectedSales[i].customer.email);
+            expect(dbSale.customer.age).equal(allExpectedSales[i].customer.age);
+            expect(dbSale.items[0].name).equal(allExpectedSales[i].items[0].name);
+            i++;
         }
         expect(dbSales.length).equal(allExpectedSales.length);
     }).timeout(20000);
@@ -525,10 +528,12 @@ describe("main CRUD and query operations", () => {
     it('Native query returning nested structure',async () => {
         let q = 'SELECT t.customer.age as age, t.customer.email as email, t.customer.gender as gender FROM o_sales t ORDER BY t.kvid';
         let customers = await Customer.nosqlQuery(q);
-        for(let i in customers) {
-            expect(customers[i].age).equal(allExpectedSales[i].customer.age);
-            expect(customers[i].email).equal(allExpectedSales[i].customer.email);
-            expect(customers[i].gender).equal(allExpectedSales[i].customer.gender);
+        let i = 0;
+        for await (let customer of customers) {
+            expect(customer.age).equal(allExpectedSales[i].customer.age);
+            expect(customer.email).equal(allExpectedSales[i].customer.email);
+            expect(customer.gender).equal(allExpectedSales[i].customer.gender);
+            i++;
         }
     }).timeout(20000);
 
@@ -558,9 +563,9 @@ describe("main CRUD and query operations", () => {
             ' exists t."items"[ $element.quantity < 20 AND ' + 
             ' exists $element.tags[$element in ("red", "green")]])';
         let sales = await Sale.nosqlQuery(q);
-        for(let i in sales) {
-            expect(sales[i].items[0].quantity).lessThan(20);
-            expect(sales[i].items[0].tags).contains("green");
+        for await (let sale of sales) {
+            expect(sale.items[0].quantity).lessThan(20);
+            expect(sale.items[0].tags).contains("green");
         }
         expect(sales.length).equal(3);
     });
@@ -599,4 +604,28 @@ describe("main CRUD and query operations", () => {
         let dbCount = await Sale.count();
         expect(dbCount).equal(0);
     }).timeout(4000);
+
+    it('get access to underlying NoSQLClient', async()  => {
+        let tableName = Sale.collection.collectionName;
+        expect(tableName).equal('o_sales');
+        let table = await Sale.db.db.client.getTable(tableName);
+        expect(table).to.be.a('object');
+
+        if (table.tableLimits) {
+            let tr = await Sale.db.db.client.setTableLimits(tableName, 
+                {
+                    // Use either PROVISIONED
+                    // mode: CapacityMode.PROVISIONED,
+                    // readUnits: 1, 
+                    // writeUnits: 1,
+                    // storageGB: 1 
+    
+                    // or ON_DEMAND
+                    mode: CapacityMode.ON_DEMAND,
+                    storageGB: 1 
+                }
+            );
+            expect(tr.tableLimits).to.be.a('object');
+        }
+    }).timeout(3000);
 });

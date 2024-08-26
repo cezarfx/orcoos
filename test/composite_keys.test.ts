@@ -118,7 +118,7 @@ describe("Composite Keys", () => {
         let dbPlayers = await Player.find();
         expect(dbPlayers).to.be.an('array');
         expect(dbPlayers.length).equal(allPlayers.length);
-        for (let player of dbPlayers) {
+        for await (let player of dbPlayers) {
             expect(player.name).to.be.oneOf(names);
             expect(player.goals).to.be.oneOf(allPlayers.map(p => p.goals));
         }

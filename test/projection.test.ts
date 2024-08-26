@@ -37,7 +37,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.a('object');
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.an('array');
@@ -71,7 +71,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {_id: 0});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined; 
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.an('array');
@@ -87,7 +87,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, 'saleDate purchaseMethod');
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.a('object'); 
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.undefined;
@@ -103,7 +103,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {saleDate: 1, purchaseMethod: 1});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.a('object'); 
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.undefined;
@@ -119,7 +119,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {_id: 0, saleDate: 1, purchaseMethod: 1});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined; 
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.undefined;
@@ -135,7 +135,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {_id: 0, couponUsed: 1, 'customer.age': 1, 'items.name': 1, 'items.price': 1});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.an('array');
@@ -161,7 +161,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {saleDate: 0, purchaseMethod: 0});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.an('object');
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.an('array');
@@ -177,7 +177,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {_id: 0, saleDate: 0, purchaseMethod: 0});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.an('array');
@@ -193,7 +193,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {_id: 0, items: 0, customer: 0});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.a('date');
             expect(sale.items).to.be.undefined;
@@ -224,7 +224,7 @@ describe("Projection", () => {
         let res = await Sale.find({}, {_id: 0, 'customer.age': 0, 'items.price': 0});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.a('date');
             expect(sale.items).to.be.an('array');
@@ -248,7 +248,7 @@ describe('Projection with extra fields', () => {
         let res = await Sale.find({}, {_id: 0, v: 'abc'});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
@@ -266,7 +266,7 @@ describe('Projection with extra fields', () => {
         let res = await Sale.find({}, {_id: 0, v: '$customer.email'});
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
@@ -317,7 +317,7 @@ describe('Projection with extra fields', () => {
         });
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
@@ -379,7 +379,7 @@ describe('Projection with extra fields', () => {
         });
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
@@ -427,7 +427,7 @@ describe('Projection with extra fields', () => {
         });
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
@@ -490,7 +490,7 @@ describe('Projection with extra fields', () => {
         });
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;
@@ -553,7 +553,7 @@ describe('Projection with extra fields', () => {
         });
         expect(res).to.be.an('array');
         expect(res.length).equal(allSales.length);
-        for (let sale of res) {
+        for await (let sale of res) {
             expect(sale._id).to.be.undefined;
             expect(sale.saleDate).to.be.undefined;
             expect(sale.items).to.be.undefined;

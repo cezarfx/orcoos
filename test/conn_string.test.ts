@@ -68,7 +68,7 @@ describe("NoSQLConnectionString tests", () => {
         expect(cs.getOptions().size).equals(0);
     });
 
-    // todo: for cloud allow only one region or endpoint
+    // for cloud allow only one region or endpoint
     it('parse cloud multiple regions', () => {
         expect(() => {new NoSQLConnectionString('nosqldb://us-ashburn-1,host:4321,us-sanjose-1')})
             .to.throw(Error,'Invalid NoSQL DB connection string, for cloud service only one region or endpoint is allowed, got: "us-ashburn-1,host:4321,us-sanjose-1"');

@@ -106,7 +106,7 @@ describe("Indexes", () => {
             let allSales = await Sale.find();
             expect(allSales).to.be.an('array');
             expect(allSales.length).equal(noOfRows);
-            for (let sale of allSales) {
+            for await(let sale of allSales) {
                 expect(sale.items[0].name).to.be.oneOf(itemNames);
                 expect(sale.storeLocation).to.be.oneOf(cities);
             }
@@ -249,7 +249,7 @@ describe("Indexes", () => {
             let querySales = await Sale.find({'items.tags': "red"});
             expect(querySales).to.be.an('array');
             expect(querySales.length).equal(1);
-            for (let sale of querySales) {
+            for await (let sale of querySales) {
                 expect(sale.items[0].name).to.be.oneOf(itemNames);
                 expect(sale.storeLocation).to.be.oneOf(cities);
             }
