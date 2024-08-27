@@ -61,7 +61,7 @@ describe("Errors for weired queries", () => {
     }).timeout(10000);
 
 
-    it('errors', async() => {
+    it('find errors', async() => {
         await expect(Sale.find({$or: {a: 1}})).to.be.rejectedWith('Cast to Array failed for value "{ a: 1 }" (type Object) at path "$or" for model "Sale"');
     
         await expect(Sale.find([])).to.be.rejectedWith('Parameter "filter" to find() must be an object, got');
@@ -70,6 +70,9 @@ describe("Errors for weired queries", () => {
         await expect(Sale.find({'items.quantity': {$or: [ {$lt: 10}, {$gt: 10} ]}})).to.be.rejectedWith('Cast to number failed for value "[ { \'$lt\': 10 }, { \'$gt\': 10 } ]" (type Array) at path "quantity" for model "Sale"');
     });
 
+    it('find maxLimit errors', async() => {
+        await expect(Sale.find({}, null, {maxLimit: 0})).to.be.rejectedWith('Query results count: 1 more than toArray maxLimit: 0');
+    });
 });
 
 function sleep(ms) {
