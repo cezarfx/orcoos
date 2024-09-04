@@ -17,7 +17,7 @@ import { NoSQLClient, TableState } from 'oracle-nosqldb';
 import { ONDB_URL } from './test-utils';
 
 let tableNames: Array<string> = [
-    'ondbMongooseSDK:o_players', 'o_sales', 'o_cust', 'o_dateplayers'
+    'ondbMongooseSDK:o_players', 'o_sales', 'o_cust', 'o_datePlayers'
 ];
 
 async function dropTable(client: NoSQLClient, tableName: string) {

@@ -25,9 +25,23 @@ export default ondbmongoose;
 // export const get = get;
 export const createConnection = ondbmongoose.createConnection;
 /**
- * Connects to an Oracle NoSQL Database using a connection string.
+ * Connects to an Oracle NoSQL Database using a {@link ConnectionString} instance.
+ * @param {ConnectionString} connectionString - The connection string to connect with.
+ * @param {ConnectionOptions} [options] - The options to connect with.
+ *   Note: other connection related options supported by Node SDK, this includes consistency, durability, timeout, etc. Note: the property names in the options are the ones defined in the Connection String. For ex: options.numberLib not dbNumber.
+ *   Note: If options.* fields are defined they will override the respective options from Connection String.
+ * @returns {Promise<Connection>} A promise that resolves to a {@link Connection} instance.
+ * @example
+ *   // Connect to a local instance of NoSQL DB cloudsim running on port 8081.
+ *   await connect('nosqldb+cloud+http://cloudsim@127.0.0.1:8081/');
+ * @example
+ *   // Connect to a local instance of NoSQL DB on premises running on port 8082.
+ *   await connect('nosqldb+on_prem+http://127.0.0.1:8082/');
  */
 export const connect = ondbmongoose.connect;
+/**
+ * Disconnects from an Oracle NoSQL Database.
+ */
 export const disconnect = ondbmongoose.disconnect;
 // export const startSession = startSession;
 // export const pluralize = pluralize;

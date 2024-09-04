@@ -14,6 +14,7 @@
 /// <reference path="./callback.d.ts" />
 /// <reference path="./collection.d.ts" />
 /// <reference path="./connection.d.ts" />
+/// <reference path="./connectionstring.d.ts" />
 /// <reference path="./cursor.d.ts" />
 /// <reference path="./document.d.ts" />
 /// <reference path="./error.d.ts" />

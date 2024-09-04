@@ -11,7 +11,7 @@
  */
 
 declare module 'ondbmongoose' {
-  import mongodb = require('mongodb');
+  //import mongodb = require('mongodb');
   import events = require('events');
 
   /** The Mongoose module's default connection. Equivalent to `mongoose.connections[0]`, see [`connections`](#mongoose_Mongoose-connections). */
@@ -20,14 +20,28 @@ declare module 'ondbmongoose' {
   /** An array containing all connections associated with this Mongoose instance. */
   const connections: Connection[];
 
-  /** Opens Mongoose's default connection to MongoDB, see [connections docs](https://mongoosejs.com/docs/connections.html) */
-  // function connect(uri: string, options?: ConnectOptions): Promise<Mongoose>;
+  /**
+   * Opens ONDBMongoose's default connection to an Oracle NoSQL DB 
+   * @param uri - The URI to connect to. See {@link NoSQLConnectionString} for more information on the URI format.
+   * @param options - Options for connecting to the database.
+   */
   function connect(uri: string, options?: ConnectOptions): Promise<Orcoos>;
 
-  /** Creates a Connection instance. */
+  /**
+   * Creates a Connection instance to an Oracle NoSQL DB.
+   * @param uri - The URI to connect to. See {@link NoSQLConnectionString} for more information on the URI format.
+   * @param options - Options for connecting to the database.
+   */
   function createConnection(uri: string, options?: ConnectOptions): Connection;
+ 
+  /**
+   * Creates a Connection instance to an Oracle NoSQL DB.
+   */
   function createConnection(): Connection;
 
+  /**
+   * Diconnects from the database.
+   */
   function disconnect(): Promise<void>;
 
   /**
