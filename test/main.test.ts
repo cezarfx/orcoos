@@ -10,15 +10,20 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-import { connect } from '../index';
+import { connect, createConnection } from '../index';
 
 import {ISale, Sale, Item, Customer, PurchaseMethod, Gender} from './sale';
 import {ONDB_URL} from './test-utils';
 import { CapacityMode } from 'oracle-nosqldb';
+import { NoSQLConnectionString } from '../lib/nosqldb-adapter/connectionString';
 
 describe("main CRUD and query operations", () => {
+    let connections;
+
     it('connect', async() => {
-        expect(await connect(ONDB_URL, { logLevel: 2 }));
+        connections = await connect(ONDB_URL, { logLevel: 2 });
+        expect(connections).to.be.an('object');
+        
         expect(await Sale.createCollection()).to.not.throw;
     });
     
@@ -606,13 +611,16 @@ describe("main CRUD and query operations", () => {
     }).timeout(4000);
 
     it('get access to underlying NoSQLClient', async()  => {
+        // Warning: This is not part of the public API and it may change in the future!
         let tableName = Sale.collection.collectionName;
         expect(tableName).equal('o_sales');
+        // Warning: This is not part of the public API and it may change in the future!
         let table = await Sale.db.db.client.getTable(tableName);
         expect(table).to.be.a('object');
 
         if (table.tableLimits) {
-            let tr = await Sale.db.db.client.setTableLimits(tableName, 
+        // Warning: This is not part of the public API and it may change in the future!
+        let tr = await Sale.db.db.client.setTableLimits(tableName, 
                 {
                     // Use either PROVISIONED
                     // mode: CapacityMode.PROVISIONED,
@@ -628,4 +636,68 @@ describe("main CRUD and query operations", () => {
             expect(tr.tableLimits).to.be.a('object');
         }
     }).timeout(3000);
+
+    it('get/set limits', async()  => {
+        let isCloudNotAnAPI = new NoSQLConnectionString(ONDB_URL).isCloud();
+
+        let limits = await Sale.getLimits();
+        if (!isCloudNotAnAPI) {
+            expect(limits).undefined;
+        } else {
+            expect(limits).to.be.a('object');
+            expect(limits.mode).oneOf([CapacityMode.ON_DEMAND, CapacityMode.PROVISIONED]);  // value set in saleSchema
+            expect(limits.storageGB).to.be.a('number').and.equal(2); // value set in saleSchema
+        }
+
+        limits = await Sale.setLimits({
+            mode: CapacityMode.ON_DEMAND, 
+            storageGB: 1
+        });
+        if (!isCloudNotAnAPI) {
+            expect(limits).undefined;
+        } else {
+            expect(limits).to.be.a('object');
+            expect(limits.mode).oneOf([CapacityMode.ON_DEMAND]);
+            expect(limits.storageGB).to.be.a('number').and.equal(1);
+        }
+
+        limits = await Sale.getLimits();
+        if (!isCloudNotAnAPI) {
+            expect(limits).undefined;
+        } else {
+            expect(limits).to.be.a('object');
+            expect(limits.mode).equal(CapacityMode.ON_DEMAND);
+            expect(limits.storageGB).equal(1);
+        }
+    }).timeout(3000);
+
+    it('isCloud', async() => {
+        // Warning: This is not part of the public API and it may change in the future!
+        expect(connections).to.be.a('object');
+        expect(connections.connection).to.be.a('object');
+        expect(connections.connection.client).to.be.a('object');
+        expect(connections.connection.client.connectionString).to.be.a('object');
+        
+        // Warning: This is not part of the public API and it may change in the future!
+        let isCloudNotAnAPI = connections.connection?.client?.connectionString?.isCloud();
+        expect(isCloudNotAnAPI).to.be.a('boolean');
+
+        // Use NoSQLConnectionString to check if it is a cloud connection
+        let isCloud1 = new NoSQLConnectionString(ONDB_URL).isCloud();
+        expect(isCloud1 === isCloudNotAnAPI);
+
+        // Use getLimits to check if it is a cloud connection
+        let limits = await Sale.getLimits();
+        let isCloud2 = limits ? true : false;
+        expect(isCloudNotAnAPI === isCloud2);
+    });
+
+    it('createConnection', async()   =>  {
+        let connection = await createConnection(ONDB_URL, { logLevel: 2 });
+        expect(connection).to.be.an('object');
+        // Warning: This is not part of the public API and it may change in the future!
+        expect(connection.client).to.be.an('object');
+        expect(connection.client.connectionString).to.be.an('object');
+    });
+    
 });

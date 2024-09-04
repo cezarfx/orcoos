@@ -98,7 +98,7 @@ export const saleSchema = new Schema<ISale>({
                 mode: CapacityMode.PROVISIONED, 
                 readUnits: 50,
                 writeUnits: 50,
-                storageGB: 1
+                storageGB: 2
             } 
         }
     });
