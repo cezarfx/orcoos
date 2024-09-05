@@ -25,7 +25,7 @@ declare module 'ondbmongoose' {
    * @param uri - The URI to connect to. See {@link NoSQLConnectionString} for more information on the URI format.
    * @param options - Options for connecting to the database.
    */
-  function connect(uri: string, options?: ConnectOptions): Promise<Orcoos>;
+  function connect(uri: string, options?: ConnectOptions): Promise<OndbMongoose>;
 
   /**
    * Creates a Connection instance to an Oracle NoSQL DB.

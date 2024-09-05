@@ -10,6 +10,8 @@
  * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
  */
 
+import { TableLimits } from 'oracle-nosqldb';
+
 declare module 'ondbmongoose' {
   import mongodb = require('mongodb');
 
@@ -539,8 +541,45 @@ declare module 'ondbmongoose' {
     TRawDocType
     >;
 
-    nosqlQuery<ResultDoc = THydratedDocumentType>(statement: String
-      ): QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, TRawDocType>;
+
+    /**
+     * Executes a NoSQL DB query statement with optional binding variables.
+     * @param {String} statement - SQL statement using the NoSQL DB SQL syntax.
+     * @param {NosqlQueryOptions} options - optional options: 
+     * @returns {Promise} - resolves to an array of results.
+     */
+    nosqlQuery<ResultDoc = THydratedDocumentType>(statement: String, options: NosqlQueryOptions = undefined): QueryWithHelpers<Array<ResultDoc>, ResultDoc, TQueryHelpers, TRawDocType>;
+
+    /**
+     * Gets the table limits of throughput and storage for the table associated with this Model. 
+     * This method excutes only when connected to a Cloud Service or Cloud Simulator, 
+     * otherwise it's ignored and returns undefined.
+     * @returns {Promise<TableLimits>} a Promice of the limits.
+     */
+    async getLimits(): Promise<TableLimits>;
+
+    /**
+    * Sets new limits of throughput and storage for the table associated with this Model. 
+    * This method excutes only when connected to a Cloud Service or Cloud Simulator, 
+    * otherwise it's ignored and returns undefined.
+    * @param {TableLimits} limits new table limits to be set. [More datails](https://oracle.github.io/nosql-node-sdk/interfaces/TableLimits.html).
+    * @returns {Promise<TableLimits>} a Promice of the updated limits.
+    */
+    async setLimits(limits: TableLimits): Promise<TableLimits>;
+  }    
   
+  /**
+   * Describes options parameter of {@link Model.nosqlQuery()}.
+   */
+  export interface NosqlQueryOptions {
+    /**
+     * Optional (name: value) pairs of query binding variables.
+     */
+    bindings?: Object;   
+    /**
+     * Optional maximum number of rows to return. If not specified 
+     * it will default to MAX_QUERY_RESULTS_LIMIT = 10000.
+     */
+    maxLimit?: Number;
   }
 }

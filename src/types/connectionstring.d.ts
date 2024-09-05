@@ -5,6 +5,7 @@
  * https://oss.oracle.com/licenses/upl/
  */
 
+import { Config, NoSQLClient } from "oracle-nosqldb";
 import string from "../../lib/cast/string";
 
 
@@ -102,10 +103,10 @@ declare module 'ondbmongoose' {
         async getClient(options) : Promise<NoSQLClient>;
 
         /**
-         * Creates and returns a config object based on this ConnectionString and @param connectOptions. 
-         * If a certain option is specified in the @param connectOptions it takes precendece over the ConnectionString option.
+         * Creates and returns a config object based on this NoSQLConnectionString and optional parameter. 
+         * If a certain option is specified in connectOptions it takes precendece over the connectionString URL option.
          */
-        getClientConfig(connectOptions = {}) ;
+        getClientConfig(connectOptions = {}) : Config;
 
         /**
          * Returns the string used to create this instance.

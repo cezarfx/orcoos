@@ -10,7 +10,7 @@
  * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
  */
 
-// import ondbmongoose, { cast, STATES, setDriver, set, get, createConnection, connect, disconnect, startSession, pluralize, model, deleteModel, modelNames, plugin, connections, version, Orcoos, Schema, SchemaType, SchemaTypes, VirtualType, Types, Query, Model, Document, ObjectId, isValidObjectId, isObjectIdOrHexString, syncIndexes, Decimal128, Mixed, Date, Number, Error, now, CastError, SchemaTypeOptions, mongo, mquery, sanitizeFilter, trusted, skipMiddlewareFunction, overwriteMiddlewareResult } from './src/types/index';
+// import ondbmongoose, { cast, STATES, setDriver, set, get, createConnection, connect, disconnect, startSession, pluralize, model, deleteModel, modelNames, plugin, connections, version, OndbMongoose, Schema, SchemaType, SchemaTypes, VirtualType, Types, Query, Model, Document, ObjectId, isValidObjectId, isObjectIdOrHexString, syncIndexes, Decimal128, Mixed, Date, Number, Error, now, CastError, SchemaTypeOptions, mongo, mquery, sanitizeFilter, trusted, skipMiddlewareFunction, overwriteMiddlewareResult } from './src/types/index';
 import ondbmongoose from './src/types/index';
 
 /**
@@ -51,7 +51,7 @@ export const model = ondbmongoose.model;
 // export const plugin = plugin;
 // export const connections = connections;
 export const version = ondbmongoose.version;
-export const Orcoos = ondbmongoose.Orcoos;
+export const OndbMongoose = ondbmongoose.OndbMongoose;
 export const Schema = ondbmongoose.Schema;
 // export const SchemaType = SchemaType;
 // export const SchemaTypes = SchemaTypes;
