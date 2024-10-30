@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
 
   import stream = require('stream');
 
@@ -20,6 +8,7 @@ declare module 'ondbmongoose' {
     parallel?: number;
     batchSize?: number;
     continueOnError?: boolean;
+    signal?: AbortSignal;
   }
 
   class Cursor<DocType = any, Options = never> extends stream.Readable {
@@ -50,8 +39,8 @@ declare module 'ondbmongoose' {
      * will wait for the promise to resolve before iterating on to the next one.
      * Returns a promise that resolves when done.
      */
-    eachAsync(fn: (doc: DocType[]) => any, options: EachAsyncOptions & { batchSize: number }): Promise<void>;
-    eachAsync(fn: (doc: DocType) => any, options?: EachAsyncOptions): Promise<void>;
+    eachAsync(fn: (doc: DocType[], i: number) => any, options: EachAsyncOptions & { batchSize: number }): Promise<void>;
+    eachAsync(fn: (doc: DocType, i: number) => any, options?: EachAsyncOptions): Promise<void>;
 
     /**
      * Registers a transform function which subsequently maps documents retrieved
@@ -63,7 +52,7 @@ declare module 'ondbmongoose' {
      * Get the next document from this cursor. Will return `null` when there are
      * no documents left.
      */
-    next(): Promise<DocType>;
+    next(): Promise<DocType | null>;
 
     options: Options;
   }

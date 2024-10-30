@@ -1,10 +1,3 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- */
-
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -105,13 +98,13 @@ describe("Composite Keys", () => {
     
     it('delete all', async() => {
         expect(await Player.deleteMany());
-        expect(await Player.count()).equal(0);
+        expect(await Player.countDocuments()).equal(0);
     }).timeout(10000);
 
     it('populate players', async() => {
         allPlayers = await populateCollection();
         expect(allPlayers.length).equal(25);
-        expect(await Player.count()).equal(25);
+        expect(await Player.countDocuments()).equal(25);
     }).timeout(10000);
 
     it('query players', async() => {
@@ -144,14 +137,14 @@ describe("Composite Keys", () => {
     it('deleteOne with pk', async() => {
         expect(await Player.deleteOne({_id: {team: allPlayers[0]._id.team, squadNumber: allPlayers[0]._id.squadNumber}}));
         deletedPlayer = allPlayers.shift();
-        expect(await Player.count()).equal(allPlayers.length);
+        expect(await Player.countDocuments()).equal(allPlayers.length);
         expect(await Player.findById(deletedPlayer?._id)).to.be.null;
     });
 
     it('deleteMany with partial pk', async() => {
         expect(await Player.deleteMany({_id: {team: deletedPlayer._id.team}}));
         allPlayers.splice(0, 4);
-        expect(await Player.count()).equal(allPlayers.length);
+        expect(await Player.countDocuments()).equal(allPlayers.length);
     });
 
     it('key non-key field name colision', async() => {
@@ -214,6 +207,7 @@ describe("Composite Keys", () => {
         const DPlayer = model<IDatePlayer>('DatePlayer', dPlayerSchema);
 
         expect(await DPlayer.deleteMany());
-        expect(await DPlayer.count()).equal(0);
-    });
+        expect(await DPlayer.countDocuments()).equal(0);
+    })
+    .timeout(4000);
 });

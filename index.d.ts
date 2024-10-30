@@ -1,15 +1,3 @@
-/*
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
 // import ondbmongoose, { cast, STATES, setDriver, set, get, createConnection, connect, disconnect, startSession, pluralize, model, deleteModel, modelNames, plugin, connections, version, OndbMongoose, Schema, SchemaType, SchemaTypes, VirtualType, Types, Query, Model, Document, ObjectId, isValidObjectId, isObjectIdOrHexString, syncIndexes, Decimal128, Mixed, Date, Number, Error, now, CastError, SchemaTypeOptions, mongo, mquery, sanitizeFilter, trusted, skipMiddlewareFunction, overwriteMiddlewareResult } from './src/types/index';
 import ondbmongoose from './src/types/index';
 

@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   import mongodb = require('mongodb');
 
   interface SchemaTimestampsConfig {
@@ -37,6 +25,11 @@ declare module 'ondbmongoose' {
      */
     autoIndex?: boolean;
     /**
+     * Similar to autoIndex, except for automatically creates any Atlas search indexes defined in your
+     * schema. Unlike autoIndex, this option defaults to false.
+     */
+    autoSearchIndex?: boolean;
+    /**
      * If set to `true`, Mongoose will call Model.createCollection() to create the underlying collection
      * in MongoDB if autoCreate is set to true. Calling createCollection() sets the collection's default
      * collation based on the collation option and establishes the collection as a capped collection if
@@ -60,6 +53,9 @@ declare module 'ondbmongoose' {
     capped?: boolean | number | { size?: number; max?: number; autoIndexId?: boolean; };
     /** Sets a default collation for every query and aggregation. */
     collation?: mongodb.CollationOptions;
+
+    /** Arbitrary options passed to `createCollection()` */
+    collectionOptions?: mongodb.CreateCollectionOptions;
 
     /** The timeseries option to use when creating the model's collection. */
     timeseries?: mongodb.TimeSeriesCollectionOptions;
@@ -124,6 +120,10 @@ declare module 'ondbmongoose' {
      * to all queries derived from a model.
      */
     read?: string;
+    /**
+     * Set a default readConcern for all queries at the schema level
+     */
+    readConcern?: { level: 'local' | 'available' | 'majority' | 'snapshot' | 'linearizable' }
     /** Allows setting write concern at the schema level. */
     writeConcern?: WriteConcern;
     /** defaults to true. */
@@ -145,14 +145,14 @@ declare module 'ondbmongoose' {
      */
     strictQuery?: boolean | 'throw';
     /** Exactly the same as the toObject option but only applies when the document's toJSON method is called. */
-    toJSON?: ToObjectOptions;
+    toJSON?: ToObjectOptions<THydratedDocumentType>;
     /**
      * Documents have a toObject method which converts the mongoose document into a plain JavaScript object.
      * This method accepts a few options. Instead of applying these options on a per-document basis, we may
      * declare the options at the schema level and have them applied to all of the schema's documents by
      * default.
      */
-    toObject?: ToObjectOptions;
+    toObject?: ToObjectOptions<THydratedDocumentType>;
     /**
      * By default, if you have an object with key 'type' in your schema, mongoose will interpret it as a
      * type declaration. However, for applications like geoJSON, the 'type' property is important. If you want to
@@ -166,6 +166,11 @@ declare module 'ondbmongoose' {
      * objects which don't pass validation, you can set validateBeforeSave to false.
      */
     validateBeforeSave?: boolean;
+    /**
+     * By default, validation will run on modified and required paths before saving to the database.
+     * You can choose to have Mongoose only validate modified paths by setting validateModifiedOnly to true.
+     */
+    validateModifiedOnly?: boolean;
     /**
      * The versionKey is a property set on each document when first created by Mongoose. This keys value
      * contains the internal revision of the document. The versionKey option is a string that represents
@@ -211,10 +216,10 @@ declare module 'ondbmongoose' {
      * Model Statics methods.
      */
     statics?: IfEquals<
-    TStaticMethods,
-    {},
-    Record<any, (this: Model<DocType>, ...args: any) => unknown>,
-    TStaticMethods
+      TStaticMethods,
+      {},
+      { [name: string]: (this: Model<DocType>, ...args: any[]) => unknown },
+      AddThisParameter<TStaticMethods, Model<DocType>>
     >
 
     /**
@@ -224,7 +229,7 @@ declare module 'ondbmongoose' {
     TInstanceMethods,
     {},
     Record<any, (this: THydratedDocumentType, ...args: any) => unknown>,
-    TInstanceMethods
+    AddThisParameter<TInstanceMethods, THydratedDocumentType> & AnyObject
     >
 
     /**
@@ -233,7 +238,7 @@ declare module 'ondbmongoose' {
     query?: IfEquals<
     QueryHelpers,
     {},
-    Record<any, <T extends QueryWithHelpers<unknown, THydratedDocumentType>>(this: T, ...args: any) => T>,
+    Record<any, <T extends QueryWithHelpers<unknown, THydratedDocumentType, QueryHelpers, DocType>>(this: T, ...args: any) => T>,
     QueryHelpers
     >
 

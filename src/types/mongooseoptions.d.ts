@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   import stream = require('stream');
 
   interface MongooseOptions {
@@ -214,5 +202,18 @@ declare module 'ondbmongoose' {
      * @default { transform: true, flattenDecimals: true }
      */
     toObject?: ToObjectOptions;
+
+    /**
+     * Set to true to make Mongoose use Node.js' built-in AsyncLocalStorage (Node >= 16.0.0)
+     * to set `session` option on all operations within a `connection.transaction(fn)` call
+     * by default. Defaults to false.
+     */
+    transactionAsyncLocalStorage?: boolean;
+
+    /**
+     * If `true`, convert any aliases in filter, projection, update, and distinct
+     * to their database property names. Defaults to false.
+     */
+    translateAliases?: boolean;
   }
 }

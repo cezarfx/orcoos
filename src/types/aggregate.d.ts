@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   // import mongodb = require('mongodb');
 
   /** Extract generic type from Aggregate class */
@@ -27,6 +15,9 @@ declare module 'ondbmongoose' {
      * will call it for you.
      */
     [Symbol.asyncIterator](): AsyncIterableIterator<Unpacked<ResultType>>;
+
+    // Returns a string representation of this aggregation.
+    [Symbol.toStringTag]: string;
 
     options: AggregateOptions;
 
@@ -84,6 +75,12 @@ declare module 'ondbmongoose' {
 
     /** Appends a new $fill operator to this aggregate pipeline */
     fill(arg: PipelineStage.Fill['$fill']): this;
+
+    /**
+     * Executes the aggregation returning a `Promise` which will be
+     * resolved with `.finally()` chained.
+     */
+    finally: Promise<ResultType>['finally'];
 
     /** Appends new custom $graphLookup operator(s) to this aggregate pipeline, performing a recursive search on a collection. */
     graphLookup(options: PipelineStage.GraphLookup['$graphLookup']): this;

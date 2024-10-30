@@ -1,10 +1,3 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- */
-
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -24,7 +17,7 @@ describe("Errors for weired queries", () => {
         expect(await connect(ONDB_URL, {logLevel: 2}));
 
         expect(await Sale.deleteMany());
-        expect(await Sale.count()).equal(0);
+        expect(await Sale.countDocuments()).equal(0);
 
         sale = new Sale({
             saleDate: new Date(),
@@ -36,7 +29,7 @@ describe("Errors for weired queries", () => {
             storeLocation: "NY"
         });
         expect(await sale.save());
-        expect(await Sale.count()).equal(1);
+        expect(await Sale.countDocuments()).equal(1);
 
         // console.log("_id: " + sale._id + " t: " + typeof sale._id);
         expect(sale._id).exist;

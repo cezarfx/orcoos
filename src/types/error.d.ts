@@ -1,18 +1,6 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
 declare class NativeError extends global.Error { }
 
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   //import mongodb = require('mongodb');
   import nosqldb = require('oracle-nosqldb');
 
@@ -20,7 +8,7 @@ declare module 'ondbmongoose' {
   type CastError = Error.CastError;
   type SyncIndexesError = Error.SyncIndexesError;
 
-  class MongooseError extends global.Error {
+  export class MongooseError extends global.Error {
     constructor(msg: string);
 
     /** The type of error. "MongooseError" for generic errors. */
@@ -42,7 +30,6 @@ declare module 'ondbmongoose' {
       value: any;
       path: string;
       reason?: NativeError | null;
-      model?: any;
 
       constructor(type: string, value: any, path: string, reason?: NativeError, schemaType?: SchemaType);
     }

@@ -1,10 +1,3 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- */
-
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -21,15 +14,15 @@ let allSales: Array<ISale> = [];
 describe("Projection", () => {
 
     it('connect', async() => {
-        expect(await connect(ONDB_URL, {logLevel: 2}));
+        expect(await connect(ONDB_URL, {logLevel: 6}));
     });
     
     it('delete all and populate sale', async() => {
         expect(await Sale.deleteMany());
-        expect(await Sale.count()).equal(0);
+        expect(await Sale.countDocuments()).equal(0);
 
         allSales = await populateDatabase();
-        expect(await Sale.count()).equal(allSales.length);
+        expect(await Sale.countDocuments()).equal(allSales.length);
     }).timeout(3000);
 
     it('project {}', async () => {

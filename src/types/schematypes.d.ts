@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
 
   /** The Mongoose Date [SchemaType](/docs/schematypes.html). */
   type Date = Schema.Types.Date;
@@ -51,7 +39,7 @@ declare module 'ondbmongoose' {
 
   type DefaultType<T> = T extends Schema.Types.Mixed ? any : Partial<ExtractMongooseArray<T>>;
 
-  class SchemaTypeOptions<T> {
+  class SchemaTypeOptions<T, EnforcedDocType = any> {
     type?:
     T extends string ? StringSchemaDefinition :
       T extends number ? NumberSchemaDefinition :
@@ -60,35 +48,39 @@ declare module 'ondbmongoose' {
             T extends Map<any, any> ? SchemaDefinition<typeof Map> :
               T extends Buffer ? SchemaDefinition<typeof Buffer> :
                 T extends Types.ObjectId ? ObjectIdSchemaDefinition :
-                  T extends Types.ObjectId[] ? AnyArray<ObjectIdSchemaDefinition> | AnyArray<SchemaTypeOptions<ObjectId>> :
-                    T extends object[] ? (AnyArray<Schema<any, any, any>> | AnyArray<SchemaDefinition<Unpacked<T>>> | AnyArray<SchemaTypeOptions<Unpacked<T>>>) :
-                      T extends string[] ? AnyArray<StringSchemaDefinition> | AnyArray<SchemaTypeOptions<string>> :
-                        T extends number[] ? AnyArray<NumberSchemaDefinition> | AnyArray<SchemaTypeOptions<number>> :
-                          T extends boolean[] ? AnyArray<BooleanSchemaDefinition> | AnyArray<SchemaTypeOptions<boolean>> :
-                            T extends Function[] ? AnyArray<Function | string> | AnyArray<SchemaTypeOptions<Unpacked<T>>> :
+                  T extends Types.ObjectId[] ? AnyArray<ObjectIdSchemaDefinition> | AnyArray<SchemaTypeOptions<ObjectId, EnforcedDocType>> :
+                    T extends object[] ? (AnyArray<Schema<any, any, any>> | AnyArray<SchemaDefinition<Unpacked<T>>> | AnyArray<SchemaTypeOptions<Unpacked<T>, EnforcedDocType>>) :
+                      T extends string[] ? AnyArray<StringSchemaDefinition> | AnyArray<SchemaTypeOptions<string, EnforcedDocType>> :
+                        T extends number[] ? AnyArray<NumberSchemaDefinition> | AnyArray<SchemaTypeOptions<number, EnforcedDocType>> :
+                          T extends boolean[] ? AnyArray<BooleanSchemaDefinition> | AnyArray<SchemaTypeOptions<boolean, EnforcedDocType>> :
+                            T extends Function[] ? AnyArray<Function | string> | AnyArray<SchemaTypeOptions<Unpacked<T>, EnforcedDocType>> :
                               T | typeof SchemaType | Schema<any, any, any> | SchemaDefinition<T> | Function | AnyArray<Function>;
 
     /** Defines a virtual with the given name that gets/sets this path. */
     alias?: string | string[];
 
     /** Function or object describing how to validate this schematype. See [validation docs](https://mongoosejs.com/docs/validation.html). */
-    validate?: SchemaValidator<T> | AnyArray<SchemaValidator<T>>;
+    validate?: SchemaValidator<T, EnforcedDocType> | AnyArray<SchemaValidator<T, EnforcedDocType>>;
 
     /** Allows overriding casting logic for this individual path. If a string, the given string overwrites Mongoose's default cast error message. */
-    cast?: string;
+    cast?: string |
+    boolean |
+    ((value: any) => T) |
+    [(value: any) => T, string] |
+    [((value: any) => T) | null, (value: any, path: string, model: Model<any>, kind: string) => string];
 
     /**
      * If true, attach a required validator to this path, which ensures this path
      * path cannot be set to a nullish value. If a function, Mongoose calls the
      * function and only checks for nullish values if the function returns a truthy value.
      */
-    required?: boolean | (() => boolean) | [boolean, string] | [() => boolean, string];
+    required?: boolean | ((this: EnforcedDocType) => boolean) | [boolean, string] | [(this: EnforcedDocType) => boolean, string];
 
     /**
      * The default value for this path. If a function, Mongoose executes the function
      * and uses the return value as the default.
      */
-    default?: DefaultType<T> | ((this: any, doc: any) => DefaultType<T>) | null;
+    default?: DefaultType<T> | ((this: EnforcedDocType, doc: any) => DefaultType<T>) | null;
 
     /**
      * The model that `populate()` should use if populating this path.
@@ -200,9 +192,14 @@ declare module 'ondbmongoose' {
     [other: string]: any;
   }
 
-  interface Validator {
-    message?: string; type?: string; validator?: Function
+  interface Validator<DocType = any> {
+    message?: string | ((props: ValidatorProps) => string);
+    type?: string;
+    validator?: ValidatorFunction<DocType>;
+    reason?: Error;
   }
+
+  type ValidatorFunction<DocType = any> = (this: DocType, value: any, validatorProperties?: Validator) => any;
 
   class SchemaType<T = any, DocType = any> {
     /** SchemaType constructor */
@@ -219,17 +216,24 @@ declare module 'ondbmongoose' {
     /** Attaches a getter for all instances of this schema type. */
     static get(getter: (value: any) => any): void;
 
+    /** Array containing default setters for all instances of this SchemaType */
+    static setters: ((val?: unknown, priorVal?: unknown, doc?: Document<unknown>, options?: Record<string, any> | null) => unknown)[];
+
     /** The class that Mongoose uses internally to instantiate this SchemaType's `options` property. */
     OptionsConstructor: SchemaTypeOptions<T>;
 
     /** Cast `val` to this schema type. Each class that inherits from schema type should implement this function. */
-    cast(val: any, doc: Document<any>, init: boolean, prev?: any, options?: any): any;
+    cast(val: any, doc?: Document<any>, init?: boolean, prev?: any, options?: any): any;
+    cast<ResultType>(val: any, doc?: Document<any>, init?: boolean, prev?: any, options?: any): ResultType;
 
     /** Sets a default value for this SchemaType. */
     default(val: any): any;
 
     /** Adds a getter to this schematype. */
     get(fn: Function): this;
+
+    /** Gets this SchemaType's embedded SchemaType, if any  */
+    getEmbeddedSchemaType<T = any, DocType = any>(): SchemaType<T, DocType> | undefined;
 
     /**
      * Defines this path as immutable. Mongoose prevents you from changing
@@ -289,7 +293,10 @@ declare module 'ondbmongoose' {
     validators: Validator[];
 
     /** Adds validator(s) for this document path. */
-    validate(obj: RegExp | ((this: DocType, value: any, validatorProperties?: Validator) => any), errorMsg?: string, type?: string): this;
+    validate(obj: RegExp | ValidatorFunction<DocType> | Validator<DocType>, errorMsg?: string, type?: string): this;
+
+    /** Adds multiple validators for this document path. */
+    validateAll(validators: Array<RegExp | ValidatorFunction<DocType> | Validator<DocType>>): this;
 
     /** Default options for this SchemaType */
     defaultOptions?: Record<string, any>;
@@ -317,6 +324,14 @@ declare module 'ondbmongoose' {
          * `SchemaString.prototype.enum()` or `SchemaNumber.prototype.enum()`
          */
         enum(vals: string[] | number[]): this;
+      }
+
+      class BigInt extends SchemaType {
+        /** This schema type's name, to defend against minifiers that mangle function names. */
+        static schemaName: 'BigInt';
+
+        /** Default options for this SchemaType */
+        defaultOptions: Record<string, any>;
       }
 
       class Boolean extends SchemaType {
@@ -435,7 +450,7 @@ declare module 'ondbmongoose' {
         defaultOptions: Record<string, any>;
       }
 
-      class Subdocument extends SchemaType implements AcceptsDiscriminator {
+      class Subdocument<DocType = unknown> extends SchemaType implements AcceptsDiscriminator {
         /** This schema type's name, to defend against minifiers that mangle function names. */
         static schemaName: string;
 
@@ -447,6 +462,8 @@ declare module 'ondbmongoose' {
 
         discriminator<T, U>(name: string | number, schema: Schema<T, U>, value?: string): U;
         discriminator<D>(name: string | number, schema: Schema, value?: string): Model<D>;
+
+        cast(val: any, doc?: Document<any>, init?: boolean, prev?: any, options?: any): HydratedSingleSubdocument<DocType>;
       }
 
       class String extends SchemaType {

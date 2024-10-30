@@ -1,10 +1,3 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- */
-
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -17,7 +10,7 @@ import { NoSQLClient, TableState } from 'oracle-nosqldb';
 import { ONDB_URL } from './test-utils';
 
 let tableNames: Array<string> = [
-    'ondbMongooseSDK:o_players', 'o_sales', 'o_cust', 'o_datePlayers'
+    'orcoosSDK:o_players', 'o_sales', 'o_cust', 'o_datePlayers'
 ];
 
 async function dropTable(client: NoSQLClient, tableName: string) {

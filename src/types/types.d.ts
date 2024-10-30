@@ -1,17 +1,6 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   import mongodb = require('mongodb');
+  import bson = require('bson');
 
   class NativeBuffer extends Buffer {}
 
@@ -54,7 +43,7 @@ declare module 'ondbmongoose' {
 
       /** Returns a native js Array. */
       toObject(options?: ToObjectOptions): any;
-      toObject<T>(options?: ToObjectOptions): T;
+      toObject<T>(options?: ToObjectOptions<T>): T;
 
       /** Wraps [`Array#unshift`](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/unshift) with proper change tracking. */
       unshift(...args: any[]): number;
@@ -70,9 +59,9 @@ declare module 'ondbmongoose' {
 
     class Decimal128 extends mongodb.Decimal128 { }
 
-    class DocumentArray<T> extends Types.Array<T extends Types.Subdocument ? T : Types.Subdocument<InferId<T>> & T> {
+    class DocumentArray<T> extends Types.Array<T extends Types.Subdocument ? T : Types.Subdocument<InferId<T>, any, T> & T> {
       /** DocumentArray constructor */
-      constructor(values: any[]);
+      constructor(values: AnyObject[]);
 
       isMongooseDocumentArray: true;
 
@@ -91,10 +80,9 @@ declare module 'ondbmongoose' {
     }
 
     class ObjectId extends mongodb.ObjectId {
-      _id: this;
     }
 
-    class Subdocument<IdType = any> extends Document<IdType> {
+    class Subdocument<IdType = unknown, TQueryHelpers = any, DocType = any> extends Document<IdType, TQueryHelpers, DocType> {
       $isSingleNested: true;
 
       /** Returns the top level document of this sub-document. */
@@ -107,9 +95,11 @@ declare module 'ondbmongoose' {
       $parent(): Document;
     }
 
-    class ArraySubdocument<IdType = any> extends Subdocument<IdType> {
+    class ArraySubdocument<IdType = any, TQueryHelpers = unknown, DocType = unknown> extends Subdocument<IdType, TQueryHelpers, DocType> {
       /** Returns this sub-documents parent array. */
       parentArray(): Types.DocumentArray<unknown>;
     }
+
+    class UUID extends bson.UUID {}
   }
 }

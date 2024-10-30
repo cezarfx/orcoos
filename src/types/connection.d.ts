@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   //import mongodb = require('mongodb');
   import events = require('events');
 
@@ -21,11 +9,11 @@ declare module 'ondbmongoose' {
   const connections: Connection[];
 
   /**
-   * Opens ONDBMongoose's default connection to an Oracle NoSQL DB 
+   * Opens Orcoos's default connection to an Oracle NoSQL DB 
    * @param uri - The URI to connect to. See {@link NoSQLConnectionString} for more information on the URI format.
    * @param options - Options for connecting to the database.
    */
-  function connect(uri: string, options?: ConnectOptions): Promise<OndbMongoose>;
+  function connect(uri: string, options?: ConnectOptions): Promise<orcoos>;
 
   /**
    * Creates a Connection instance to an Oracle NoSQL DB.
@@ -75,7 +63,7 @@ declare module 'ondbmongoose' {
     pass?: string;
     /** Set to false to disable automatic index creation for all models associated with this connection. */
     autoIndex?: boolean;
-    /** Set to `true` to make Mongoose automatically call `createCollection()` on every model created on this connection. */
+    /** Set to `false` to disable Mongoose automatically calling `createCollection()` on every model created on this connection. */
     autoCreate?: boolean;
     /** Set the console logging level: number 0 to 6 
      * (NONE: 0, SEVERE: 1, WARNING: 2, INFO: 3, CONFIG: 4, FINE: 5, FINNER: 6) 
@@ -103,7 +91,7 @@ declare module 'ondbmongoose' {
     readonly config: any;
 
     /** The mongodb.Db instance, set when the connection is opened */
-    readonly db: mongodb.Db;
+    readonly db: mongodb.Db | undefined;
 
     /**
      * Helper for `createCollection()`. Will explicitly create the given collection
@@ -111,6 +99,11 @@ declare module 'ondbmongoose' {
      * and [views](https://www.mongodb.com/docs/manual/core/views/) from mongoose.
      */
     createCollection<T extends AnyObject = AnyObject>(name: string, options?: mongodb.CreateCollectionOptions): Promise<mongodb.Collection<T>>;
+
+    /**
+     * https://mongoosejs.com/docs/api/connection.html#Connection.prototype.createCollections()
+     */
+    createCollections(continueOnError?: boolean): Promise<Record<string, Error | mongodb.Collection<any>>>;
 
     /**
      * Removes the model named `name` from this connection, if it exists. You can
@@ -151,6 +144,18 @@ declare module 'ondbmongoose' {
      * you have [multiple connections](/docs/connections.html#multiple_connections).
      */
     readonly id: number;
+
+    /**
+     * Helper for MongoDB Node driver's `listCollections()`.
+     * Returns an array of collection names.
+     */
+    listCollections(): Promise<Pick<mongodb.CollectionInfo, 'name' | 'type'>[]>;
+
+    /**
+     * Helper for MongoDB Node driver's `listDatabases()`.
+     * Returns an array of database names.
+     */
+    listDatabases(): Promise<mongodb.ListDatabasesResult>;
 
     /**
      * A [POJO](https://masteringjs.io/tutorials/fundamentals/pojo) containing
@@ -250,7 +255,7 @@ declare module 'ondbmongoose' {
      * async function executes successfully and attempt to retry if
      * there was a retryable error.
      */
-    transaction(fn: (session: mongodb.ClientSession) => Promise<any>, options?: mongodb.TransactionOptions): Promise<void>;
+    transaction<ReturnType = unknown>(fn: (session: mongodb.ClientSession) => Promise<ReturnType>, options?: mongodb.TransactionOptions): Promise<ReturnType>;
 
     /** Switches to a different database using the same connection pool. */
     useDb(name: string, options?: { useCache?: boolean, noListener?: boolean }): Connection;
@@ -260,6 +265,8 @@ declare module 'ondbmongoose' {
 
     /** Watches the entire underlying database for changes. Similar to [`Model.watch()`](/docs/api/model.html#model_Model-watch). */
     watch<ResultType extends mongodb.Document = any>(pipeline?: Array<any>, options?: mongodb.ChangeStreamOptions): mongodb.ChangeStream<ResultType>;
+
+    withSession<T = any>(executor: (session: ClientSession) => Promise<T>): Promise<T>;
   }
 
 }

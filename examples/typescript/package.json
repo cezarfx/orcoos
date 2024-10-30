@@ -1,8 +1,8 @@
 {
-    "name": "ondbmongoose-ts-examples",
+    "name": "orcoos-ts-examples",
     "version": "0.0.1",
     "private": true,
-    "description": "OndbMongoose SDK TypeScript Examples",
+    "description": "Orcoos SDK TypeScript Examples",
     "dependencies": {
         "oracle-nosqldb": "latest",
         "package.json": "^2.0.1"
@@ -14,12 +14,12 @@
     },
     "scripts": {
         "build": "rm dist/* && tsc",
-        "start": "ts-node demo-ondbmongoose.ts"
+        "start": "ts-node demo-orcoos.ts"
     },
     "engines": {
         "node": ">=18.0.0"
     },
     "author": "Cezar Andrei",
-    "license": "UPL-1.0",
+    "license": "MIT License",
     "repository": {}
 }

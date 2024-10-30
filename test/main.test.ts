@@ -1,10 +1,3 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- */
-
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -21,7 +14,7 @@ describe("main CRUD and query operations", () => {
     let connections;
 
     it('connect', async() => {
-        connections = await connect(ONDB_URL, { logLevel: 2 });
+        connections = await connect(ONDB_URL, { logLevel: 6 });
         expect(connections).to.be.an('object');
         
         expect(await Sale.createCollection()).to.not.throw;
@@ -29,7 +22,7 @@ describe("main CRUD and query operations", () => {
     
     it('delete all', async() => {
         expect(await Sale.deleteMany());
-        expect(await Sale.count()).equal(0);
+        expect(await Sale.countDocuments()).equal(0);
     }).timeout(4000);
     
     let sale: typeof Sale;
@@ -46,7 +39,7 @@ describe("main CRUD and query operations", () => {
             storeLocation: "NY"
         });
         expect(await sale.save());
-        expect(await Sale.count()).equal(1);
+        expect(await Sale.countDocuments()).equal(1);
 
         expect(sale._id).exist;
         expect(sale._id).to.be.a('object');
@@ -69,7 +62,7 @@ describe("main CRUD and query operations", () => {
     let tags = ["white", "green", "red"];
 
     it('insertMany', async () => {
-        let saleCount = await Sale.count();
+        let saleCount = await Sale.countDocuments();
         let r: number;
         
         let allSales: Array<ISale> = [];
@@ -103,7 +96,7 @@ describe("main CRUD and query operations", () => {
         expect(res.insertedIds).to.be.a('array');
         expect(res.insertedCount).equals(names.length);
 
-        expect(await Sale.count()).equal(saleCount + names.length);
+        expect(await Sale.countDocuments()).equal(saleCount + names.length);
         noOfRows = saleCount + names.length;
         allExpectedSales = allSales;
     });
@@ -330,7 +323,7 @@ describe("main CRUD and query operations", () => {
     });
 
     it('query skip', async () => {
-        let noOfSales = await Sale.count();
+        let noOfSales = await Sale.countDocuments();
         // Q: SELECT * FROM o_sales t OFFSET 2
         let allSales = await Sale.find({}, {}, {skip: 2});
         expect(allSales).to.be.an('array');
@@ -576,7 +569,7 @@ describe("main CRUD and query operations", () => {
     });
 
     it('count',async () => {
-        let c = await Sale.count();
+        let c = await Sale.countDocuments();
         expect(c).equal(allExpectedSales.length);
     });
 
@@ -606,7 +599,7 @@ describe("main CRUD and query operations", () => {
         expect(dbSales).to.be.empty;
 
         // Q: SELECT count(*) FROM o_sales t
-        let dbCount = await Sale.count();
+        let dbCount = await Sale.countDocuments();
         expect(dbCount).equal(0);
     }).timeout(4000);
 

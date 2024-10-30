@@ -1,37 +1,3 @@
-8.7.2 / 2024-10-17
-==================
- * fix(document): recursively clear modified subpaths when setting deeply nested subdoc to null #14963 #14952
- * fix(populate): handle array of ids with parent refPath #14965
- * types: make Buffers into mongodb.Binary in lean result type to match runtime behavior #14967
- * types: correct schema type inference when using nested typeKey like type: { type: String } #14956 #14950
- * types: re-export DeleteResult and UpdateResult from MongoDB Node.js driver #14947 #14946
- * docs(documents): add section on setting deeply nested properties, including warning about nullish coalescing assignment #14972
- * docs(model): add more info on acknowledged: false, specifically that Mongoose may return that if the update was empty #14957
-
-8.7.1 / 2024-10-09
-==================
- * fix: set flattenObjectIds to false when calling toObject() for internal purposes #14938
- * fix: add mongodb 8 to test matrix #14937
- * fix: handle buffers stored in MongoDB as EJSON representation with { $binary } #14932
- * docs: indicate that Mongoose 8.7 is required for full MongoDB 8 support #14937
-
-8.7.0 / 2024-09-27
-==================
- * feat(model): add Model.applyVirtuals() to apply virtuals to a POJO #14905 #14818
- * feat: upgrade mongodb -> 6.9.0 #14914
- * feat(query): cast $rename to string #14887 #3027
- * feat(SchemaType): add getEmbeddedSchemaType() method to SchemaTypes #14880 #8389
- * fix(model): throw MongooseBulkSaveIncompleteError if bulkSave() didn't completely succeed #14884 #14763
- * fix(connection): avoid returning readyState = connected if connection state is stale #14812 #14727
- * fix: depopulate if push() or addToSet() with an ObjectId on a populated array #14883 #1635
- * types: make __v a number, only set __v on top-level documents #14892
-
-8.6.4 / 2024-09-26
-==================
- * fix(document): avoid massive perf degradation when saving new doc with 10 level deep subdocs #14910 #14897
- * fix(model): skip applying static hooks by default if static name conflicts with aggregate middleware #14904 [dragontaek-lee](https://github.com/dragontaek-lee)
- * fix(model): filter applying static hooks by default if static name conflicts with mongoose middleware #14908 [dragontaek-lee](https://github.com/dragontaek-lee)
-
 7.8.2 / 2024-09-25
 ==================
  * fix(projection): avoid setting projection to unknown exclusive/inclusive if elemMatch on a Date, ObjectId, etc. #14894 #14893

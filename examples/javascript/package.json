@@ -1,20 +1,20 @@
 {
-    "name": "ondbmongoose-js-examples",
+    "name": "orcoos-js-examples",
     "version": "0.0.1",
     "type": "module",
     "private": true,
-    "description": "OndbMongoose SDK JavaScript Examples",
+    "description": "Orcoos SDK JavaScript Examples",
     "dependencies": {
-        "ondbmongoose": ">=0.0.1",
+        "orcoos": ">=0.0.1",
         "package.json": "^2.0.1"
     },
     "scripts": {
-        "start": "node demo-ondbmongoose.js"
+        "start": "node demo-orcoos.js"
     },
     "engines": {
         "node": ">=18.0.0"
     },
     "author": "Cezar Andrei",
-    "license": "UPL-1.0",
+    "license": "MIT License",
     "repository": {}
 }

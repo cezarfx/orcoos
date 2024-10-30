@@ -1,10 +1,3 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- */
-
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -32,7 +25,7 @@ describe("Indexes", () => {
         
         it('delete all', async() => {
             expect(await Sale.deleteMany());
-            expect(await Sale.count()).equal(0);
+            expect(await Sale.countDocuments()).equal(0);
         }).timeout(3000);
         
         it('save', async() => {
@@ -46,7 +39,7 @@ describe("Indexes", () => {
                 storeLocation: "NY"
             });
             expect(await sale.save());
-            expect(await Sale.count()).equal(1);
+            expect(await Sale.countDocuments()).equal(1);
 
             expect(sale._id).exist;
             expect(sale._id).to.be.a('object');
@@ -63,7 +56,7 @@ describe("Indexes", () => {
         });
         
         it('insertMany', async () => {
-            let saleCount = await Sale.count();
+            let saleCount = await Sale.countDocuments();
             let r: number;
             
             let allSales: Array<ISale> = [];
@@ -97,7 +90,7 @@ describe("Indexes", () => {
             expect(res.insertedIds).to.be.a('array');
             expect(res.insertedCount).equals(names.length);
 
-            expect(await Sale.count()).equal(saleCount + names.length);
+            expect(await Sale.countDocuments()).equal(saleCount + names.length);
             noOfRows = saleCount + names.length;
             allExpectedSales = allSales;
         });

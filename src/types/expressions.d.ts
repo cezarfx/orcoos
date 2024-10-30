@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
 
   /**
    * [Expressions reference](https://www.mongodb.com/docs/manual/meta/aggregation-quick-reference/#expressions)
@@ -1805,7 +1793,7 @@ declare module 'ondbmongoose' {
        * @version 3.6
        * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/mergeObjects/#mongodb-expression-exp.-mergeObjects
        */
-      $mergeObjects: ObjectExpression | ObjectExpression[] | ArrayExpression;
+      $mergeObjects: ObjectExpression | ObjectExpression[] | ArrayExpression | Record<string, string>;
     }
 
     export interface SetField {

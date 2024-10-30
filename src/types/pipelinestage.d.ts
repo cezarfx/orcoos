@@ -1,16 +1,4 @@
-/*-
- * Copyright (c) 2024 Oracle and/or its affiliates.  All rights reserved.
- *
- * Licensed under the Universal Permissive License v 1.0 as shown at
- * https://oss.oracle.com/licenses/upl/
- * 
- * Copyright (c) 2010-2013 LearnBoost dev@learnboost.com Copyright (c) 2013-2021 Automattic
- *
- * Licensed under the MIT License as shown at
- * https://github.com/Automattic/mongoose/blob/master/LICENSE.md
- */
-
-declare module 'ondbmongoose' {
+declare module 'orcoos' {
   /**
      * [Stages reference](https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#aggregation-pipeline-stages)
      */
@@ -21,6 +9,7 @@ declare module 'ondbmongoose' {
     | PipelineStage.CollStats
     | PipelineStage.Count
     | PipelineStage.Densify
+    | PipelineStage.Documents
     | PipelineStage.Facet
     | PipelineStage.Fill
     | PipelineStage.GeoNear
@@ -40,6 +29,7 @@ declare module 'ondbmongoose' {
     | PipelineStage.ReplaceWith
     | PipelineStage.Sample
     | PipelineStage.Search
+    | PipelineStage.SearchMeta
     | PipelineStage.Set
     | PipelineStage.SetWindowFields
     | PipelineStage.Skip
@@ -47,7 +37,8 @@ declare module 'ondbmongoose' {
     | PipelineStage.SortByCount
     | PipelineStage.UnionWith
     | PipelineStage.Unset
-    | PipelineStage.Unwind;
+    | PipelineStage.Unwind
+    | PipelineStage.VectorSearch;
 
   export namespace PipelineStage {
     export interface AddFields {
@@ -101,6 +92,11 @@ declare module 'ondbmongoose' {
           bounds: number[] | globalThis.Date[] | 'full' | 'partition'
         }
       }
+    }
+
+    export interface Documents {
+      /** [`$documents` reference](https://www.mongodb.com/docs/manual/reference/operator/aggregation/documents/) */
+      $documents: Record<string, Expression>[]
     }
 
     export interface Fill {
@@ -251,6 +247,20 @@ declare module 'ondbmongoose' {
       }
     }
 
+    export interface SearchMeta {
+      /** [`$searchMeta` reference](https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta) */
+      $searchMeta: {
+        index?: string;
+        highlight?: {
+          /** [`highlightPath` reference](https://docs.atlas.mongodb.com/atlas-search/path-construction/#multiple-field-search) */
+          path: string | string[] | { value: string, multi: string };
+          maxCharsToExamine?: number;
+          maxNumPassages?: number;
+        };
+        [operator: string]: any;
+      }
+    }
+
     export interface Set {
       /** [`$set` reference](https://www.mongodb.com/docs/manual/reference/operator/aggregation/set/) */
       $set: Record<string, AnyExpression | any>
@@ -294,6 +304,7 @@ declare module 'ondbmongoose' {
       $unionWith:
       | string
       | { coll: string; pipeline?: Exclude<PipelineStage, PipelineStage.Out | PipelineStage.Merge>[] }
+      | { coll?: string; pipeline: Exclude<PipelineStage, PipelineStage.Out | PipelineStage.Merge>[] }
     }
 
     export interface Unset {
@@ -305,5 +316,17 @@ declare module 'ondbmongoose' {
       /** [`$unwind` reference](https://www.mongodb.com/docs/manual/reference/operator/aggregation/unwind/) */
       $unwind: string | { path: string; includeArrayIndex?: string; preserveNullAndEmptyArrays?: boolean }
     }
+    export interface VectorSearch {
+      /** [`$vectorSearch` reference](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-stage/) */
+      $vectorSearch: {
+        index: string,
+        path: string,
+        queryVector: number[],
+        numCandidates: number,
+        limit: number,
+        filter?: Expression,
+      }
+    }
+
   }
 }
