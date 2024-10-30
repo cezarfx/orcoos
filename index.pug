@@ -1,0 +1,157 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    title Mongoose ODM v#{package.version}
+    link(href="//fonts.googleapis.com/css?family=Anonymous+Pro:400,700|Droid+Sans+Mono|Open+Sans:400,700|Linden+Hill|Quattrocento:400,700|News+Cycle:400,700|Antic+Slab|Cabin+Condensed:400,700", rel="stylesheet", type="text/css")
+    link(href="docs/css/style.css", rel="stylesheet")
+    link(href="docs/css/github.css", rel="stylesheet")
+    link(href="docs/css/carbonads.css", rel="stylesheet")
+
+    include ./docs/includes/favicon
+
+    meta(name='msapplication-TileColor', content='#ffffff')
+    meta(name='msapplication-TileImage', content='docs/images/favicon/ms-icon-144x144.png')
+    meta(name='theme-color', content='#ffffff')
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css")
+
+    style.
+      pre {
+        font-size: 1em;
+        line-height: 1;
+      }
+
+      .sponsor {
+        margin-bottom: 40px;
+        font-size: 0.66em;
+        color: #666;
+        text-decoration: none;
+      }
+
+      .sponsors {
+        margin-bottom: 40px;
+      }
+
+      .sponsors a {
+        text-decoration: none;
+      }
+
+      img.sponsor {
+        margin-right: 10px;
+        border: 1px dotted #dfdfdf;
+        height: 100px;
+      }
+
+  body
+    a(class="github-fork-ribbon" href="https://github.com/Automattic/mongoose" data-ribbon="Fork me on GitHub" title="Fork me on GitHub" target="_blank").
+      Fork me on GitHub
+    #wrap.homepage
+      #header
+        h1
+          a(href="https://github.com/Automattic/mongoose", target="blank")
+            .mongoose Mongoose
+      div.tagline
+        :markdown
+          Elegant [MongoDB](https://www.mongodb.com/) object modeling for
+          [Node.js](https://nodejs.org/en/)
+      #links
+        ul
+          li
+            a(href="docs/guide.html") Read the Docs
+          li
+            a(href="https://plugins.mongoosejs.io") Discover Plugins
+      #follow
+        ul
+          li
+            iframe(class="github-btn", src="//ghbtns.com/github-btn.html?user=Automattic&repo=mongoose&type=watch&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="100px", height="20px")
+          li#version
+            span
+              | Version #{package.version}
+          li
+            iframe(class="github-btn", src="//ghbtns.com/github-btn.html?user=Automattic&repo=mongoose&type=fork&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="100px", height="20px")
+        
+      #inner
+        #what
+          p.what
+            | Let's face it,&nbsp;
+            strong writing MongoDB validation, casting and business logic boilerplate is a drag
+            | . That's why we wrote Mongoose.
+        :markdown
+          ```javascript
+          const mongoose = require('mongoose');
+          mongoose.connect('mongodb://127.0.0.1:27017/test');
+
+          const Cat = mongoose.model('Cat', { name: String });
+
+          const kitty = new Cat({ name: 'Zildjian' });
+          kitty.save().then(() => console.log('meow'));
+          ```
+
+          Mongoose provides a straight-forward, schema-based solution to model
+          your application data. It includes built-in type casting, validation,
+          query building, business logic hooks and more, out of the box.
+
+        #tidelift.
+          <a id="tidelift-button" href="https://tidelift.com/subscription/pkg/npm-mongoose?utm_source=npm-mongoose&utm_medium=website">
+            <img src="/docs/images/tidelift.svg" />
+            <span>Get Professionally Supported Mongoose</span>
+          </a>
+
+        div.carbon-ad
+          <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=mongoosejscom" id="_carbonads_js"></script>
+
+        :markdown
+          ## Getting Started
+
+          * [quick start guide](/docs/index.html)
+
+          ## Support
+
+          * [Stack Overflow](http://stackoverflow.com/questions/tagged/mongoose)
+          * [GitHub Issues](https://github.com/Automattic/mongoose/issues)
+          * [MongoDB Support](https://www.mongodb.com/docs/manual/support/)
+
+          ## News
+
+          * [Twitter](https://twitter.com/mongoosejs)
+
+          ## Changelog
+
+          * [Changelog](https://github.com/Automattic/mongoose/blob/master/CHANGELOG.md)
+
+          ## GitHub Sponsors
+
+          <div class="sponsors">
+            <div>
+              <a rel="sponsored" href="https://localizejs.com/">
+                <img class="sponsor" src="https://assets.localizecdn.com/uploads/1609766994137.svg" style="height: 100px">
+              </a>
+              <a rel="sponsored" href="https://birb.app/">
+                <img class="sponsor" src="https://uploads-ssl.webflow.com/618b15b23212e0b2b4f8f67b/618b189f1d441fd9e0f6c5f3_logo-black-text.png" style="height: 100px">
+              </a>
+              <a rel="sponsored" href="https://helloclub.com/?source=Mongoose">
+                <img class="sponsor" src="https://codebarbarian-images.s3.amazonaws.com/logo-text-default.svg" style="height:100px">
+              </a>
+              <a rel="sponsored" href="https://devitjobs.us/?utm_source=mongoose_main">
+                <img class="sponsor" src="https://codebarbarian-images.s3.amazonaws.com/devitUS-flat-rectangle-v4.png" style="height:100px">
+              </a>
+            </div>
+          </div>
+
+          ## Sponsors
+
+        div.sponsors
+          div
+            each sponsor in opencollectiveSponsors
+              a(rel='sponsored', href=sponsor.website || sponsor.profile)
+                img.sponsor(src=sponsor.image || 'https://next-images.opencollective.com/_next/image?url=%2Fstatic%2Fimages%2Fopencollective-icon.png&w=96&q=75', style='height:50px', alt=sponsor.alt)
+
+        div.sponsors
+          :markdown
+            Sponsor [Mongoose on OpenCollective](https://opencollective.com/mongoose) to get your company's logo above!
+
+    p#footer Licensed under MIT.
+    script.
+      document.body.className = 'load';
