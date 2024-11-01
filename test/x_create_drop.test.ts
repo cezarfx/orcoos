@@ -78,6 +78,14 @@ describe("Create and Drop tables", () => {
 
     it('drop and find', async() => {
         await dropSale();
+        Sale.db.db.prepStmtCache.clear();
+        try {
+            let dbSales = await Sale.find();
+            expect(dbSales).to.be.empty;
+        } catch(e) {
+            console.log('!!! Exception: ' + e);
+            // Ignore expected error since the prepared statment cache will contain reference to old table.
+        }
         let dbSales = await Sale.find();
         expect(dbSales).to.be.empty;
     }).timeout(30000);

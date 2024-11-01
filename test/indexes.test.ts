@@ -257,21 +257,21 @@ describe("Indexes", () => {
             await saleSchema.clearIndexes();
             await saleSchema.index({"items.*": 1});
 
-            await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "OndbMongoose does not support wildcard indexes, received: items.*");
+            await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "Orcoos does not support wildcard indexes, received: items.*");
         });
 
         it('index with $',async () => {
             await saleSchema.clearIndexes();
             await saleSchema.index({"$": 1});
 
-            await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "OndbMongoose does not support wildcard indexes, received: $");
+            await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "Orcoos does not support wildcard indexes, received: $");
         });
 
         it('index with 0',async () => {
             await saleSchema.clearIndexes();
             await saleSchema.index({"customer": 0});
 
-            await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "OndbMongoose supports indexes only on path values equal to 1, received: 0");
+            await expect(Sale.createIndexes()).to.eventually.be.rejectedWith(Error, "Orcoos supports indexes only on path values equal to 1, received: 0");
         });
     });
 });

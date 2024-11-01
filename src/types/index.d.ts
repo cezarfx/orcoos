@@ -36,13 +36,13 @@ declare module 'orcoos' {
   import orcoos = require('orcoos');
 
   //export type Mongoose = typeof mongoose;
-  export type OndbMongoose = typeof orcoos;
+  export type Orcoos = typeof orcoos;
 
   /**
    * Mongoose constructor. The exports object of the `orcoos` module is an instance of this
    * class. Most apps will only use this one instance.
    */
-  export const OndbMongoose: new (options?: MongooseOptions | null) => OndbMongoose;
+  export const Orcoos: new (options?: MongooseOptions | null) => Orcoos;
 
   export let Promise: any;
 
@@ -61,7 +61,7 @@ declare module 'orcoos' {
    * You can use this function to clean up any models you created in your tests to
    * prevent OverwriteModelErrors.
    */
-  export function deleteModel(name: string | RegExp): OndbMongoose;
+  export function deleteModel(name: string | RegExp): Orcoos;
 
   /**
    * Sanitizes query filters against query selector injection attacks by wrapping
@@ -107,29 +107,29 @@ declare module 'orcoos' {
     options?: CompileModelOptions
   ): U;
 
-  /** Returns an array of model names created on this instance of OndbMongoose. */
+  /** Returns an array of model names created on this instance of Orcoos. */
   export function modelNames(): Array<string>;
 
   /**
-   * Overwrites the current driver used by this OndbMongoose instance. A driver is a
-   * OndbMongoose-specific interface that defines functions like `find()`.
+   * Overwrites the current driver used by this Orcoos instance. A driver is a
+   * Orcoos-specific interface that defines functions like `find()`.
    */
-  export function setDriver(driver: any): OndbMongoose;
+  export function setDriver(driver: any): Orcoos;
 
-  /** The node-mongodb-native driver OndbMongoose uses. */
+  /** The node-mongodb-native driver Orcoos uses. */
   //export { mongodb as mongo };
 
   /** Declares a global plugin executed on all Schemas. */
-  export function plugin(fn: (schema: Schema, opts?: any) => void, opts?: any): OndbMongoose;
+  export function plugin(fn: (schema: Schema, opts?: any) => void, opts?: any): Orcoos;
 
   /** Getter/setter around function for pluralizing collection names. */
   export function pluralize(fn?: ((str: string) => string) | null): ((str: string) => string) | null;
 
   /** Sets mongoose options */
-  export function set<K extends keyof MongooseOptions>(key: K, value: MongooseOptions[K]): OndbMongoose;
-  export function set(options: { [K in keyof MongooseOptions]: MongooseOptions[K] }): OndbMongoose;
+  export function set<K extends keyof MongooseOptions>(key: K, value: MongooseOptions[K]): Orcoos;
+  export function set(options: { [K in keyof MongooseOptions]: MongooseOptions[K] }): Orcoos;
 
-  /** The OndbMongoose version */
+  /** The Orcoos version */
   export const version: string;
 
   export type AnyKeys<T> = { [P in keyof T]?: T[P] | any };
@@ -596,7 +596,7 @@ declare module 'orcoos' {
      */
     justOne?: boolean;
 
-    /** If you set this to `true`, OndbMongoose will call any custom getters you defined on this virtual. */
+    /** If you set this to `true`, Orcoos will call any custom getters you defined on this virtual. */
     getters?: boolean;
 
     /**
@@ -617,7 +617,7 @@ declare module 'orcoos' {
     /**
      * For legacy reasons, `limit` with `populate()` may give incorrect results because it only
      * executes a single query for every document being populated. If you set `perDocumentLimit`,
-     * OndbMongoose will ensure correct `limit` per document by executing a separate query for each
+     * Orcoos will ensure correct `limit` per document by executing a separate query for each
      * document to `populate()`. For example, `.find().populate({ path: 'test', perDocumentLimit: 2 })`
      * will execute 2 additional queries if `.find()` returns 2 documents.
      */

@@ -94,7 +94,7 @@ await orcoos.connect('nosqldb+on_prem_http://localhost:8080/');
 
 Once connected, the `open` event is fired on the `Connection` instance. If you're using `orcoos.connect`, the `Connection` is `orcoos.connection`. Otherwise, `orcoos.createConnection` return value is a `Connection`.
 
-To enable logging to get insight into what query OndbMongoose SDK generates use the option logLevel, with one of values: NONE 0, SEVERE: 1, WARNING: 2, INFO: 3, CONFIG: 4, FINE: 5, FINNER: 6.
+To enable logging to get insight into what query Orcoos SDK generates use the option logLevel, with one of values: NONE 0, SEVERE: 1, WARNING: 2, INFO: 3, CONFIG: 4, FINE: 5, FINNER: 6.
 
 ```js
 await orcoos.connect('nosqldb+on_prem_http://localhost:8080/', {logLevel: 3});
@@ -104,7 +104,7 @@ await orcoos.connect('nosqldb+on_prem_http://localhost:8080/', {logLevel: 3});
 
 **Note:** _If the connection string specifies a compartment or namespace, the expected compartment or namespace must already exist. Example: 'nosqldb+on_prem_http://localhost:8080/dev'._
 
-**Important!** OndbMongoose buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
+**Important!** Orcoos buffers all the commands until it's connected to the database. This means that you don't have to wait until it connects to Oracle NoSQL DB in order to define models, run queries, etc.
 
 #### Defining a Model
 
@@ -174,7 +174,7 @@ Or just do it all at once
 const MyModel = orcoos.model('ModelName', mySchema);
 ```
 
-The first argument is the _singular_ name of the collection your model is for. **OndbMongoose automatically looks for the _plural_ version of your model name.** For example, if you use
+The first argument is the _singular_ name of the collection your model is for. **Orcoos automatically looks for the _plural_ version of your model name.** For example, if you use
 
 ```js
 const MyModel = orcoos.model('Ticket', mySchema);
@@ -314,7 +314,7 @@ Moreover, you can mutate the incoming `method` arguments so that subsequent midd
 
 ##### Schema gotcha
 
-`type`, when used in a schema has special meaning within OndbMongoose. If your schema requires using `type` as a nested property you must use object notation:
+`type`, when used in a schema has special meaning within Orcoos. If your schema requires using `type` as a nested property you must use object notation:
 
 ```js
 new Schema({
@@ -336,7 +336,7 @@ new Schema({
 
 ### Driver Access
 
-OndbMongoose is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all orcoos features, including hooks, validation, etc. The one
+Orcoos is built on top of the [Oracle NoSQL DB NodeJs SDK](https://github.com/oracle/nosql-node-sdk). Each model keeps a reference to a [native Oracle NoSQL DB SDK table](https://oracle.github.io/nosql-node-sdk/pages/tables.html). The table object can be accessed using `YourModel.collection`. However, using the collection object directly bypasses all orcoos features, including hooks, validation, etc. The one
 notable exception that `YourModel.collection` still buffers
 commands. As such, `YourModel.collection.find()` will **not**
 return a cursor.

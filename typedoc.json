@@ -1,5 +1,5 @@
 {
-    "name": "OndbMongoose SDK",
+    "name": "Orcoos SDK",
     "readme": "README.md",
     "entryPoints": ["./src/types/index.d.ts" ],
     "out": "docs/site",
